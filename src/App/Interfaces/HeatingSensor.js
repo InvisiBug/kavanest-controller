@@ -1,4 +1,3 @@
-// Express
 const express = require("express");
 const app = (module.exports = express());
 
@@ -15,14 +14,14 @@ const errorState = {
 
 const newSensor = (room, offset) => {
   var timer;
-  var deviceData = errorState;
+  var deviceData = disconnectedState;
 
   client.on("message", (topic, payload) => {
     if (topic == `${room} ${"Heating Sensor"}`) {
       clearTimeout(timer);
 
       timer = setTimeout(() => {
-        deviceData = errorState;
+        deviceData = disconnectedState;
         let environmentalData = getStore("Environmental Data");
         environmentalData = {
           ...environmentalData,
@@ -47,7 +46,7 @@ const newSensor = (room, offset) => {
 
         updateSensorData(camelRoomName(room), deviceData);
       } else {
-        console.log(`${room} ${"Heating Sensor Disconnected"}`);
+        console.log(`${room} ${"Heating Sensor Disconnected at "} ${printTime()}`);
       }
     }
   });

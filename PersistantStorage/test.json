@@ -1,0 +1,61 @@
+{
+  "heatingSensors": {
+    "livingRoom": { "isConnected": true, "temperature": 15.8, "humidity": 74.4, "pressure": 102749.1 },
+    "kitchen": { "isConnected": true, "temperature": 20.4, "humidity": 75, "pressure": 62331.41 },
+    "liamsRoom": { "isConnected": true, "temperature": 14.9, "humidity": 79.2, "pressure": 102644 },
+    "study": { "isConnected": true, "temperature": 20, "humidity": 43.5, "pressure": 102671.7 },
+    "ourRoom": { "isConnected": true, "temperature": 18.3, "humidity": 63, "pressure": 102562.6 }
+  },
+  "radiatorValves": {
+    "livingRoom": { "isConnected": true, "isOpen": false, "demand": false },
+    "kitchen": { "isConnected": false, "isOpen": false, "demand": false },
+    "liamsRoom": { "isConnected": false, "isOpen": false, "demand": false },
+    "study": { "isConnected": false, "isOpen": false, "demand": false },
+    "ourRoom": { "isConnected": true, "isOpen": true, "demand": "value" }
+  },
+  "setpoints": {
+    "livingRoom": [0, 0, 0, 0, 0, 0, 0, 10, 10, 12, 13, 14, 15, 0, 23, 22, 72, 0, 0, 0, 0, 0, 0, 0],
+    "kitchen": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    "study": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    "liamsRoom": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    "ourRoom": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 18, 19, 16, 17, 18, 19, 20, 21, 22, 23]
+  },
+  "outside": {
+    "current": {
+      "temperature": 7.36,
+      "humidity": 0.79,
+      "pressure": 1037,
+      "windSpeed": 3.04,
+      "windBearing": 263,
+      "cloudCover": 0.89,
+      "isConnected": true
+    },
+    "next24Hrs": [
+      7.35,
+      7.36,
+      7.05,
+      6.77,
+      6.5,
+      6.01,
+      5.44,
+      4.89,
+      5.22,
+      4.89,
+      4.6,
+      4.35,
+      4.08,
+      3.91,
+      3.73,
+      3.39,
+      3.45,
+      3.52,
+      3.49,
+      3.9,
+      4.2,
+      5.64,
+      7.29,
+      8.29
+    ]
+  },
+  "houseStats": { "average": 17.9, "minimumTemp": 14.9, "maximumTemp": 20.4 }
+}

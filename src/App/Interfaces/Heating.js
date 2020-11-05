@@ -1,8 +1,8 @@
-// Express
 const express = require("express");
 const app = (module.exports = express());
 const { getStore, setStore, updateValue, readValue } = require("../../helpers/StorageDriver");
 const { boostOn, boostOff } = require("../../helpers/HeatingFunctions");
+const functions = require("../../helpers/Functions");
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -51,9 +51,10 @@ client.on("message", (topic, payload) => {
         isConnected: true,
         isOn: mqttData.state,
       };
+
       setStore("Heating", deviceData);
     } else {
-      console.log(`${"Heating Disconnected"}`);
+      console.log(`${"Heating Disconnected"} ${functions.printTime()}`);
     }
   } else if (topic === "Heating Button") {
     const now = new Date().getTime();

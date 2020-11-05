@@ -92,8 +92,8 @@ app.get("/api/ci/manual/off", (req, res) => {
 // ----- On / Off -----
 app.get("/api/ci/on", (req, res) => {
   let data = getStore("heatingSchedule");
-  let boostTime = new Date();
   if (!data.auto) {
+    // Open all valves here
     heatingOn();
     sendHeatingSchedule();
   }
@@ -103,6 +103,7 @@ app.get("/api/ci/on", (req, res) => {
 app.get("/api/ci/off", (req, res) => {
   let data = getStore("heatingSchedule");
   if (!data.auto) {
+    // close all valves here
     console.log("heating Off");
     heatingOff();
     sendHeatingSchedule();
