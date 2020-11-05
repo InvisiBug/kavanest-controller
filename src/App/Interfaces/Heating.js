@@ -1,53 +1,18 @@
-// Express
 const express = require("express");
 const app = (module.exports = express());
 const { getStore, setStore, updateValue, readValue } = require("../../helpers/StorageDriver");
 const { boostOn, boostOff } = require("../../helpers/HeatingFunctions");
+const functions = require("../../helpers/Functions");
 
-// MQTT
-const mqtt = require("mqtt");
-const connection = mqtt.connect("mqtt://kavanet.io");
-
-connection.setMaxListeners(15); // Disables event listener warning
-connection.subscribe("#", (err) => {
-  err ? console.log(err) : null;
-});
-
-connection.on("connect", () => null);
-
-////////////////////////////////////////////////////////////////////////
-//
-//  #     #
-//  #     #   ##   #####  #   ##   #####  #      ######  ####
-//  #     #  #  #  #    # #  #  #  #    # #      #      #
-//  #     # #    # #    # # #    # #####  #      #####   ####
-//   #   #  ###### #####  # ###### #    # #      #           #
-//    # #   #    # #   #  # #    # #    # #      #      #    #
-//     #    #    # #    # # #    # #####  ###### ######  ####
-//
-////////////////////////////////////////////////////////////////////////
-const saveToStorage = true;
-var deviceData = {
+const disconnectedState = {
   isConnected: false,
   isOn: false,
 };
 
-var timer = setTimeout(() => {
-  deviceData.isConnected = false;
-}, 10 * 1000);
+var timer;
+var deviceData = disconnectedState;
 
-////////////////////////////////////////////////////////////////////////
-//
-//  #     #  #####  ####### #######
-//  ##   ## #     #    #       #
-//  # # # # #     #    #       #
-//  #  #  # #     #    #       #
-//  #     # #   # #    #       #
-//  #     # #    #     #       #
-//  #     #  #### #    #       #
-//
-////////////////////////////////////////////////////////////////////////
-connection.on("message", (topic, payload) => {
+client.on("message", (topic, payload) => {
   if (topic == "Heating") {
     clearTimeout(timer);
 
@@ -64,9 +29,10 @@ connection.on("message", (topic, payload) => {
         isConnected: true,
         isOn: mqttData.state,
       };
+
       setStore("Heating", deviceData);
     } else {
-      console.log(`${"Heating Disconnected"}`);
+      console.log(`${"Heating Disconnected"} ${functions.printTime()}`);
     }
   } else if (topic === "Heating Button") {
     const now = new Date().getTime();

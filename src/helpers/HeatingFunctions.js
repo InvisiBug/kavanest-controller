@@ -75,7 +75,7 @@ const isHeatingOn = () => {
   return readValue("heatingSchedule", "heatingTime") > new Date();
 };
 
-// radiatorFanOff();
+radiatorFanOff();
 
 module.exports = {
   boostOn: boostOn,

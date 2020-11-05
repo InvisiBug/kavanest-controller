@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { get } = require("../App/Weather");
 
 const setStore = (store, data) => {
   const storePath = path.join(`${__dirname}${"/../../PersistantStorage/"}${store}${".json"}`);
@@ -29,8 +30,10 @@ const updateValue = (store, point, value) => {
 };
 
 const readValue = (store, point) => {
-  let data = getStore(store);
-  return data[point];
+  // let data = getStore(store);
+  // return data[point];
+
+  return getStore(store)[point];
 };
 
 const updateBoostTime = (time = 0) => {
@@ -48,6 +51,21 @@ const updateHeatingTime = (time = 0) => {
   updateValue("heatingSchedule", "heatingTime", now.setMinutes(now.getMinutes() + time));
 };
 
+// Valves
+
+// Conditions
+const getRoomConditions = (room) => {
+  return getStore("Environmental Data").heatingSensors[room];
+};
+
+const getRoomTemperature = (room) => {
+  return getStore("Environmental Data").heatingSensors[room].temperature;
+};
+
+const getRoomSetpoints = (room) => {
+  return getStore("Environmental Data").setpoints[room];
+};
+
 module.exports = {
   getStore: getStore,
   setStore: setStore,
@@ -56,6 +74,9 @@ module.exports = {
   updateBoostTime: updateBoostTime,
   updateRadiatorFanTime: updateRadiatorFanTime,
   updateHeatingTime: updateHeatingTime,
+  getRoomSetpoints: getRoomSetpoints,
+  getRoomConditions: getRoomConditions,
+  getRoomTemperature: getRoomTemperature,
 };
 
 // function setSchedule(schedule, item, time = 0) {

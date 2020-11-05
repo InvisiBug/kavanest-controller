@@ -1,17 +1,17 @@
 {
   "heatingSensors": {
-    "livingRoom": { "isConnected": true, "temperature": 15.9, "humidity": 72.9, "pressure": 102687.8 },
+    "livingRoom": { "isConnected": true, "temperature": 15.8, "humidity": 74.4, "pressure": 102749.1 },
     "kitchen": { "isConnected": true, "temperature": 20.4, "humidity": 75, "pressure": 62331.41 },
-    "liamsRoom": { "isConnected": true, "temperature": 15.5, "humidity": 79, "pressure": 102581.9 },
-    "study": { "isConnected": true, "temperature": 19.4, "humidity": 43.7, "pressure": 102617.5 },
-    "ourRoom": { "isConnected": true, "temperature": 19.5, "humidity": 59.8, "pressure": 102503.5 }
+    "liamsRoom": { "isConnected": true, "temperature": 14.9, "humidity": 79.2, "pressure": 102644 },
+    "study": { "isConnected": true, "temperature": 20, "humidity": 43.5, "pressure": 102671.7 },
+    "ourRoom": { "isConnected": true, "temperature": 18.3, "humidity": 63, "pressure": 102562.6 }
   },
   "radiatorValves": {
     "livingRoom": { "isConnected": true, "isOpen": false, "demand": false },
     "kitchen": { "isConnected": false, "isOpen": false, "demand": false },
     "liamsRoom": { "isConnected": false, "isOpen": false, "demand": false },
     "study": { "isConnected": false, "isOpen": false, "demand": false },
-    "ourRoom": { "isConnected": true, "isOpen": true, "demand": false }
+    "ourRoom": { "isConnected": true, "isOpen": true, "demand": "value" }
   },
   "setpoints": {
     "livingRoom": [0, 0, 0, 0, 0, 0, 0, 10, 10, 12, 13, 14, 15, 0, 23, 22, 72, 0, 0, 0, 0, 0, 0, 0],
@@ -22,24 +22,26 @@
   },
   "outside": {
     "current": {
-      "temperature": 7.04,
-      "humidity": 0.82,
+      "temperature": 7.36,
+      "humidity": 0.79,
       "pressure": 1037,
-      "windSpeed": 2.48,
-      "windBearing": 268,
-      "cloudCover": 0.87,
+      "windSpeed": 3.04,
+      "windBearing": 263,
+      "cloudCover": 0.89,
       "isConnected": true
     },
     "next24Hrs": [
-      7.07,
+      7.35,
+      7.36,
+      7.05,
       6.77,
-      6.48,
-      6,
+      6.5,
+      6.01,
       5.44,
-      4.88,
+      4.89,
       5.22,
-      4.88,
-      4.59,
+      4.89,
+      4.6,
       4.35,
       4.08,
       3.91,
@@ -49,13 +51,11 @@
       3.52,
       3.49,
       3.9,
-      4.21,
+      4.2,
       5.64,
       7.29,
-      8.29,
-      10.01,
-      8.42
+      8.29
     ]
   },
-  "houseStats": { "average": 18.1, "minimumTemp": 15.5, "maximumTemp": 20.4 }
+  "houseStats": { "average": 17.9, "minimumTemp": 14.9, "maximumTemp": 20.4 }
 }

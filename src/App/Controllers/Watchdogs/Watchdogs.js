@@ -8,12 +8,15 @@ const { radiatorFanControl, heatingControl } = require("../../Interfaces/mqttOut
 setInterval(() => {
   let heatingSchedule = getStore("heatingSchedule");
   let heatingController = getStore("Heating");
+  // let valves = getStore("Radiator Valves");
   let now = new Date().getTime();
 
   if (now < heatingSchedule.heatingTime) {
+    // if (valves.livingRoom || valves.kitchen || valves.liamsRoom || valves.study || valves.ourRoom) {
     if (heatingController.isConnected && !heatingController.isOn) {
       heatingControl("1");
     }
+    // }
   } else if (heatingController.isConnected && heatingController.isOn) {
     heatingControl("0");
   }
@@ -23,6 +26,7 @@ setInterval(() => {
 setInterval(() => {
   let radiatorFan = getStore("Radiator Fan");
   let heating = getStore("heatingSchedule");
+  // let valves = getStore("Radiator Valves");
   let now = new Date().getTime();
 
   if (radiatorFan.isAutomatic) {
@@ -34,4 +38,10 @@ setInterval(() => {
       radiatorFanControl("0");
     }
   }
+}, 1 * 1000);
+
+setInterval(() => {
+  // grab valve demand
+  // grab valve state
+  // if demand is less than state then change state
 }, 1 * 1000);

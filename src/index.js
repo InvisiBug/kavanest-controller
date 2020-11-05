@@ -51,7 +51,7 @@ const socketPort = process.env.PORT || 5001;
 //   #####   ####   ####  #    # ######   #
 //
 ////////////////////////////////////////////////////////////////////////
-var server = require("http").createServer(app);
+let server = require("http").createServer(app);
 global.io = require("socket.io")(server);
 
 ////////////////////////////////////////////////////////////////////////
@@ -68,10 +68,10 @@ global.io = require("socket.io")(server);
 const mqtt = require("mqtt");
 // global.client = mqtt.connect("mqtt://192.168.1.46");
 global.client = mqtt.connect("mqtt://kavanet.io");
-client.setMaxListeners(15); // Disables event listener warning
+client.setMaxListeners(16); // Disables event listener warning
 
 client.subscribe("#", (err) => {
-  err ? console.log(err) : console.log("Subscribed to " + "All");
+  err ? console.log(err) : console.log("Subscribed to all");
 });
 
 client.on("connect", () => null);
@@ -114,7 +114,7 @@ app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 app.use(require("./App/Historical.js"));
 
 // Calor Imperium
-app.use(require("./App/Controllers/HeatingController.js"));
+
 app.use(require("./App/Calor Imperium.js"));
 app.use(require("./App/Interfaces/Heating.js"));
 app.use(require("./App/Services/HouseClimateStats"));
@@ -132,12 +132,11 @@ app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
 //
 ////////////////////////////////////////////////////////////////////////
 const heatingSensor = require("./App/Interfaces/HeatingSensor");
-const { Console } = require("console");
 
 const sensors = [
   {
     name: "Our Room",
-    offset: -0.1,
+    offset: 1.6,
   },
   {
     name: "Study",
@@ -161,19 +160,27 @@ sensors.map((room, index) => {
   heatingSensor.newSensor(room.name, room.offset);
 });
 
-////////////////////////////////////////////////////////////////////////
-//
-//   #####
-//  #     #  ####  #    #  ####   ####  #      ######
-//  #       #    # ##   # #      #    # #      #
-//  #       #    # # #  #  ####  #    # #      #####
-//  #       #    # #  # #      # #    # #      #
-//  #     # #    # #   ## #    # #    # #      #
-//   #####   ####  #    #  ####   ####  ###### ######
-//
-////////////////////////////////////////////////////////////////////////
-//This adds the the line printed information to all console.logs
-["log", "warn", "error"].forEach((methodName) => {
+const radiatorValve = require("./App/Interfaces/RadiatorValve");
+radiatorValve.newValve("Our Room");
+
+const zoneHeatingController = require("./App/Controllers/ZoneHeatingController");
+zoneHeatingController.newZoneController("Our Room");
+
+[
+  ////////////////////////////////////////////////////////////////////////
+  //
+  //   #####
+  //  #     #  ####  #    #  ####   ####  #      ######
+  //  #       #    # ##   # #      #    # #      #
+  //  #       #    # # #  #  ####  #    # #      #####
+  //  #       #    # #  # #      # #    # #      #
+  //  #     # #    # #   ## #    # #    # #      #
+  //   #####   ####  #    #  ####   ####  ###### ######
+  //
+  ////////////////////////////////////////////////////////////////////////
+  //This adds the the line printed information to all console.logs
+  ("log", "warn", "error"),
+].forEach((methodName) => {
   const originalMethod = console[methodName];
   console[methodName] = (...args) => {
     try {
@@ -211,30 +218,3 @@ sensors.map((room, index) => {
 // Start the app
 app.listen(fetchPort, console.log("App is listening on port " + fetchPort));
 io.listen(socketPort, console.log("Socket is open on port " + socketPort));
-
-// const sleep = (waitTimeInMs) => new Promise((resolve) => setTimeout(resolve, waitTimeInMs));
-
-// sleep(10000).then(() => {
-//   console.log("DSAKJ");
-//   // This will execute 10 seconds from now
-// });
-
-// function sleep(milliseconds) {
-//   const date = Date.now();
-//   let currentDate = null;
-//   do {
-//     currentDate = Date.now();
-//   } while (currentDate - date < milliseconds);
-// }
-
-// // console.log("Hello");
-
-// // console.log("World!");
-// console.log("Here");
-// console.log("Here");
-
-// const sensorUpdate = setInterval(() => {
-//   console.log("Here");
-// }, 0.1 * 1000);
-
-// sleep(2000);
