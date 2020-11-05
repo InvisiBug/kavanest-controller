@@ -46,7 +46,7 @@ const newZoneController = (room) => {
 
     if (currentTemp < setpoint[currentHour] && currentTemp > -1) {
       setValveDemand(camelRoomName(room), true);
-      console.log("here");
+      // console.log("here");
     } else {
       setValveDemand(camelRoomName(room), false);
     }
