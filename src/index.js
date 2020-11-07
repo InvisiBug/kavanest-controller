@@ -70,7 +70,7 @@ const mqtt = require("mqtt");
 // global.client = mqtt.connect("mqtt://kavanet.io");
 
 global.client = mqtt.connect("mqtt://localhost");
-client.setMaxListeners(15); // Disables event listener warning
+client.setMaxListeners(16); // Disables event listener warning
 
 client.subscribe("#", (err) => {
   err ? console.log(err) : console.log("Subscribed to " + "All");
@@ -118,11 +118,11 @@ app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 // app.use(require("./App/Historical.js"));
 
 // // Calor Imperium
-// app.use(require("./App/Controllers/HeatingController.js"));
+app.use(require("./App/Controllers/HeatingController.js"));
 app.use(require("./App/Calor Imperium.js"));
-// app.use(require("./App/Interfaces/Heating.js"));
+app.use(require("./App/Interfaces/Heating.js"));
 app.use(require("./App/Services/HouseClimateStats")); // Socket is in here too
-// app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
+app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
 
 ////////////////////////////////////////////////////////////////////////
 //
