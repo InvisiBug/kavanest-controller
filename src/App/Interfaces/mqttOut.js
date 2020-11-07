@@ -1,4 +1,4 @@
-var mqttOut = false;
+var mqttOut = true;
 
 const heatingControl = (message) => {
   if (mqttOut) {

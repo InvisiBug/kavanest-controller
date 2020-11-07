@@ -2,7 +2,15 @@ const express = require("express");
 const app = (module.exports = express());
 const { sunControl } = require("../../Interfaces/mqttOut");
 
-var deviceData;
+// TODO needs initial data looking at
+
+const disconnectedState = {
+  isConnected: false,
+  isOn: false,
+};
+
+var deviceData = disconnectedState;
+
 var timer = setTimeout(() => {
   deviceData.isConnected = false;
 }, 10 * 1000);

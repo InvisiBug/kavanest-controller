@@ -24,7 +24,8 @@ const app = (module.exports = express());
 const chalk = require("chalk");
 
 app.use(bodyParser.json()); // Used to handle data in post requests
-process.stdout.write("\033c"); // Clear the console
+// process.stdout.write("\033c"); // Clear the console
+console.clear();
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -66,15 +67,18 @@ global.io = require("socket.io")(server);
 //
 ////////////////////////////////////////////////////////////////////////
 const mqtt = require("mqtt");
+
 // global.client = mqtt.connect("mqtt://192.168.1.46");
-global.client = mqtt.connect("mqtt://kavanet.io");
+// global.client = mqtt.connect("mqtt://kavanet.io");
+global.client = mqtt.connect("mqtt://localhost");
+
 client.setMaxListeners(16); // Disables event listener warning
 
 client.subscribe("#", (err) => {
   err ? console.log(err) : console.log("Subscribed to all");
 });
 
-client.on("connect", () => null);
+client.on("connect", () => console.log("MQTT Connected"));
 
 // client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload)));
 client.on("message", (topic, payload) => {
@@ -107,13 +111,13 @@ app.use(require("./App/Devices/OurRoom/FloodLight.js"));
 app.use(require("./App/Devices/OurRoom/Sun.js"));
 app.use(require("./App/Devices/OurRoom/Computer Audio.js"));
 app.use(require("./App/Devices/OurRoom/Computer Power.js"));
-// app.use(require('./App/Devices/Our Room/Blanket.js'));
+// // app.use(require('./App/Devices/Our Room/Blanket.js'));
 app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 
-// Historical
-app.use(require("./App/Historical.js"));
+// // Historical
+// app.use(require("./App/Historical.js"));
 
-// Calor Imperium
+// // Calor Imperium
 
 app.use(require("./App/Calor Imperium.js"));
 app.use(require("./App/Interfaces/Heating.js"));
@@ -160,11 +164,11 @@ sensors.map((room, index) => {
   heatingSensor.newSensor(room.name, room.offset);
 });
 
-const radiatorValve = require("./App/Interfaces/RadiatorValve");
-radiatorValve.newValve("Our Room");
+// const radiatorValve = require("./App/Interfaces/RadiatorValve");
+// radiatorValve.newValve("Our Room");
 
-const zoneHeatingController = require("./App/Controllers/ZoneHeatingController");
-zoneHeatingController.newZoneController("Our Room");
+// const zoneHeatingController = require("./App/Controllers/ZoneHeatingController");
+// zoneHeatingController.newZoneController("Our Room");
 
 [
   ////////////////////////////////////////////////////////////////////////
