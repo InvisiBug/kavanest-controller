@@ -1,20 +1,8 @@
 const express = require("express");
 const app = (module.exports = express());
 const { radiatorFanControl } = require("../../Interfaces/mqttOut");
-
 const { getStore, setStore } = require("../../../helpers/StorageDriver");
 
-////////////////////////////////////////////////////////////////////////
-//
-//  #     #
-//  #     #   ##   #####  #   ##   #####  #      ######  ####
-//  #     #  #  #  #    # #  #  #  #    # #      #      #
-//  #     # #    # #    # # #    # #####  #      #####   ####
-//   #   #  ###### #####  # ###### #    # #      #           #
-//    # #   #    # #   #  # #    # #    # #      #      #    #
-//     #    #    # #    # # #    # #####  ###### ######  ####
-//
-////////////////////////////////////////////////////////////////////////
 let errorState = {
   isConnected: false,
   isOn: false,

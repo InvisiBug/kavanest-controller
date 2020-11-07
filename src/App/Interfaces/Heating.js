@@ -1,20 +1,9 @@
 const express = require("express");
 const app = (module.exports = express());
-const { getStore, setStore, updateValue, readValue } = require("../../helpers/StorageDriver");
+const { setStore, updateValue, readValue } = require("../../helpers/StorageDriver");
 const { boostOn, boostOff } = require("../../helpers/HeatingFunctions");
 const functions = require("../../helpers/Functions");
 
-////////////////////////////////////////////////////////////////////////
-//
-//  #     #
-//  #     #   ##   #####  #   ##   #####  #      ######  ####
-//  #     #  #  #  #    # #  #  #  #    # #      #      #
-//  #     # #    # #    # # #    # #####  #      #####   ####
-//   #   #  ###### #####  # ###### #    # #      #           #
-//    # #   #    # #   #  # #    # #    # #      #      #    #
-//     #    #    # #    # # #    # #####  ###### ######  ####
-//
-////////////////////////////////////////////////////////////////////////
 let errorState = {
   isConnected: false,
   isOn: false,

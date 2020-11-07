@@ -1,7 +1,6 @@
 const express = require("express");
 const app = (module.exports = express());
 const { sunControl } = require("../../Interfaces/mqttOut");
-
 const { printTime } = require("../../../helpers/Functions.js");
 
 let errorState = {

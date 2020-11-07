@@ -1,8 +1,6 @@
 const express = require("express");
 const app = (module.exports = express());
 const { computerPowerControl } = require("../../Interfaces/mqttOut");
-
-// Functions
 const { printTime } = require("../../../helpers/Functions.js");
 
 let errorState = {

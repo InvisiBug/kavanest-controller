@@ -1,7 +1,5 @@
 const express = require("express");
 const app = (module.exports = express());
-
-// Persistant Storage
 const { getStore, setStore, updateSensorData } = require("../../helpers/StorageDriver");
 const { camelRoomName } = require("../../helpers/Functions");
 
