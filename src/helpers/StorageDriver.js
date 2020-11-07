@@ -61,6 +61,7 @@ const updateSensorData = (roomName, data) => {
     },
   };
   setStore("Environmental Data", environmentalData);
+};
 // Valves
 
 // Conditions

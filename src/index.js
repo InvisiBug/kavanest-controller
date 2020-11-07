@@ -120,7 +120,7 @@ app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 // app.use(require("./App/Historical.js"));
 
 // // Calor Imperium
-app.use(require("./App/Controllers/HeatingController.js"));
+app.use(require("./App/Controllers/ZoneHeatingController.js"));
 app.use(require("./App/Calor Imperium.js"));
 app.use(require("./App/Interfaces/Heating.js"));
 app.use(require("./App/Services/HouseClimateStats")); // Socket is in here too

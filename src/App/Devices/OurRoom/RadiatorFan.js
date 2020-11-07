@@ -82,12 +82,8 @@ client.on("message", (topic, payload) => {
     clearTimeout(timer);
 
     timer = setTimeout(() => {
-<<<<<<< HEAD
       deviceData = errorState;
       setStore(`${"Radiator Fan"}`, deviceData);
-=======
-      setStore("Radiator Fan", disconnectedState);
->>>>>>> 1e3ed8a... Squished down
     }, 10 * 1000);
 
     if (payload != "Radiator Fan Disconnected") {
