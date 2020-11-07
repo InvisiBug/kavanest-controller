@@ -35,13 +35,15 @@ const { computerAudioControl } = require("../../Interfaces/mqttOut");
 ////////////////////////////////////////////////////////////////////////
 var computerAudio = null;
 var timer;
-var deviceData = {
+var errorState = {
   isConnected: false,
   left: false,
   right: false,
   sub: false,
   mixer: false,
 };
+
+var deviceData = errorState;
 // var timer = setTimeout(() => {
 //   deviceData.isConnected = false;
 // }, 10 * 1000);
@@ -174,5 +176,6 @@ const sensorUpdate = setInterval(() => {
 
 const sendSocketData = () => {
   io.emit("New Computer Audio", deviceData);
-  io.emit("Computer Audio", computerAudio);
+  io.emit("Computer Audio", deviceData);
+  // io.emit("Computer Audio", computerAudio);
 };

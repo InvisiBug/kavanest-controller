@@ -1,24 +1,3 @@
-////////////////////////////////////////////////////////////////////////
-//
-// ██████╗  █████╗ ██████╗ ██╗ █████╗ ████████╗ ██████╗ ██████╗     ███████╗ █████╗ ███╗   ██╗
-// ██╔══██╗██╔══██╗██╔══██╗██║██╔══██╗╚══██╔══╝██╔═══██╗██╔══██╗    ██╔════╝██╔══██╗████╗  ██║
-// ██████╔╝███████║██║  ██║██║███████║   ██║   ██║   ██║██████╔╝    █████╗  ███████║██╔██╗ ██║
-// ██╔══██╗██╔══██║██║  ██║██║██╔══██║   ██║   ██║   ██║██╔══██╗    ██╔══╝  ██╔══██║██║╚██╗██║
-// ██║  ██║██║  ██║██████╔╝██║██║  ██║   ██║   ╚██████╔╝██║  ██║    ██║     ██║  ██║██║ ╚████║
-// ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═══╝
-//
-////////////////////////////////////////////////////////////////////////
-//
-//   #####
-//  #     #  ####  #    # ###### #  ####
-//  #       #    # ##   # #      # #    #
-//  #       #    # # #  # #####  # #
-//  #       #    # #  # # #      # #  ###
-//  #     # #    # #   ## #      # #    #
-//   #####   ####  #    # #      #  ####
-//
-////////////////////////////////////////////////////////////////////////
-// Express
 const express = require("express");
 const app = (module.exports = express());
 const { radiatorFanControl } = require("../../Interfaces/mqttOut");
@@ -36,11 +15,13 @@ const { getStore, setStore } = require("../../../helpers/StorageDriver");
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-const saveToStorage = true;
-var deviceData = { isAutomatic: true }; // means isAutomatic gets written to long term storage
-var timer = setTimeout(() => {
-  deviceData.isConnected = false;
-}, 10 * 1000);
+let errorState = {
+  isConnected: false,
+  isOn: false,
+  isAutomatic: false,
+};
+var deviceData = errorState;
+var timer;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -101,8 +82,8 @@ client.on("message", (topic, payload) => {
     clearTimeout(timer);
 
     timer = setTimeout(() => {
-      deviceData.isConnected = false;
-      if (saveToStorage) setStore(`${"Radiator Fan"}`, deviceData);
+      deviceData = errorState;
+      setStore(`${"Radiator Fan"}`, deviceData);
     }, 10 * 1000);
 
     if (payload != "Radiator Fan Disconnected") {
@@ -111,7 +92,7 @@ client.on("message", (topic, payload) => {
         isConnected: true,
         isOn: JSON.parse(payload).state,
       };
-      if (saveToStorage) setStore(`${"Radiator Fan"}`, deviceData);
+      setStore(`${"Radiator Fan"}`, deviceData);
     } else {
       console.log("Radiator Fan Disconnected");
     }

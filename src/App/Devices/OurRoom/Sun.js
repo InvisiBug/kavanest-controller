@@ -2,10 +2,14 @@ const express = require("express");
 const app = (module.exports = express());
 const { sunControl } = require("../../Interfaces/mqttOut");
 
-var deviceData;
-var timer = setTimeout(() => {
-  deviceData.isConnected = false;
-}, 10 * 1000);
+const { printTime } = require("../../../helpers/Functions.js");
+
+let errorState = {
+  isConnected: false,
+  isOn: false,
+};
+var deviceData = errorState;
+var timer;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -48,7 +52,7 @@ client.on("message", (topic, payload) => {
     clearTimeout(timer);
 
     timer = setTimeout(() => {
-      deviceData.isConnected = false;
+      deviceData = errorState;
     }, 10 * 1000);
 
     if (payload != "Sun Disconnected") {
@@ -58,7 +62,7 @@ client.on("message", (topic, payload) => {
         isOn: JSON.parse(payload).state,
       };
     } else {
-      console.log("Sun Disconnected");
+      console.log("Sun Disconnected" + printTime());
     }
   } else if (topic === "Sun Button") {
     deviceData.isOn ? sunControl("0") : sunControl("1");

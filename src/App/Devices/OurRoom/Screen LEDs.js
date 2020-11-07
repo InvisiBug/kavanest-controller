@@ -36,10 +36,15 @@ const functions = require("../../../helpers/Functions.js");
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-var deviceData;
-var timer = setTimeout(() => {
-  deviceData.isConnected = false;
-}, 10 * 1000);
+let errorState = {
+  isConnected: false,
+  red: 0,
+  green: 0,
+  blue: 0,
+  mode: 0,
+};
+var deviceData = errorState;
+var timer;
 
 ////////////////////////////////////////////////////////////////////////
 //

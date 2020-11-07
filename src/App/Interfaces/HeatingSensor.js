@@ -3,18 +3,8 @@ const express = require("express");
 const app = (module.exports = express());
 
 // Persistant Storage
-const { getStore, setStore } = require("../../helpers/StorageDriver");
+const { getStore, setStore, updateSensorData } = require("../../helpers/StorageDriver");
 const { camelRoomName } = require("../../helpers/Functions");
-
-// MQTT
-const mqtt = require("mqtt");
-const connection = mqtt.connect("mqtt://kavanet.io");
-connection.setMaxListeners(15); // Disables event listener warning
-connection.subscribe("#", (err) => {
-  err ? console.log(err) : null;
-});
-
-connection.on("connect", () => null);
 
 const errorState = {
   isConnected: false,
@@ -27,9 +17,8 @@ const newSensor = (room, offset) => {
   var timer;
   var deviceData = errorState;
 
-  connection.on("message", (topic, payload) => {
+  client.on("message", (topic, payload) => {
     if (topic == `${room} ${"Heating Sensor"}`) {
-      const roomName = camelRoomName(room);
       clearTimeout(timer);
 
       timer = setTimeout(() => {
@@ -39,7 +28,7 @@ const newSensor = (room, offset) => {
           ...environmentalData,
           heatingSensors: {
             ...environmentalData.heatingSensors,
-            [roomName]: deviceData,
+            [camelRoomName(room)]: deviceData,
           },
         };
         setStore("Environmental Data", environmentalData);
@@ -56,15 +45,7 @@ const newSensor = (room, offset) => {
           pressure: mqttData.pressure,
         };
 
-        let environmentalData = getStore("Environmental Data");
-        environmentalData = {
-          ...environmentalData,
-          heatingSensors: {
-            ...environmentalData.heatingSensors,
-            [roomName]: deviceData,
-          },
-        };
-        setStore("Environmental Data", environmentalData);
+        updateSensorData(camelRoomName(room), deviceData);
       } else {
         console.log(`${room} ${"Heating Sensor Disconnected"}`);
       }

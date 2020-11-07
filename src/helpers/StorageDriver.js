@@ -48,6 +48,18 @@ const updateHeatingTime = (time = 0) => {
   updateValue("heatingSchedule", "heatingTime", now.setMinutes(now.getMinutes() + time));
 };
 
+const updateSensorData = (roomName, data) => {
+  let environmentalData = getStore("Environmental Data");
+  environmentalData = {
+    ...environmentalData,
+    heatingSensors: {
+      ...environmentalData.heatingSensors,
+      [roomName]: data,
+    },
+  };
+  setStore("Environmental Data", environmentalData);
+};
+
 module.exports = {
   getStore: getStore,
   setStore: setStore,
@@ -56,6 +68,7 @@ module.exports = {
   updateBoostTime: updateBoostTime,
   updateRadiatorFanTime: updateRadiatorFanTime,
   updateHeatingTime: updateHeatingTime,
+  updateSensorData: updateSensorData,
 };
 
 // function setSchedule(schedule, item, time = 0) {

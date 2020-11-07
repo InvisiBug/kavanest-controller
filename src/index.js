@@ -67,7 +67,9 @@ global.io = require("socket.io")(server);
 ////////////////////////////////////////////////////////////////////////
 const mqtt = require("mqtt");
 // global.client = mqtt.connect("mqtt://192.168.1.46");
-global.client = mqtt.connect("mqtt://kavanet.io");
+// global.client = mqtt.connect("mqtt://kavanet.io");
+
+global.client = mqtt.connect("mqtt://localhost");
 client.setMaxListeners(15); // Disables event listener warning
 
 client.subscribe("#", (err) => {
@@ -76,7 +78,10 @@ client.subscribe("#", (err) => {
 
 client.on("connect", () => null);
 
-// client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload)));
+client.on("message", (_, payload) => {
+  // console.log(chalk.white("Topic: " + _) + chalk.cyan(" \t" + payload));
+  // console.log(chalk.yellow(payload.toString()));
+});
 client.on("message", (topic, payload) => {
   try {
     io.emit("MQTT Messages", JSON.parse(payload));
@@ -96,29 +101,28 @@ client.on("message", (topic, payload) => {
 ////////////////////////////////////////////////////////////////////////
 // const heating        = require('./App/Devices/Heating.js');
 // General
-app.use(require("./App/Weather.js"));
+// app.use(require("./App/Weather.js"));
 
-// Our Room
+// // Our Room
 app.use(require("./App/Devices/OurRoom/Desk LEDs"));
 app.use(require("./App/Devices/OurRoom/Screen LEDs"));
-app.use(require("./App/Devices/OurRoom/FloodLight"));
 app.use(require("./App/Devices/OurRoom/Table Lamp"));
 app.use(require("./App/Devices/OurRoom/FloodLight.js"));
 app.use(require("./App/Devices/OurRoom/Sun.js"));
 app.use(require("./App/Devices/OurRoom/Computer Audio.js"));
 app.use(require("./App/Devices/OurRoom/Computer Power.js"));
-// app.use(require('./App/Devices/Our Room/Blanket.js'));
+// // app.use(require('./App/Devices/Our Room/Blanket.js'));
 app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 
-// Historical
-app.use(require("./App/Historical.js"));
+// // Historical
+// app.use(require("./App/Historical.js"));
 
-// Calor Imperium
-app.use(require("./App/Controllers/HeatingController.js"));
+// // Calor Imperium
+// app.use(require("./App/Controllers/HeatingController.js"));
 app.use(require("./App/Calor Imperium.js"));
-app.use(require("./App/Interfaces/Heating.js"));
-app.use(require("./App/Services/HouseClimateStats"));
-app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
+// app.use(require("./App/Interfaces/Heating.js"));
+app.use(require("./App/Services/HouseClimateStats")); // Socket is in here too
+// app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -132,7 +136,6 @@ app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
 //
 ////////////////////////////////////////////////////////////////////////
 const heatingSensor = require("./App/Interfaces/HeatingSensor");
-const { Console } = require("console");
 
 const sensors = [
   {

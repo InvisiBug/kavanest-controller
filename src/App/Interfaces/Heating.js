@@ -4,17 +4,6 @@ const app = (module.exports = express());
 const { getStore, setStore, updateValue, readValue } = require("../../helpers/StorageDriver");
 const { boostOn, boostOff } = require("../../helpers/HeatingFunctions");
 
-// MQTT
-const mqtt = require("mqtt");
-const connection = mqtt.connect("mqtt://kavanet.io");
-
-connection.setMaxListeners(15); // Disables event listener warning
-connection.subscribe("#", (err) => {
-  err ? console.log(err) : null;
-});
-
-connection.on("connect", () => null);
-
 ////////////////////////////////////////////////////////////////////////
 //
 //  #     #
@@ -26,15 +15,13 @@ connection.on("connect", () => null);
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-const saveToStorage = true;
-var deviceData = {
+let errorState = {
   isConnected: false,
   isOn: false,
+  isAutomatic: false,
 };
-
-var timer = setTimeout(() => {
-  deviceData.isConnected = false;
-}, 10 * 1000);
+var deviceData = errorState;
+var timer;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -47,12 +34,12 @@ var timer = setTimeout(() => {
 //  #     #  #### #    #       #
 //
 ////////////////////////////////////////////////////////////////////////
-connection.on("message", (topic, payload) => {
+client.on("message", (topic, payload) => {
   if (topic == "Heating") {
     clearTimeout(timer);
 
     timer = setTimeout(() => {
-      deviceData.isConnected = false;
+      deviceData = errorState;
       setStore("Heating", deviceData);
     }, 10 * 1000);
 

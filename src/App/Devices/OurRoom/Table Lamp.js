@@ -33,15 +33,15 @@ const { tableLampControl } = require("../../Interfaces/mqttOut");
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-var deviceData;
+let errorState = {
+  isConnected: false,
+  red: 0,
+  green: 0,
+  blue: 0,
+  mode: 0,
+};
+var deviceData = errorState;
 var timer;
-
-timer = setTimeout(() => {
-  deviceData = {
-    ...deviceData,
-    isConnected: false,
-  };
-}, 10 * 1000);
 
 ////////////////////////////////////////////////////////////////////////
 //
