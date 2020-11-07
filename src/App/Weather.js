@@ -27,10 +27,7 @@ var schedule = require("node-schedule");
 
 // Request
 const request = require("request");
-
 const store = require("../helpers/StorageDriver");
-
-const saveToStorage = true;
 
 ////////////////////////////////////////////////////////////////////////
 //

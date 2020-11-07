@@ -14,14 +14,14 @@ const errorState = {
 
 const newSensor = (room, offset) => {
   var timer;
-  var deviceData = disconnectedState;
+  var deviceData = errorState;
 
   client.on("message", (topic, payload) => {
     if (topic == `${room} ${"Heating Sensor"}`) {
       clearTimeout(timer);
 
       timer = setTimeout(() => {
-        deviceData = disconnectedState;
+        deviceData = errorState;
         let environmentalData = getStore("Environmental Data");
         environmentalData = {
           ...environmentalData,

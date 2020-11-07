@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const { get } = require("../App/Weather");
 
 const setStore = (store, data) => {
   const storePath = path.join(`${__dirname}${"/../../PersistantStorage/"}${store}${".json"}`);
