@@ -78,7 +78,11 @@ client.subscribe("#", (err) => {
   err ? console.log(err) : console.log("Subscribed to all");
 });
 
-client.on("connect", () => console.log("MQTT Connected"));
+// client.on("connect", (err) => {
+//   err ? console.log(err) : console.log("MQTT Connected");
+// });
+
+client.on("connect", () => null);
 
 client.on("message", (_, payload) => {
   // console.log(chalk.white("Topic: " + _) + chalk.cyan(" \t" + payload));
