@@ -20,7 +20,6 @@
 ////////////////////////////////////////////////////////////////////////
 const express = require("express");
 const app = (module.exports = express());
-const { computerAudioControl } = require("../../Interfaces/mqttOut");
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -35,15 +34,13 @@ const { computerAudioControl } = require("../../Interfaces/mqttOut");
 ////////////////////////////////////////////////////////////////////////
 var computerAudio = null;
 var timer;
-var errorState = {
+var deviceData = {
   isConnected: false,
   left: false,
   right: false,
   sub: false,
   mixer: false,
 };
-
-var deviceData = errorState;
 // var timer = setTimeout(() => {
 //   deviceData.isConnected = false;
 // }, 10 * 1000);
@@ -66,7 +63,7 @@ app.get("/api/computerAudio/Status", (req, res) => {
 app.post("/api/ComputerAudio/On", (req, res) => {
   // console.log("Computer Audio On: " + req.body.Device);
   if (req.body.Device == "Master") {
-    computerAudioControl("1");
+    client.publish("Computer Audio Control", "1"); // Toggle power button
 
     computerAudio.Left = true;
     computerAudio.Right = true;
@@ -83,7 +80,7 @@ app.post("/api/ComputerAudio/On", (req, res) => {
       ? (computerAudio.Mixer = true)
       : null;
 
-    computerAudioControl(JSON.stringify(computerAudio));
+    client.publish("Computer Audio Control", JSON.stringify(computerAudio));
   }
 
   res.json(computerAudio);
@@ -92,7 +89,7 @@ app.post("/api/ComputerAudio/On", (req, res) => {
 app.post("/api/ComputerAudio/Off", (req, res) => {
   // console.log("Computer Audio Off: " + req.body.Device);
   if (req.body.Device == "Master") {
-    computerAudioControl("0");
+    client.publish("Computer Audio Control", "0"); // Toggle power button
 
     computerAudio.Left = false;
     computerAudio.Right = false;
@@ -109,7 +106,7 @@ app.post("/api/ComputerAudio/Off", (req, res) => {
       ? (computerAudio.Mixer = false)
       : null;
 
-    computerAudioControl(JSON.stringify(computerAudio));
+    client.publish("Computer Audio Control", JSON.stringify(computerAudio));
   }
   // console.log(computerAudio);
 
@@ -176,6 +173,5 @@ const sensorUpdate = setInterval(() => {
 
 const sendSocketData = () => {
   io.emit("New Computer Audio", deviceData);
-  io.emit("Computer Audio", deviceData);
-  // io.emit("Computer Audio", computerAudio);
+  io.emit("Computer Audio", computerAudio);
 };

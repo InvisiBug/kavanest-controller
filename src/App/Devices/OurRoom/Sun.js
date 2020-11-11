@@ -1,14 +1,42 @@
+////////////////////////////////////////////////////////////////////////
+//
+// ███████╗██╗      ██████╗  ██████╗ ██████╗ ██╗     ██╗ ██████╗ ██╗  ██╗████████╗
+// ██╔════╝██║     ██╔═══██╗██╔═══██╗██╔══██╗██║     ██║██╔════╝ ██║  ██║╚══██╔══╝
+// █████╗  ██║     ██║   ██║██║   ██║██║  ██║██║     ██║██║  ███╗███████║   ██║
+// ██╔══╝  ██║     ██║   ██║██║   ██║██║  ██║██║     ██║██║   ██║██╔══██║   ██║
+// ██║     ███████╗╚██████╔╝╚██████╔╝██████╔╝███████╗██║╚██████╔╝██║  ██║   ██║
+// ╚═╝     ╚══════╝ ╚═════╝  ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝
+//
+////////////////////////////////////////////////////////////////////////
+//
+//   #####
+//  #     #  ####  #    # ###### #  ####
+//  #       #    # ##   # #      # #    #
+//  #       #    # # #  # #####  # #
+//  #       #    # #  # # #      # #  ###
+//  #     # #    # #   ## #      # #    #
+//   #####   ####  #    # #      #  ####
+//
+////////////////////////////////////////////////////////////////////////
+// Express
 const express = require("express");
 const app = (module.exports = express());
-const { sunControl } = require("../../Interfaces/mqttOut");
-const { printTime } = require("../../../helpers/Functions.js");
 
-let errorState = {
-  isConnected: false,
-  isOn: false,
-};
-var deviceData = errorState;
-var timer;
+////////////////////////////////////////////////////////////////////////
+//
+//  #     #
+//  #     #   ##   #####  #   ##   #####  #      ######  ####
+//  #     #  #  #  #    # #  #  #  #    # #      #      #
+//  #     # #    # #    # # #    # #####  #      #####   ####
+//   #   #  ###### #####  # ###### #    # #      #           #
+//    # #   #    # #   #  # #    # #    # #      #      #    #
+//     #    #    # #    # # #    # #####  ###### ######  ####
+//
+////////////////////////////////////////////////////////////////////////
+var deviceData;
+var timer = setTimeout(() => {
+  deviceData.isConnected = false;
+}, 10 * 1000);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -22,14 +50,14 @@ var timer;
 //
 ////////////////////////////////////////////////////////////////////////
 app.get("/api/Sun/On", (req, res) => {
-  sunControl("1");
+  client.publish("Sun Control", "1");
   deviceData.isOn = true;
   sendSocketData();
   res.json(null);
 });
 
 app.get("/api/Sun/Off", (req, res) => {
-  sunControl("0");
+  client.publish("Sun Control", "0");
   deviceData.isOn = false;
   sendSocketData();
   res.json(null);
@@ -51,7 +79,7 @@ client.on("message", (topic, payload) => {
     clearTimeout(timer);
 
     timer = setTimeout(() => {
-      deviceData = errorState;
+      deviceData.isConnected = false;
     }, 10 * 1000);
 
     if (payload != "Sun Disconnected") {
@@ -61,10 +89,12 @@ client.on("message", (topic, payload) => {
         isOn: JSON.parse(payload).state,
       };
     } else {
-      console.log("Sun Disconnected" + printTime());
+      console.log("Sun Disconnected");
     }
   } else if (topic === "Sun Button") {
-    deviceData.isOn ? sunControl("0") : sunControl("1");
+    deviceData.isOn
+      ? client.publish("Sun Control", "0")
+      : client.publish("Sun Control", "1");
   }
 });
 

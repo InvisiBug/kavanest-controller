@@ -29,10 +29,9 @@ const updateValue = (store, point, value) => {
 };
 
 const readValue = (store, point) => {
-  // let data = getStore(store);
-  // return data[point];
+  let data = getStore(store);
 
-  return getStore(store)[point];
+  return data[point];
 };
 
 const updateBoostTime = (time = 0) => {
@@ -50,32 +49,6 @@ const updateHeatingTime = (time = 0) => {
   updateValue("heatingSchedule", "heatingTime", now.setMinutes(now.getMinutes() + time));
 };
 
-const updateSensorData = (roomName, data) => {
-  let environmentalData = getStore("Environmental Data");
-  environmentalData = {
-    ...environmentalData,
-    heatingSensors: {
-      ...environmentalData.heatingSensors,
-      [roomName]: data,
-    },
-  };
-  setStore("Environmental Data", environmentalData);
-};
-// Valves
-
-// Conditions
-const getRoomConditions = (room) => {
-  return getStore("Environmental Data").heatingSensors[room];
-};
-
-const getRoomTemperature = (room) => {
-  return getStore("Environmental Data").heatingSensors[room].temperature;
-};
-
-const getRoomSetpoints = (room) => {
-  return getStore("Environmental Data").setpoints[room];
-};
-
 module.exports = {
   getStore: getStore,
   setStore: setStore,
@@ -84,10 +57,6 @@ module.exports = {
   updateBoostTime: updateBoostTime,
   updateRadiatorFanTime: updateRadiatorFanTime,
   updateHeatingTime: updateHeatingTime,
-  updateSensorData: updateSensorData,
-  getRoomSetpoints: getRoomSetpoints,
-  getRoomConditions: getRoomConditions,
-  getRoomTemperature: getRoomTemperature,
 };
 
 // function setSchedule(schedule, item, time = 0) {

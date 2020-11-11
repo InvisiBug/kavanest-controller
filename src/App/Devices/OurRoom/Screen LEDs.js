@@ -1,6 +1,25 @@
+////////////////////////////////////////////////////////////////////////
+//
+//  ███████╗ ██████╗██████╗ ███████╗███████╗███╗   ██╗    ██╗     ███████╗██████╗ ███████╗
+//  ██╔════╝██╔════╝██╔══██╗██╔════╝██╔════╝████╗  ██║    ██║     ██╔════╝██╔══██╗██╔════╝
+//  ███████╗██║     ██████╔╝█████╗  █████╗  ██╔██╗ ██║    ██║     █████╗  ██║  ██║███████╗
+//  ╚════██║██║     ██╔══██╗██╔══╝  ██╔══╝  ██║╚██╗██║    ██║     ██╔══╝  ██║  ██║╚════██║
+//  ███████║╚██████╗██║  ██║███████╗███████╗██║ ╚████║    ███████╗███████╗██████╔╝███████║
+//  ╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝    ╚══════╝╚══════╝╚═════╝ ╚══════╝
+//
+////////////////////////////////////////////////////////////////////////
+//
+//   #####
+//  #     #  ####  #    # ###### #  ####
+//  #       #    # ##   # #      # #    #
+//  #       #    # # #  # #####  # #
+//  #       #    # #  # # #      # #  ###
+//  #     # #    # #   ## #      # #    #
+//   #####   ####  #    # #      #  ####
+//
+////////////////////////////////////////////////////////////////////////
 const express = require("express");
 const app = (module.exports = express());
-const { screenLEDsControl } = require("../../Interfaces/mqttOut");
 
 // Functions
 const functions = require("../../../helpers/Functions.js");
@@ -16,15 +35,10 @@ const functions = require("../../../helpers/Functions.js");
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-let errorState = {
-  isConnected: false,
-  red: 0,
-  green: 0,
-  blue: 0,
-  mode: 0,
-};
-var deviceData = errorState;
-var timer;
+var deviceData;
+var timer = setTimeout(() => {
+  deviceData.isConnected = false;
+}, 10 * 1000);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -40,35 +54,35 @@ var timer;
 app.post("/api/screenLEDs/update", (req, res) => {
   deviceData = req.body;
 
-  screenLEDsControl(JSON.stringify(deviceData));
+  client.publish("Screen LEDs Control", JSON.stringify(deviceData));
   res.end(null);
 });
 
 app.get("/api/screenLEDs/colour", (req, res) => {
   deviceData.mode = null;
 
-  screenLEDsControl("0");
+  client.publish("Screen LEDs Control", "0");
   res.end(null);
 });
 
 app.get("/api/screenLEDs/ambient/on", (req, res) => {
   deviceData.mode = "ambient";
 
-  screenLEDsControl("1");
+  client.publish("Screen LEDs Control", "1");
   res.end(null);
 });
 
 app.get("/api/screenLEDs/rainbow/on", (req, res) => {
   deviceData.mode = "rainbow";
 
-  screenLEDsControl("2");
+  client.publish("Screen LEDs Control", "2");
   res.end(null);
 });
 
 app.get("/api/screenLEDs/fade/on", (req, res) => {
   deviceData.mode = "fade";
 
-  screenLEDsControl("3");
+  client.publish("Screen LEDs Control", "3");
   res.end(null);
 });
 

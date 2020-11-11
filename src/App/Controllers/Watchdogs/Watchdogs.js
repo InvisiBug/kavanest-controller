@@ -1,24 +1,20 @@
 const express = require("express");
 var app = (module.exports = express());
 const { getStore, setStore, updateValue } = require("../../../helpers/StorageDriver");
-const { radiatorFanControl, heatingControl } = require("../../Interfaces/mqttOut");
 
 // TODO, Move each watchdog to seperate files
 // Heating
 setInterval(() => {
   let heatingSchedule = getStore("heatingSchedule");
   let heatingController = getStore("Heating");
-  // let valves = getStore("Radiator Valves");
   let now = new Date().getTime();
 
   if (now < heatingSchedule.heatingTime) {
-    // if (valves.livingRoom || valves.kitchen || valves.liamsRoom || valves.study || valves.ourRoom) {
     if (heatingController.isConnected && !heatingController.isOn) {
-      heatingControl("1");
+      client.publish("Heating Control", "1");
     }
-    // }
   } else if (heatingController.isConnected && heatingController.isOn) {
-    heatingControl("0");
+    client.publish("Heating Control", "0");
   }
 }, 1 * 1000);
 
@@ -26,22 +22,15 @@ setInterval(() => {
 setInterval(() => {
   let radiatorFan = getStore("Radiator Fan");
   let heating = getStore("heatingSchedule");
-  // let valves = getStore("Radiator Valves");
   let now = new Date().getTime();
 
   if (radiatorFan.isAutomatic) {
     if (now < heating.radiatorFanTime) {
       if (radiatorFan.isConnected && !radiatorFan.isOn) {
-        radiatorFanControl("1");
+        client.publish("Radiator Fan Control", "1");
       }
     } else if (radiatorFan.isConnected && radiatorFan.isOn) {
-      radiatorFanControl("0");
+      client.publish("Radiator Fan Control", "0");
     }
   }
-}, 1 * 1000);
-
-setInterval(() => {
-  // grab valve demand
-  // grab valve state
-  // if demand is less than state then change state
 }, 1 * 1000);

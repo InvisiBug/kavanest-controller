@@ -24,8 +24,7 @@ const app = (module.exports = express());
 const chalk = require("chalk");
 
 app.use(bodyParser.json()); // Used to handle data in post requests
-// process.stdout.write("\033c"); // Clear the console
-console.clear();
+process.stdout.write("\033c"); // Clear the console
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -52,7 +51,7 @@ const socketPort = process.env.PORT || 5001;
 //   #####   ####   ####  #    # ######   #
 //
 ////////////////////////////////////////////////////////////////////////
-let server = require("http").createServer(app);
+var server = require("http").createServer(app);
 global.io = require("socket.io")(server);
 
 ////////////////////////////////////////////////////////////////////////
@@ -67,27 +66,17 @@ global.io = require("socket.io")(server);
 //
 ////////////////////////////////////////////////////////////////////////
 const mqtt = require("mqtt");
-
-// global.client = mqtt.connect("mqtt://192.168.1.46"); // Internal network
-// global.client = mqtt.connect("mqtt://kavanet.io"); // Internet
-global.client = mqtt.connect("mqtt://localhost"); // Laptop
-
-client.setMaxListeners(16); // Disables event listener warning
+// global.client = mqtt.connect("mqtt://192.168.1.46");
+global.client = mqtt.connect("mqtt://kavanet.io");
+client.setMaxListeners(15); // Disables event listener warning
 
 client.subscribe("#", (err) => {
-  err ? console.log(err) : console.log("Subscribed to all");
+  err ? console.log(err) : console.log("Subscribed to " + "All");
 });
-
-// client.on("connect", (err) => {
-//   err ? console.log(err) : console.log("MQTT Connected");
-// });
 
 client.on("connect", () => null);
 
-client.on("message", (_, payload) => {
-  // console.log(chalk.white("Topic: " + _) + chalk.cyan(" \t" + payload));
-  // console.log(chalk.yellow(payload.toString()));
-});
+// client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload)));
 client.on("message", (topic, payload) => {
   try {
     io.emit("MQTT Messages", JSON.parse(payload));
@@ -107,27 +96,28 @@ client.on("message", (topic, payload) => {
 ////////////////////////////////////////////////////////////////////////
 // const heating        = require('./App/Devices/Heating.js');
 // General
-// app.use(require("./App/Weather.js"));
+app.use(require("./App/Weather.js"));
 
-// // Our Room
+// Our Room
 app.use(require("./App/Devices/OurRoom/Desk LEDs"));
 app.use(require("./App/Devices/OurRoom/Screen LEDs"));
+app.use(require("./App/Devices/OurRoom/FloodLight"));
 app.use(require("./App/Devices/OurRoom/Table Lamp"));
 app.use(require("./App/Devices/OurRoom/FloodLight.js"));
 app.use(require("./App/Devices/OurRoom/Sun.js"));
 app.use(require("./App/Devices/OurRoom/Computer Audio.js"));
 app.use(require("./App/Devices/OurRoom/Computer Power.js"));
-// // app.use(require('./App/Devices/Our Room/Blanket.js'));
+// app.use(require('./App/Devices/Our Room/Blanket.js'));
 app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 
-// // Historical
-// app.use(require("./App/Historical.js"));
+// Historical
+app.use(require("./App/Historical.js"));
 
-// // Calor Imperium
-// app.use(require("./App/Controllers/ZoneHeatingController.js"));
+// Calor Imperium
+app.use(require("./App/Controllers/HeatingController.js"));
 app.use(require("./App/Calor Imperium.js"));
 app.use(require("./App/Interfaces/Heating.js"));
-app.use(require("./App/Services/HouseClimateStats")); // Socket is in here too
+app.use(require("./App/Services/HouseClimateStats"));
 app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
 
 ////////////////////////////////////////////////////////////////////////
@@ -146,7 +136,7 @@ const heatingSensor = require("./App/Interfaces/HeatingSensor");
 const sensors = [
   {
     name: "Our Room",
-    offset: 1.6,
+    offset: -0.1,
   },
   {
     name: "Study",
@@ -170,27 +160,19 @@ sensors.map((room, index) => {
   heatingSensor.newSensor(room.name, room.offset);
 });
 
-// const radiatorValve = require("./App/Interfaces/RadiatorValve");
-// radiatorValve.newValve("Our Room");
-
-const zoneHeatingController = require("./App/Controllers/ZoneHeatingController");
-zoneHeatingController.newZoneController("Our Room");
-
-[
-  ////////////////////////////////////////////////////////////////////////
-  //
-  //   #####
-  //  #     #  ####  #    #  ####   ####  #      ######
-  //  #       #    # ##   # #      #    # #      #
-  //  #       #    # # #  #  ####  #    # #      #####
-  //  #       #    # #  # #      # #    # #      #
-  //  #     # #    # #   ## #    # #    # #      #
-  //   #####   ####  #    #  ####   ####  ###### ######
-  //
-  ////////////////////////////////////////////////////////////////////////
-  //This adds the the line printed information to all console.logs
-  ("log", "warn", "error"),
-].forEach((methodName) => {
+////////////////////////////////////////////////////////////////////////
+//
+//   #####
+//  #     #  ####  #    #  ####   ####  #      ######
+//  #       #    # ##   # #      #    # #      #
+//  #       #    # # #  #  ####  #    # #      #####
+//  #       #    # #  # #      # #    # #      #
+//  #     # #    # #   ## #    # #    # #      #
+//   #####   ####  #    #  ####   ####  ###### ######
+//
+////////////////////////////////////////////////////////////////////////
+//This adds the the line printed information to all console.logs
+["log", "warn", "error"].forEach((methodName) => {
   const originalMethod = console[methodName];
   console[methodName] = (...args) => {
     try {

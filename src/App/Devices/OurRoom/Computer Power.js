@@ -1,14 +1,45 @@
+////////////////////////////////////////////////////////////////////////
+//
+//  ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗   ██╗████████╗███████╗██████╗     ██████╗  ██████╗ ██╗    ██╗███████╗██████╗
+// ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██║   ██║╚══██╔══╝██╔════╝██╔══██╗    ██╔══██╗██╔═══██╗██║    ██║██╔════╝██╔══██╗
+// ██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║   ██║   █████╗  ██████╔╝    ██████╔╝██║   ██║██║ █╗ ██║█████╗  ██████╔╝
+// ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║   ██║   ██╔══╝  ██╔══██╗    ██╔═══╝ ██║   ██║██║███╗██║██╔══╝  ██╔══██╗
+// ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝   ██║   ███████╗██║  ██║    ██║     ╚██████╔╝╚███╔███╔╝███████╗██║  ██║
+//  ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝    ╚═╝   ╚══════╝╚═╝  ╚═╝    ╚═╝      ╚═════╝  ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝
+//
+////////////////////////////////////////////////////////////////////////
+//
+//   #####
+//  #     #  ####  #    # ###### #  ####
+//  #       #    # ##   # #      # #    #
+//  #       #    # # #  # #####  # #
+//  #       #    # #  # # #      # #  ###
+//  #     # #    # #   ## #      # #    #
+//   #####   ####  #    # #      #  ####
+//
+////////////////////////////////////////////////////////////////////////
+// Express
 const express = require("express");
 const app = (module.exports = express());
-const { computerPowerControl } = require("../../Interfaces/mqttOut");
-const { printTime } = require("../../../helpers/Functions.js");
 
-let errorState = {
-  isConnected: false,
-  isOn: false,
-};
-var deviceData = errorState;
-var timer;
+// Functions
+const functions = require("../../../helpers/Functions.js");
+
+////////////////////////////////////////////////////////////////////////
+//
+//  #     #
+//  #     #   ##   #####  #   ##   #####  #      ######  ####
+//  #     #  #  #  #    # #  #  #  #    # #      #      #
+//  #     # #    # #    # # #    # #####  #      #####   ####
+//   #   #  ###### #####  # ###### #    # #      #           #
+//    # #   #    # #   #  # #    # #    # #      #      #    #
+//     #    #    # #    # # #    # #####  ###### ######  ####
+//
+////////////////////////////////////////////////////////////////////////
+var deviceData;
+var timer = setTimeout(() => {
+  deviceData.isConnected = false;
+}, 10 * 1000);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -22,14 +53,14 @@ var timer;
 //
 ////////////////////////////////////////////////////////////////////////
 app.get("/api/ComputerPower/On", (req, res) => {
-  computerPowerControl("1");
+  client.publish("Computer Power Control", "1");
   deviceData.isOn = true;
   sendSocketData();
   res.json(null); // Toggle power button
 });
 
 app.get("/api/ComputerPower/Off", (req, res) => {
-  computerPowerControl("0");
+  client.publish("Computer Power Control", "0");
   deviceData.isOn = false;
   sendSocketData();
   res.json(null);
@@ -61,7 +92,7 @@ client.on("message", (topic, payload) => {
         isOn: JSON.parse(payload).state,
       };
     } else {
-      console.log("Computer power disconnected at " + printTime());
+      console.log("Computer power disconnected at " + functions.printTime());
     }
   }
 });

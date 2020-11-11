@@ -43,8 +43,16 @@ var printTime = () => {
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
   minutes = minutes < 10 ? "0" + minutes : minutes;
-  const strTime = hours + ":" + minutes + ampm;
+  const strTime = hours + ":" + minutes + " " + ampm;
   return strTime;
+};
+
+const updateValue = (data, point, value) => {
+  data = {
+    ...data,
+    [point]: value,
+  };
+  return data;
 };
 
 const camelRoomName = (roomName) => {

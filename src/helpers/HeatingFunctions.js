@@ -1,6 +1,6 @@
 const { updateValue, readValue, updateBoostTime, updateRadiatorFanTime, updateHeatingTime } = require("./StorageDriver");
 
-const overRunTime = 20;
+const overRunTime = 15;
 const boostTime = 20;
 
 ////////////////////////////////////////////////////////////////////////

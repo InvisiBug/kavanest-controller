@@ -1,7 +1,20 @@
+// Express
 const express = require("express");
 const app = (module.exports = express());
-const { getStore, setStore, updateSensorData } = require("../../helpers/StorageDriver");
+
+// Persistant Storage
+const { getStore, setStore } = require("../../helpers/StorageDriver");
 const { camelRoomName } = require("../../helpers/Functions");
+
+// MQTT
+const mqtt = require("mqtt");
+const connection = mqtt.connect("mqtt://kavanet.io");
+connection.setMaxListeners(15); // Disables event listener warning
+connection.subscribe("#", (err) => {
+  err ? console.log(err) : null;
+});
+
+connection.on("connect", () => null);
 
 const errorState = {
   isConnected: false,
@@ -14,8 +27,9 @@ const newSensor = (room, offset) => {
   var timer;
   var deviceData = errorState;
 
-  client.on("message", (topic, payload) => {
+  connection.on("message", (topic, payload) => {
     if (topic == `${room} ${"Heating Sensor"}`) {
+      const roomName = camelRoomName(room);
       clearTimeout(timer);
 
       timer = setTimeout(() => {
@@ -25,7 +39,7 @@ const newSensor = (room, offset) => {
           ...environmentalData,
           heatingSensors: {
             ...environmentalData.heatingSensors,
-            [camelRoomName(room)]: deviceData,
+            [roomName]: deviceData,
           },
         };
         setStore("Environmental Data", environmentalData);
@@ -42,9 +56,17 @@ const newSensor = (room, offset) => {
           pressure: mqttData.pressure,
         };
 
-        updateSensorData(camelRoomName(room), deviceData);
+        let environmentalData = getStore("Environmental Data");
+        environmentalData = {
+          ...environmentalData,
+          heatingSensors: {
+            ...environmentalData.heatingSensors,
+            [roomName]: deviceData,
+          },
+        };
+        setStore("Environmental Data", environmentalData);
       } else {
-        console.log(`${room} ${"Heating Sensor Disconnected at "} ${printTime()}`);
+        console.log(`${room} ${"Heating Sensor Disconnected"}`);
       }
     }
   });
