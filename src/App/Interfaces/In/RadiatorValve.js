@@ -1,7 +1,7 @@
 const express = require("express");
 const app = (module.exports = express());
 const { getStore, setStore } = require("../../helpers/StorageDriver");
-const { camelRoomName, printTime } = require("../../helpers/Functions");
+const { camelRoomName, printTime } = require("../../../helpers/Functions");
 
 const disconnectedState = {
   isConnected: false,

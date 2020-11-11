@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { get } = require("../App/Weather");
+const { get } = require("../../App/Weather");
 
 const setStore = (store, data) => {
   const storePath = path.join(`${__dirname}${"/../../PersistantStorage/"}${store}${".json"}`);
@@ -52,19 +52,6 @@ const updateHeatingTime = (time = 0) => {
 };
 
 // Valves
-
-// Conditions
-const getRoomConditions = (room) => {
-  return getStore("Environmental Data").heatingSensors[room];
-};
-
-const getRoomTemperature = (room) => {
-  return getStore("Environmental Data").heatingSensors[room].temperature;
-};
-
-const getRoomSetpoints = (room) => {
-  return getStore("Environmental Data").setpoints[room];
-};
 
 module.exports = {
   getStore: getStore,
