@@ -4,17 +4,6 @@ const app = (module.exports = express());
 const { getStore, setStore, updateValue, readValue } = require("../../helpers/StorageDriver");
 const { boostOn, boostOff } = require("../../helpers/HeatingFunctions");
 
-// MQTT
-const mqtt = require("mqtt");
-const connection = mqtt.connect("mqtt://kavanet.io");
-
-connection.setMaxListeners(15); // Disables event listener warning
-connection.subscribe("#", (err) => {
-  err ? console.log(err) : null;
-});
-
-connection.on("connect", () => null);
-
 ////////////////////////////////////////////////////////////////////////
 //
 //  #     #
@@ -47,7 +36,7 @@ var timer = setTimeout(() => {
 //  #     #  #### #    #       #
 //
 ////////////////////////////////////////////////////////////////////////
-connection.on("message", (topic, payload) => {
+client.on("message", (topic, payload) => {
   if (topic == "Heating") {
     clearTimeout(timer);
 

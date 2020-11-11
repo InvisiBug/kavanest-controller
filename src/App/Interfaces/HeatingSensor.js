@@ -6,16 +6,6 @@ const app = (module.exports = express());
 const { getStore, setStore } = require("../../helpers/StorageDriver");
 const { camelRoomName } = require("../../helpers/Functions");
 
-// MQTT
-const mqtt = require("mqtt");
-const connection = mqtt.connect("mqtt://kavanet.io");
-connection.setMaxListeners(15); // Disables event listener warning
-connection.subscribe("#", (err) => {
-  err ? console.log(err) : null;
-});
-
-connection.on("connect", () => null);
-
 const errorState = {
   isConnected: false,
   temperature: -1,
@@ -27,7 +17,7 @@ const newSensor = (room, offset) => {
   var timer;
   var deviceData = errorState;
 
-  connection.on("message", (topic, payload) => {
+  client.on("message", (topic, payload) => {
     if (topic == `${room} ${"Heating Sensor"}`) {
       const roomName = camelRoomName(room);
       clearTimeout(timer);

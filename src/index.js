@@ -66,8 +66,11 @@ global.io = require("socket.io")(server);
 //
 ////////////////////////////////////////////////////////////////////////
 const mqtt = require("mqtt");
-// global.client = mqtt.connect("mqtt://192.168.1.46");
-global.client = mqtt.connect("mqtt://kavanet.io");
+
+// global.client = mqtt.connect("mqtt://192.168.1.46"); // Internal network
+// global.client = mqtt.connect("mqtt://kavanet.io"); // Internet
+global.client = mqtt.connect("mqtt://localhost"); // Laptop
+
 client.setMaxListeners(15); // Disables event listener warning
 
 client.subscribe("#", (err) => {
@@ -75,6 +78,7 @@ client.subscribe("#", (err) => {
 });
 
 client.on("connect", () => null);
+client.on("error", (error) => console.log(error));
 
 // client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload)));
 client.on("message", (topic, payload) => {
