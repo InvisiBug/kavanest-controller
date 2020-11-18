@@ -1,18 +1,17 @@
 const fs = require("fs");
 const path = require("path");
-const { get } = require("../../App/Weather");
 
 const setStore = (store, data) => {
-  const storePath = path.join(`${__dirname}${"/../../PersistantStorage/"}${store}${".json"}`);
+  const storePath = path.join(`${__dirname}${"/../../../PersistantStorage/"}${store}${".json"}`);
   try {
-    fs.writeFileSync(storePath, JSON.stringify(data));
+    fs.writeFileSync(storePath, JSON.stringify(data, null, 0));
   } catch (e) {
     console.log(e);
   }
 };
 
 const getStore = (store) => {
-  const storePath = path.join(`${__dirname}${"/../../PersistantStorage/"}${store}${".json"}`);
+  const storePath = path.join(`${__dirname}${"/../../../PersistantStorage/"}${store}${".json"}`);
   try {
     return JSON.parse(fs.readFileSync(storePath));
   } catch (e) {
@@ -61,9 +60,9 @@ module.exports = {
   updateBoostTime: updateBoostTime,
   updateRadiatorFanTime: updateRadiatorFanTime,
   updateHeatingTime: updateHeatingTime,
-  getRoomSetpoints: getRoomSetpoints,
-  getRoomConditions: getRoomConditions,
-  getRoomTemperature: getRoomTemperature,
+  // getRoomSetpoints: getRoomSetpoints,
+  // getRoomConditions: getRoomConditions,
+  // getRoomTemperature: getRoomTemperature,
 };
 
 // function setSchedule(schedule, item, time = 0) {

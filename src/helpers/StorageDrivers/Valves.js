@@ -37,8 +37,6 @@ const getValveStatus = (room) => {
   console.log(getStore("Environmental Data").radiatorValves[room]);
 };
 
-getValveStatus("ourRoom");
-
 module.exports = {
   setValveState: setValveState,
   getValveState: getValveState,

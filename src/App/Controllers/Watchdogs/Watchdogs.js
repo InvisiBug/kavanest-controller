@@ -1,7 +1,7 @@
 const express = require("express");
 var app = (module.exports = express());
 const { getStore, setStore, updateValue } = require("../../../helpers/StorageDrivers/LowLevelDriver");
-const { radiatorFanControl, heatingControl } = require("../../Interfaces/mqttOut");
+const { radiatorFanControl, heatingControl } = require("../../Interfaces/out/mqttOut");
 
 // TODO, Move each watchdog to seperate files
 // Heating

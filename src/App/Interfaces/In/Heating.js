@@ -17,8 +17,8 @@ client.on("message", (topic, payload) => {
     clearTimeout(timer);
 
     timer = setTimeout(() => {
-      deviceData.isConnected = false;
-      setStore("Heating", deviceData);
+      deviceData = disconnectedState;
+      setHeatingController(deviceData);
     }, 10 * 1000);
 
     if (payload != `${"Heating Disconnected"}`) {
@@ -30,17 +30,17 @@ client.on("message", (topic, payload) => {
         isOn: mqttData.state,
       };
 
-      setStore("Heating", deviceData);
+      setHeatingController(deviceData);
     } else {
       console.log(`${"Heating Disconnected"} ${functions.printTime()}`);
     }
   } else if (topic === "Heating Button") {
-    const now = new Date().getTime();
-    if (readValue("heatingSchedule", "boostTime") < now) {
-      boostOn();
-    } else {
-      boostOff();
-    }
+    // const now = new Date().getTime();
+    // if (readValue("heatingSchedule", "boostTime") < now) {
+    //   boostOn();
+    // } else {
+    //   boostOff();
+    // }
   }
 });
 
@@ -50,4 +50,14 @@ setInterval(() => {
 
 const sendSocketData = () => {
   io.emit("Heating", deviceData);
+};
+
+const setHeatingController = (data) => {
+  // TODO check if this can be replaced with setPoint()
+  let environmentalData = getStore("Environmental Data");
+  environmentalData = {
+    ...environmentalData,
+    heatingController: data,
+  };
+  setStore("Environmental Data", environmentalData);
 };

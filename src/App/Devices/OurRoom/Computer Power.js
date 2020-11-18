@@ -21,7 +21,7 @@
 // Express
 const express = require("express");
 const app = (module.exports = express());
-const { computerControl, computerPowerControl } = require("../../Interfaces/mqttOut");
+const { computerControl, computerPowerControl } = require("../../Interfaces/out/mqttOut");
 
 // Functions
 const functions = require("../../../helpers/Functions.js");

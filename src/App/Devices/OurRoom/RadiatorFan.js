@@ -1,6 +1,6 @@
 const express = require("express");
 const app = (module.exports = express());
-const { radiatorFanControl } = require("../../Interfaces/mqttOut");
+const { radiatorFanControl } = require("../../Interfaces/out/mqttOut");
 
 const { getStore, setStore } = require("../../../helpers/StorageDrivers/LowLevelDriver");
 

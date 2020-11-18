@@ -98,7 +98,6 @@ client.on("message", (topic, payload) => {
 //  #     #  ####  #####   ####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-// const heating        = require('./App/Devices/Heating.js');
 // General
 app.use(require("./App/Weather.js"));
 
@@ -111,18 +110,13 @@ app.use(require("./App/Devices/OurRoom/FloodLight.js"));
 app.use(require("./App/Devices/OurRoom/Sun.js"));
 app.use(require("./App/Devices/OurRoom/Computer Audio.js"));
 app.use(require("./App/Devices/OurRoom/Computer Power.js"));
-// // app.use(require('./App/Devices/Our Room/Blanket.js'));
+
 app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 
-// // Historical
-// app.use(require("./App/Historical.js"));
-
-// // Calor Imperium
-
 app.use(require("./App/Calor Imperium.js"));
-app.use(require("./App/Interfaces/Heating.js"));
-app.use(require("./App/Services/HouseClimateStats"));
-app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
+app.use(require("./App/Interfaces/In/Heating.js"));
+// app.use(require("./App/Services/HouseClimateStats"));
+// app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -135,7 +129,7 @@ app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
 // #     # ###### #    #   #   # #    #  ####      #####  ###### #    #  ####   ####  #    #
 //
 ////////////////////////////////////////////////////////////////////////
-const heatingSensor = require("./App/Interfaces/HeatingSensor");
+const heatingSensor = require("./App/Interfaces/In/HeatingSensor");
 
 const sensors = [
   {

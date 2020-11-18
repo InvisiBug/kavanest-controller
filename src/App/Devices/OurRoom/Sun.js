@@ -1,6 +1,6 @@
 const express = require("express");
 const app = (module.exports = express());
-const { sunControl } = require("../../Interfaces/mqttOut");
+const { sunControl } = require("../../Interfaces/out/mqttOut");
 
 // TODO needs initial data looking at
 

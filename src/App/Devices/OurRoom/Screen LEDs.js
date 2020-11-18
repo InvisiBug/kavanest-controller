@@ -20,7 +20,7 @@
 ////////////////////////////////////////////////////////////////////////
 const express = require("express");
 const app = (module.exports = express());
-const { screenLEDsControl } = require("../../Interfaces/mqttOut");
+const { screenLEDsControl } = require("../../Interfaces/out/mqttOut");
 
 // Functions
 const functions = require("../../../helpers/Functions.js");
