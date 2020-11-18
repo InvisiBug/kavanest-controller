@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { offsetTime } = require("../Time");
 
 const setStore = (store, data) => {
   const storePath = path.join(`${__dirname}${"/../../../PersistantStorage/"}${store}${".json"}`);
@@ -36,18 +37,17 @@ const readValue = (store, point) => {
 };
 
 const updateBoostTime = (time = 0) => {
-  let now = new Date();
-  updateValue("heatingSchedule", "boostTime", now.setMinutes(now.getMinutes() + time));
+  updateValue("heatingSchedule", "boostTime", offsetTime(time));
 };
 
 const updateRadiatorFanTime = (time = 0) => {
   let now = new Date();
-  updateValue("heatingSchedule", "radiatorFanTime", now.setMinutes(now.getMinutes() + time));
+  updateValue("heatingSchedule", "radiatorFanTime", offsetTime(time));
 };
 
 const updateHeatingTime = (time = 0) => {
   let now = new Date();
-  updateValue("heatingSchedule", "heatingTime", now.setMinutes(now.getMinutes() + time));
+  updateValue("heatingSchedule", "heatingTime", offsetTime(time));
 };
 
 // Valves
@@ -64,15 +64,3 @@ module.exports = {
   // getRoomConditions: getRoomConditions,
   // getRoomTemperature: getRoomTemperature,
 };
-
-// function setSchedule(schedule, item, time = 0) {
-//   setParameter(schedule, item, (new Date() + time).getTime());
-// }
-
-// function setHeatingSchedule(item, time = 0) {
-//   setSchedule("heating", item, time);
-// }
-
-// setHeatingFanSchedule(time = 0) {
-//   setHeatingSchedule("Fan", time);
-// }

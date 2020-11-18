@@ -2,6 +2,7 @@ const express = require("express");
 var app = (module.exports = express());
 const { getStore, setStore, updateValue } = require("../../../helpers/StorageDrivers/LowLevelDriver");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/out/mqttOut");
+const { now } = require("../../../helpers/Time");
 
 // TODO, Move each watchdog to seperate files
 // Heating
@@ -9,9 +10,8 @@ setInterval(() => {
   let heatingSchedule = getStore("heatingSchedule");
   let heatingController = getStore("Heating");
   // let valves = getStore("Radiator Valves");
-  let now = new Date().getTime();
 
-  if (now < heatingSchedule.heatingTime) {
+  if (now() < heatingSchedule.heatingTime) {
     // if (valves.livingRoom || valves.kitchen || valves.liamsRoom || valves.study || valves.ourRoom) {
     if (heatingController.isConnected && !heatingController.isOn) {
       heatingControl("1");
@@ -27,10 +27,9 @@ setInterval(() => {
   let radiatorFan = getStore("Radiator Fan");
   let heating = getStore("heatingSchedule");
   // let valves = getStore("Radiator Valves");
-  let now = new Date().getTime();
 
   if (radiatorFan.isAutomatic) {
-    if (now < heating.radiatorFanTime) {
+    if (now() < heating.radiatorFanTime) {
       if (radiatorFan.isConnected && !radiatorFan.isOn) {
         radiatorFanControl("1");
       }

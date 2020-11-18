@@ -23,6 +23,7 @@ const { getRoomSetpoints, getRoomTemperature } = require("../../helpers/StorageD
 const { setValveDemand, getValveDemand } = require("../../helpers/ValveStorageDriver");
 const { openOurRoomValve, closeOurRoomValve } = require("../../helpers/ValveDriver");
 const { camelRoomName } = require("../../helpers/Functions");
+const { hour } = require("../../helpers/Time");
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -38,13 +39,10 @@ const { camelRoomName } = require("../../helpers/Functions");
 const newZoneController = (room) => {
   // TODO make this the same as heating sensor and radiator valve
   setInterval(() => {
-    var date = new Date();
-    let currentHour = date.getHours();
-
     let setpoint = getRoomSetpoints(camelRoomName(room));
     let currentTemp = getRoomTemperature(camelRoomName(room));
 
-    if (currentTemp < setpoint[currentHour] && currentTemp > -1) {
+    if (currentTemp < setpoint[hour()] && currentTemp > -1) {
       setValveDemand(camelRoomName(room), true);
       // console.log("here");
     } else {

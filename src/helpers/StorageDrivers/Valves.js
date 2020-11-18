@@ -42,4 +42,5 @@ module.exports = {
   getValveState: getValveState,
   getValveDemand: getValveDemand,
   setValveDemand: setValveDemand,
+  getValveConnection: getValveConnection,
 };
