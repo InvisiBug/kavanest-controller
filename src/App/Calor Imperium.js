@@ -92,7 +92,6 @@ app.get("/api/ci/manual/off", (req, res) => {
 // ----- On / Off -----
 app.get("/api/ci/on", (req, res) => {
   let data = getStore("heatingSchedule");
-  let boostTime = new Date();
   if (!data.auto) {
     heatingOn();
     sendHeatingSchedule();

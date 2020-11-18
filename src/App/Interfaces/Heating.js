@@ -3,6 +3,7 @@ const express = require("express");
 const app = (module.exports = express());
 const { getStore, setStore, updateValue, readValue } = require("../../helpers/StorageDriver");
 const { boostOn, boostOff } = require("../../helpers/HeatingFunctions");
+const { now } = require("../../helpers/Time");
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -58,8 +59,8 @@ client.on("message", (topic, payload) => {
       console.log(`${"Heating Disconnected"}`);
     }
   } else if (topic === "Heating Button") {
-    const now = new Date().getTime();
-    if (readValue("heatingSchedule", "boostTime") < now) {
+    if (readValue("heatingSchedule", "boostTime") < now()) {
+      // this used to be now.getTime()
       boostOn();
     } else {
       boostOff();
