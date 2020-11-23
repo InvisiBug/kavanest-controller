@@ -95,7 +95,7 @@ const toNodeDecimalConverter = (val) => {
     case 0.25:
       return 0.15;
     case 0.5:
-      return 0.3;
+      return 0.31; // ! This prevents the issue with the heating turning on early in the morning (Horrible Hack)
     case 0.75:
       return 0.45;
     default:
@@ -107,7 +107,7 @@ const toReactDecimalConverter = (val) => {
   switch (parseFloat((val % 1).toFixed(2))) {
     case 0.15:
       return 0.25;
-    case 0.3:
+    case 0.31: // ! This prevents the issue with the heating turning on early in the morning (Horrible Hack)
       return 0.5;
     case 0.45:
       return 0.75;

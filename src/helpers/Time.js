@@ -10,10 +10,10 @@ const now = () => {
 
 const time = () => {
   const date = new Date();
-  console.log(date.getHours() + "." + date.getMinutes());
+  // console.log(date.getHours() + "." + date.getMinutes());
   return date.getHours() + "." + date.getMinutes();
 
-  // return 8 + "." + 0;
+  // return 8 + "." + 03;
 };
 
 const offsetTime = (time = 0) => {
