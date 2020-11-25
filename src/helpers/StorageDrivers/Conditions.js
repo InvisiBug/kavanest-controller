@@ -1,14 +1,20 @@
-import { getStore, setStore } from "./LowLevelDriver";
+const { getStore, setStore } = require("./LowLevelDriver");
 
 // Conditions
-export const getRoomConditions = (room) => {
+const getRoomConditions = (room) => {
   return getStore("Environmental Data").heatingSensors[room];
 };
 
-export const getRoomTemperature = (room) => {
+const getRoomTemperature = (room) => {
   return getStore("Environmental Data").heatingSensors[room].temperature;
 };
 
-export const getRoomSetpoints = (room) => {
+const getRoomSetpoints = (room) => {
   return getStore("Environmental Data").setpoints[room];
+};
+
+module.exports = {
+  getRoomConditions: getRoomConditions,
+  getRoomTemperature: getRoomTemperature,
+  getRoomSetpoints: getRoomSetpoints,
 };

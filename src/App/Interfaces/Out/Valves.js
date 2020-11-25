@@ -99,6 +99,14 @@ const closeAllValves = () => {
   // }, valveTransitTime);
 };
 
+const openValve = (valve) => {
+  client.publish(`${valve} Valve Control`, open);
+};
+
+const closeValve = (valve) => {
+  client.publish(`${valve} Valve Control`, close);
+};
+
 module.exports = {
   openLivingRoomValve: openLivingRoomValve,
   openKitchenValve: openKitchenValve,
@@ -114,4 +122,7 @@ module.exports = {
 
   openAllValves: openAllValves,
   closeAllValves: closeAllValves,
+
+  openValve: openValve,
+  closeValve: closeValve,
 };

@@ -72,7 +72,7 @@ const mqtt = require("mqtt");
 // global.client = mqtt.connect("mqtt://kavanet.io");
 global.client = mqtt.connect("mqtt://localhost");
 
-client.setMaxListeners(16); // Disables event listener warning
+client.setMaxListeners(50); // TODO Sort this out later, Disables event listener warning
 
 client.subscribe("#", (err) => {
   err ? console.log(err) : console.log("Subscribed to all");
@@ -115,7 +115,7 @@ app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 
 app.use(require("./App/Calor Imperium.js"));
 app.use(require("./App/Interfaces/In/Heating.js"));
-// app.use(require("./App/Services/HouseClimateStats"));
+app.use(require("./App/Services/HouseClimateStats"));
 // app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
 
 ////////////////////////////////////////////////////////////////////////
@@ -130,6 +130,7 @@ app.use(require("./App/Interfaces/In/Heating.js"));
 //
 ////////////////////////////////////////////////////////////////////////
 const heatingSensor = require("./App/Interfaces/In/HeatingSensor");
+const radiatorValve = require("./App/Interfaces/In/RadiatorValve");
 
 const sensors = [
   {
@@ -156,13 +157,14 @@ const sensors = [
 
 sensors.map((room, index) => {
   heatingSensor.newSensor(room.name, room.offset);
+  radiatorValve.newValve(room.name);
 });
 
 // const radiatorValve = require("./App/Interfaces/RadiatorValve");
 // radiatorValve.newValve("Our Room");
 
-// const zoneHeatingController = require("./App/Controllers/ZoneHeatingController");
-// zoneHeatingController.newZoneController("Our Room");
+const zoneHeatingController = require("./App/Controllers/ZoneHeatingController");
+zoneHeatingController.newZoneController("Our Room");
 
 [
   ////////////////////////////////////////////////////////////////////////

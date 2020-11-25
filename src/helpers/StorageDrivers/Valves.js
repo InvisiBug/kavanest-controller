@@ -1,4 +1,4 @@
-const { getStore, setStore } = require("./StorageDriver");
+const { getStore, setStore } = require("./LowLevelDriver");
 
 const setValveState = (room, value) => {
   // updateValue("Radiator Valves", room, value);
@@ -43,4 +43,5 @@ module.exports = {
   getValveDemand: getValveDemand,
   setValveDemand: setValveDemand,
   getValveConnection: getValveConnection,
+  getValveStatus: getValveStatus,
 };

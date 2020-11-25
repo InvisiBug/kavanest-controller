@@ -19,9 +19,9 @@
 // Express
 const express = require("express");
 var app = (module.exports = express());
-const { getRoomSetpoints, getRoomTemperature } = require("../../helpers/StorageDriver");
-const { setValveDemand, getValveDemand } = require("../../helpers/ValveStorageDriver");
-const { openOurRoomValve, closeOurRoomValve } = require("../../helpers/ValveDriver");
+const { getRoomSetpoints, getRoomTemperature } = require("../../helpers/StorageDrivers/Conditions");
+const { setValveDemand, getValveDemand } = require("../../helpers/StorageDrivers/Valves");
+const { openOurRoomValve, closeOurRoomValve } = require("../../App/Interfaces/Out/Valves");
 const { camelRoomName } = require("../../helpers/Functions");
 const { hour } = require("../../helpers/Time");
 
@@ -43,12 +43,13 @@ const newZoneController = (room) => {
     let currentTemp = getRoomTemperature(camelRoomName(room));
 
     if (currentTemp < setpoint[hour()] && currentTemp > -1) {
+      // ! the -1 bit may need to open the valve, fail safe
       setValveDemand(camelRoomName(room), true);
       // console.log("here");
     } else {
       setValveDemand(camelRoomName(room), false);
     }
-    // console.log(`${room} Current Temp: ${currentTemp} \t Target Temp: ${setpoint[currentHour]}`);
+    // console.log(`${room} \t Current Temp: ${currentTemp} \t Target Temp: ${setpoint[hour()]}`);
   }, 1 * 1000);
 
   setInterval(() => {

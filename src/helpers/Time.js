@@ -17,7 +17,7 @@ const time = () => {
 };
 
 const hour = () => {
-  const sate = new Date();
+  const date = new Date();
   return date.getHours();
 };
 
@@ -30,6 +30,6 @@ module.exports = {
   day: day,
   now: now,
   time: time,
-  hosur: hour,
+  hour: hour,
   offsetTime: offsetTime,
 };
