@@ -17,11 +17,9 @@
 //
 ////////////////////////////////////////////////////////////////////////
 // Express
-const express = require("express");
-var app = (module.exports = express());
 const { getRoomSetpoints, getRoomTemperature } = require("../../helpers/StorageDrivers/Conditions");
-const { setValveDemand, getValveDemand } = require("../../helpers/StorageDrivers/Valves");
-const { openOurRoomValve, closeOurRoomValve } = require("../../App/Interfaces/Out/Valves");
+const { setValveDemand, getValveStatus } = require("../../helpers/StorageDrivers/Valves");
+const { openValve, closeValve } = require("../../App/Interfaces/Out/Valves");
 const { camelRoomName } = require("../../helpers/Functions");
 const { hour } = require("../../helpers/Time");
 
@@ -45,19 +43,24 @@ const newZoneController = (room) => {
     if (currentTemp < setpoint[hour()] && currentTemp > -1) {
       // ! the -1 bit may need to open the valve, fail safe
       setValveDemand(camelRoomName(room), true);
-      // console.log("here");
     } else {
       setValveDemand(camelRoomName(room), false);
     }
     // console.log(`${room} \t Current Temp: ${currentTemp} \t Target Temp: ${setpoint[hour()]}`);
   }, 1 * 1000);
 
+  // Valve open / close
   setInterval(() => {
-    // grab the valve demand
-    // grab the valve state and connection
-    // if valve is connected, had demand and is closed, open
-    // else close
-    // const
+    let valve = getValveStatus(camelRoomName(room));
+    // console.log(valve);
+
+    if (valve.isConnected) {
+      if (valve.demand && !valve.isOpen) {
+        openValve(room);
+      } else if (!valve.demand && valve.isOpen) {
+        closeValve(room);
+      }
+    }
   }, 1 * 1000);
 };
 

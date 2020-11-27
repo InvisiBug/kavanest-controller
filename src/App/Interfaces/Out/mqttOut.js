@@ -34,6 +34,10 @@ const screenLEDsControl = (message) => {
   client.publish("Screen LEDs Control", message);
 };
 
+const radiatorValveControl = (valve, message) => {
+  client.publish(`${valve} Radiator Valve Control`, message);
+};
+
 module.exports = {
   heatingControl: heatingControl,
   radiatorFanControl: radiatorFanControl,
@@ -44,4 +48,5 @@ module.exports = {
   tableLampControl: tableLampControl,
   deskLEDsControl: deskLEDsControl,
   screenLEDsControl: screenLEDsControl,
+  radiatorValveControl: radiatorValveControl,
 };

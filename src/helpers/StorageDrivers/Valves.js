@@ -34,7 +34,7 @@ const getValveConnection = (room) => {
 };
 
 const getValveStatus = (room) => {
-  console.log(getStore("Environmental Data").radiatorValves[room]);
+  return getStore("Environmental Data").radiatorValves[room];
 };
 
 module.exports = {
