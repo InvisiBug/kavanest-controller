@@ -14,8 +14,6 @@ const time = () => {
   let hrs = date.getHours();
   let mins = date.getMinutes();
 
-  // console.log(hrs + "." + mins.toString().padStart(2, "0"));
-
   return hrs + "." + mins.toString().padStart(2, "0");
 };
 
