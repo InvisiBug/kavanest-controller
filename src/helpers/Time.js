@@ -10,10 +10,13 @@ const now = () => {
 
 const time = () => {
   const date = new Date();
-  // console.log(date.getHours() + "." + date.getMinutes());
-  return date.getHours() + "." + date.getMinutes();
 
-  // return 8 + "." + 03;
+  let hrs = date.getHours();
+  let mins = date.getMinutes();
+
+  // console.log(hrs + "." + mins.toString().padStart(2, "0"));
+
+  return hrs + "." + mins.toString().padStart(2, "0");
 };
 
 const offsetTime = (time = 0) => {
