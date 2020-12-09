@@ -1,5 +1,5 @@
-const express = require("express");
-const app = (module.exports = express());
+// const express = require("express");
+// const app = (module.exports = express());
 const { getStore, setStore } = require("../../helpers/StorageDrivers/LowLevelDriver");
 
 let environmentalData = getStore("Environmental Data");
@@ -14,6 +14,7 @@ setInterval(() => {
     study: environmentalData.heatingSensors.study.temperature,
     ourRoom: environmentalData.heatingSensors.ourRoom.temperature,
   };
+
   const houseData = {
     ...environmentalData,
     houseStats: {
@@ -22,9 +23,14 @@ setInterval(() => {
       maximumTemp: minMax(temperatures)[1],
     },
   };
+
   setStore("Environmental Data", houseData);
-  io.emit(`${"Environmental Data"}`, houseData); //*NB* Break this out in to a seperate socket file
+  triggerEnvironmentalDataSocket();
 }, 1 * 1000);
+
+const triggerEnvironmentalDataSocket = () => {
+  io.emit(`${"Environmental Data"}`, getStore("Environmental Data"));
+};
 
 // -----  Functions  -----
 const average = (temps) => {
@@ -52,4 +58,8 @@ const minMax = (temps) => {
     }
   }
   return [Math.min(...tempTemps), Math.max(...tempTemps)];
+};
+
+module.exports = {
+  triggerEnvironmentalDataSocket: triggerEnvironmentalDataSocket,
 };

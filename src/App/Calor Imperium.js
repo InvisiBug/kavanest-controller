@@ -25,6 +25,8 @@ const { getStore, setStore, updateValue, readValue } = require("../helpers/Stora
 const { backendToFrontend, frontendToBackend } = require("../helpers/Functions");
 const { boostOn, boostOff, radiatorFanOverrun, heatingOn, heatingOff } = require("../helpers/HeatingFunctions");
 const { isClimateControlAuto, setClimateControlAuto } = require("../helpers/StorageDrivers/ClimateControl");
+const { setRoomSetpoints } = require("../helpers/StorageDrivers/Conditions");
+const { triggerEnvironmentalDataSocket } = require("../App/Services/HouseClimateStats");
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -117,3 +119,9 @@ const sendHeatingSchedule = () => {
     console.log(e);
   }
 };
+
+app.post("/api/ci/setpoints", (req, res) => {
+  setRoomSetpoints(req.body.room, req.body.vals);
+  triggerEnvironmentalDataSocket();
+  res.end(null);
+});
