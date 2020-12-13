@@ -37,6 +37,10 @@ const getValveStatus = (room) => {
   return getStore("Environmental Data").radiatorValves[room];
 };
 
+const isValveOpen = () => {
+  return getValveState("livingRoom") || getValveState("kitchen") || getValveState("liamsRoom") || getValveState("study") || getValveState("ourRoom");
+};
+
 module.exports = {
   setValveState: setValveState,
   getValveState: getValveState,
@@ -44,4 +48,5 @@ module.exports = {
   setValveDemand: setValveDemand,
   getValveConnection: getValveConnection,
   getValveStatus: getValveStatus,
+  isValveOpen: isValveOpen,
 };

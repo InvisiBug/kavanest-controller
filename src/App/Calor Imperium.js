@@ -94,31 +94,31 @@ app.get("/api/ci/off", (req, res) => {
   res.end(null);
 });
 
-////////////////////////////////////////////////////////////////////////
-//
-//  #####
-// #     #  ####   ####  #    # ###### #####
-// #       #    # #    # #   #  #        #
-//  #####  #    # #      ####   #####    #
-//       # #    # #      #  #   #        #
-// #     # #    # #    # #   #  #        #
-//  #####   ####   ####  #    # ######   #
-//
-////////////////////////////////////////////////////////////////////////
-var heatingScheduleSocket = setInterval(() => {
-  sendHeatingSchedule();
-}, 1 * 1000);
+// ////////////////////////////////////////////////////////////////////////
+// //
+// //  #####
+// // #     #  ####   ####  #    # ###### #####
+// // #       #    # #    # #   #  #        #
+// //  #####  #    # #      ####   #####    #
+// //       # #    # #      #  #   #        #
+// // #     # #    # #    # #   #  #        #
+// //  #####   ####   ####  #    # ######   #
+// //
+// ////////////////////////////////////////////////////////////////////////
+// var heatingScheduleSocket = setInterval(() => {
+//   sendHeatingSchedule();
+// }, 1 * 1000);
 
-const sendHeatingSchedule = () => {
-  try {
-    const data = getStore("heatingSchedule");
-    const adjustedData = backendToFrontend(data);
+// const sendHeatingSchedule = () => {
+//   try {
+//     const data = getStore("heatingSchedule");
+//     const adjustedData = backendToFrontend(data);
 
-    io.emit("Heating Schedule", adjustedData);
-  } catch (e) {
-    console.log(e);
-  }
-};
+//     io.emit("Heating Schedule", adjustedData);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 
 app.post("/api/ci/setpoints", (req, res) => {
   setRoomSetpoints(req.body.room, req.body.vals);

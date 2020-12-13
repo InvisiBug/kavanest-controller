@@ -35,7 +35,8 @@ const { hour } = require("../../helpers/Time");
 //
 ////////////////////////////////////////////////////////////////////////
 const newZoneController = (room) => {
-  // TODO make this the same as heating sensor and radiator valve
+  // TODO, Make this the same as heating sensor and radiator valve
+  //? Valve Demand Setter
   setInterval(() => {
     let setpoint = getRoomSetpoints(camelRoomName(room));
     let currentTemp = getRoomTemperature(camelRoomName(room));
@@ -49,7 +50,7 @@ const newZoneController = (room) => {
     // console.log(`${room} \t Current Temp: ${currentTemp} \t Target Temp: ${setpoint[hour()]}`);
   }, 1 * 1000);
 
-  // Valve open / close
+  //? Valve opener / closer
   setInterval(() => {
     let valve = getValveStatus(camelRoomName(room));
     // console.log(valve);

@@ -116,7 +116,7 @@ app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 app.use(require("./App/Calor Imperium.js"));
 app.use(require("./App/Interfaces/In/Heating.js"));
 require("./App/Services/HouseClimateStats");
-// app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
+app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
 
 ////////////////////////////////////////////////////////////////////////
 //
