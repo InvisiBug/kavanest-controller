@@ -57,8 +57,10 @@ const newZoneController = (room) => {
     if (valve.isConnected) {
       if (valve.demand && !valve.isOpen) {
         openValve(room);
+        // console.log("Opening Valve");
       } else if (!valve.demand && valve.isOpen) {
         closeValve(room);
+        // console.log("Closing Valve");
       }
     }
   }, 1 * 1000);

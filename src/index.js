@@ -131,8 +131,9 @@ require("./App/Services/HouseClimateStats");
 ////////////////////////////////////////////////////////////////////////
 const heatingSensor = require("./App/Interfaces/In/HeatingSensor");
 const radiatorValve = require("./App/Interfaces/In/RadiatorValve");
+const zoneHeatingController = require("./App/Controllers/ZoneHeatingController");
 
-const sensors = [
+const rooms = [
   {
     name: "Our Room",
     offset: 1.6,
@@ -155,15 +156,15 @@ const sensors = [
   },
 ];
 
-sensors.map((room, index) => {
+rooms.map((room, index) => {
   heatingSensor.newSensor(room.name, room.offset);
   radiatorValve.newValve(room.name);
+  zoneHeatingController.newZoneController(room.name);
 });
 
 // const radiatorValve = require("./App/Interfaces/RadiatorValve");
 // radiatorValve.newValve("Our Room");
 
-const zoneHeatingController = require("./App/Controllers/ZoneHeatingController");
 zoneHeatingController.newZoneController("Our Room");
 
 [
