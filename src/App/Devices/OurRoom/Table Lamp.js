@@ -95,7 +95,7 @@ client.on("message", (topic, payload) => {
       deviceData = {
         ...deviceData,
         isConnected: true,
-        red: 20,
+        red: mqttData.red,
         green: mqttData.green,
         blue: mqttData.blue,
         mode: mqttData.mode,
