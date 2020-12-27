@@ -35,7 +35,16 @@ const functions = require("../../../helpers/Functions");
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-var deviceData;
+const disconnectedState = {
+  isConnected: false,
+  red: 0,
+  green: 0,
+  blue: 0,
+  mode: 0,
+};
+
+var deviceData = disconnectedState;
+
 var timer = setTimeout(() => {
   deviceData.isConnected = false;
 }, 10 * 1000);
