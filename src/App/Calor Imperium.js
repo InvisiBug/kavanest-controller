@@ -64,13 +64,13 @@ app.get("/api/ci/boost/off", (req, res) => {
 
 // -----  Manual  -----
 app.get("/api/ci/manual/on", (req, res) => {
-  setClimateControlAuto(true);
+  setClimateControlAuto(false);
   console.log("Heating in manual mode");
   res.end(null);
 });
 
 app.get("/api/ci/manual/off", (req, res) => {
-  setClimateControlAuto(false);
+  setClimateControlAuto(true);
   console.log("Heating in auto mode");
   res.end(null);
 });

@@ -40,15 +40,8 @@ const newZoneController = (room) => {
     const auto = getStore("Environmental Data").climateControl.isAuto;
 
     if (auto) {
-      //* Climate Control In Auto
-      //? Valve demand
       checkValveDemand(room);
       signalValve(room);
-
-      //? Valve opener / closer
-    } else {
-      // * Climate Control In Manual
-      // console.log("Clear Timers");
     }
   }, 1 * 1000);
 };

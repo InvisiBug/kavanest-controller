@@ -5,19 +5,18 @@ const { isValveOpen, getValveState } = require("../../../helpers/StorageDrivers/
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/out/mqttOut");
 const { now } = require("../../../helpers/Time");
 
-// TODO, Move each watchdog to seperate files
-// Heating
-
 setInterval(() => {
-  signalHeating();
+  const auto = getStore("Environmental Data").climateControl.isAuto;
+
+  if (auto) {
+    autoSignalHeating();
+    autoSignalRadiatorFan();
+  } else {
+    console.log("Manual Mode");
+  }
 }, 1 * 1000);
 
-// Radiator Fan
-setInterval(() => {
-  signalRadiatorFan();
-}, 1 * 1000);
-
-const signalHeating = () => {
+const autoSignalHeating = () => {
   let heatingSchedule = getStore("heatingSchedule");
   let heatingController = getStore("Environmental Data").heatingController;
 
@@ -30,7 +29,7 @@ const signalHeating = () => {
   }
 };
 
-const signalRadiatorFan = () => {
+const autoSignalRadiatorFan = () => {
   let radiatorFan = getStore("Radiator Fan");
   let ourRoomValve = getValveState("ourRoom");
 
@@ -41,6 +40,34 @@ const signalRadiatorFan = () => {
       }
     } else if (radiatorFan.isConnected && radiatorFan.isOn) {
       setTimeout(() => radiatorFanControl("0"), 5 * 1000);
+    }
+  }
+};
+
+const scheduleSignalHeating = () => {
+  let heatingSchedule = getStore("heatingSchedule");
+  let heatingController = getStore("Heating");
+
+  if (now() < heatingSchedule.heatingTime) {
+    if (heatingController.isConnected && !heatingController.isOn) {
+      client.publish("Heating Control", "1");
+    }
+  } else if (heatingController.isConnected && heatingController.isOn) {
+    client.publish("Heating Control", "0");
+  }
+};
+
+const scheduleSignalRadiatorFan = () => {
+  let radiatorFan = getStore("Radiator Fan");
+  let heating = getStore("heatingSchedule");
+
+  if (radiatorFan.isAutomatic) {
+    if (now() < heating.radiatorFanTime) {
+      if (radiatorFan.isConnected && !radiatorFan.isOn) {
+        client.publish("Radiator Fan Control", "1");
+      }
+    } else if (radiatorFan.isConnected && radiatorFan.isOn) {
+      client.publish("Radiator Fan Control", "0");
     }
   }
 };
