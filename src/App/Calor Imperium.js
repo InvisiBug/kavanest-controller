@@ -24,7 +24,7 @@ var app = (module.exports = express());
 const { getStore, setStore, updateValue, readValue } = require("../helpers/StorageDrivers/LowLevelDriver");
 const { backendToFrontend, frontendToBackend } = require("../helpers/Functions");
 const { boostOn, boostOff, radiatorFanOverrun, heatingOn, heatingOff } = require("../helpers/HeatingFunctions");
-const { isClimateControlAuto, setClimateControlAuto } = require("../helpers/StorageDrivers/ClimateControl");
+const { isClimateControlAuto, setClimateControlAuto, getHeatingSchedule, setHeatingSchedule } = require("../helpers/StorageDrivers/ClimateControl");
 const { setRoomSetpoints } = require("../helpers/StorageDrivers/Conditions");
 const { triggerEnvironmentalDataSocket } = require("../App/Services/HouseClimateStats");
 
@@ -41,7 +41,8 @@ const { triggerEnvironmentalDataSocket } = require("../App/Services/HouseClimate
 ////////////////////////////////////////////////////////////////////////
 // -----  Schedule  -----
 app.post("/api/ci/schedule/update", (req, res) => {
-  setStore("heatingSchedule", frontendToBackend(req.body.data));
+  setHeatingSchedule(frontendToBackend(req.body.data));
+  // setStore("heatingSchedule", frontendToBackend(req.body.data));
   sendHeatingSchedule();
   res.end(null);
 });
@@ -94,31 +95,32 @@ app.get("/api/ci/off", (req, res) => {
   res.end(null);
 });
 
-// ////////////////////////////////////////////////////////////////////////
-// //
-// //  #####
-// // #     #  ####   ####  #    # ###### #####
-// // #       #    # #    # #   #  #        #
-// //  #####  #    # #      ####   #####    #
-// //       # #    # #      #  #   #        #
-// // #     # #    # #    # #   #  #        #
-// //  #####   ####   ####  #    # ######   #
-// //
-// ////////////////////////////////////////////////////////////////////////
-// var heatingScheduleSocket = setInterval(() => {
-//   sendHeatingSchedule();
-// }, 1 * 1000);
+////////////////////////////////////////////////////////////////////////
+//
+//  #####
+// #     #  ####   ####  #    # ###### #####
+// #       #    # #    # #   #  #        #
+//  #####  #    # #      ####   #####    #
+//       # #    # #      #  #   #        #
+// #     # #    # #    # #   #  #        #
+//  #####   ####   ####  #    # ######   #
+//
+////////////////////////////////////////////////////////////////////////
+var heatingScheduleSocket = setInterval(() => {
+  sendHeatingSchedule();
+}, 1 * 1000);
 
-// const sendHeatingSchedule = () => {
-//   try {
-//     const data = getStore("heatingSchedule");
-//     const adjustedData = backendToFrontend(data);
+const sendHeatingSchedule = () => {
+  try {
+    const data = getHeatingSchedule();
+    // const data = getStore("heatingSchedule");
+    const adjustedData = backendToFrontend(data);
 
-//     io.emit("Heating Schedule", adjustedData);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
+    io.emit("Heating Schedule", adjustedData);
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 app.post("/api/ci/setpoints", (req, res) => {
   setRoomSetpoints(req.body.room, req.body.vals);

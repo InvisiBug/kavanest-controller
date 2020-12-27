@@ -7,7 +7,17 @@ const { now } = require("../../../helpers/Time");
 
 // TODO, Move each watchdog to seperate files
 // Heating
+
 setInterval(() => {
+  signalHeating();
+}, 1 * 1000);
+
+// Radiator Fan
+setInterval(() => {
+  signalRadiatorFan();
+}, 1 * 1000);
+
+const signalHeating = () => {
   let heatingSchedule = getStore("heatingSchedule");
   let heatingController = getStore("Environmental Data").heatingController;
 
@@ -18,10 +28,9 @@ setInterval(() => {
   } else if (heatingController.isConnected && heatingController.isOn) {
     heatingControl("0");
   }
-}, 1 * 1000);
+};
 
-// Radiator Fan
-setInterval(() => {
+const signalRadiatorFan = () => {
   let radiatorFan = getStore("Radiator Fan");
   let ourRoomValve = getValveState("ourRoom");
 
@@ -34,4 +43,4 @@ setInterval(() => {
       setTimeout(() => radiatorFanControl("0"), 5 * 1000);
     }
   }
-}, 1 * 1000);
+};
