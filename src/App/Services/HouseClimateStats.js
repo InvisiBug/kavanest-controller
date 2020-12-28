@@ -25,12 +25,7 @@ setInterval(() => {
   };
 
   setStore("Environmental Data", houseData);
-  triggerEnvironmentalDataSocket();
 }, 1 * 1000);
-
-const triggerEnvironmentalDataSocket = () => {
-  io.emit(`${"Environmental Data"}`, getStore("Environmental Data"));
-};
 
 // -----  Functions  -----
 const average = (temps) => {
@@ -58,8 +53,4 @@ const minMax = (temps) => {
     }
   }
   return [Math.min(...tempTemps), Math.max(...tempTemps)];
-};
-
-module.exports = {
-  triggerEnvironmentalDataSocket: triggerEnvironmentalDataSocket,
 };

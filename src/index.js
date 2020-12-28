@@ -116,7 +116,8 @@ app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 app.use(require("./App/Calor Imperium.js"));
 app.use(require("./App/Interfaces/In/Heating.js"));
 require("./App/Services/HouseClimateStats");
-app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
+app.use(require("./App/Controllers/HeatingModeController"));
+// app.use(require("./App/Controllers/ScheduleHeatingController"));
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -131,12 +132,12 @@ app.use(require("./App/Controllers/Watchdogs/Watchdogs"));
 ////////////////////////////////////////////////////////////////////////
 const heatingSensor = require("./App/Interfaces/In/HeatingSensor");
 const radiatorValve = require("./App/Interfaces/In/RadiatorValve");
-const zoneHeatingController = require("./App/Controllers/ZoneHeatingController");
+const zoneHeatingController = require("./App/Controllers/ValveController");
 
 const rooms = [
   {
     name: "Our Room",
-    offset: 1.6,
+    offset: 2.6,
   },
   {
     name: "Study",
@@ -165,7 +166,7 @@ rooms.map((room, index) => {
 // const radiatorValve = require("./App/Interfaces/RadiatorValve");
 // radiatorValve.newValve("Our Room");
 
-zoneHeatingController.newZoneController("Our Room");
+// zoneHeatingController.newZoneController("Our Room");
 
 [
   ////////////////////////////////////////////////////////////////////////

@@ -25,7 +25,6 @@ const closeAllValves = () => {
 };
 
 const openValve = (valve) => {
-  // client.publish(`${valve} Radiator Valve Control`, open);
   radiatorValveControl(valve, open);
 };
 

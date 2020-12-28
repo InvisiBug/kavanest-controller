@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { offsetTime } = require("../Time");
+// const { getHeatingSchedule, setHeatingSchedule } = require("./ClimateControl");
 
 const setStore = (store, data) => {
   const storePath = path.join(`${__dirname}${"/../../../PersistantStorage/"}${store}${".json"}`);
@@ -36,31 +36,13 @@ const readValue = (store, point) => {
   return getStore(store)[point];
 };
 
-const updateBoostTime = (time = 0) => {
-  updateValue("heatingSchedule", "boostTime", offsetTime(time));
+const getEnvironmentalData = () => {
+  return getStore("Environmental Data");
 };
-
-const updateRadiatorFanTime = (time = 0) => {
-  let now = new Date();
-  updateValue("heatingSchedule", "radiatorFanTime", offsetTime(time));
-};
-
-const updateHeatingTime = (time = 0) => {
-  let now = new Date();
-  updateValue("heatingSchedule", "heatingTime", offsetTime(time));
-};
-
-// Valves
 
 module.exports = {
   getStore: getStore,
   setStore: setStore,
   updateValue: updateValue,
   readValue: readValue,
-  updateBoostTime: updateBoostTime,
-  updateRadiatorFanTime: updateRadiatorFanTime,
-  updateHeatingTime: updateHeatingTime,
-  // getRoomSetpoints: getRoomSetpoints,
-  // getRoomConditions: getRoomConditions,
-  // getRoomTemperature: getRoomTemperature,
 };

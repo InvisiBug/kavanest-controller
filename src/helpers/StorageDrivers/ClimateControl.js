@@ -24,13 +24,11 @@ const isClimateControlAuto = () => {
 };
 
 const getHeatingSchedule = () => {
-  // let heatingSchedule = getStore("heatingSchedule");
   let heatingSchedule = getStore("Environmental Data").heatingSchedule;
   return heatingSchedule;
 };
 
 const setHeatingSchedule = (data) => {
-  // setStore("heatingSchedule", data);
   let oldData = getStore("Environmental Data");
 
   setStore("Environmental Data", {
@@ -39,9 +37,15 @@ const setHeatingSchedule = (data) => {
   });
 };
 
+const getHeatingController = () => {
+  let heatingController = getStore("Environmental Data").heatingController;
+  return heatingController;
+};
+
 module.exports = {
   isClimateControlAuto: isClimateControlAuto,
   setClimateControlAuto: setClimateControlAuto,
   getHeatingSchedule: getHeatingSchedule,
   setHeatingSchedule: setHeatingSchedule,
+  getHeatingController: getHeatingController,
 };

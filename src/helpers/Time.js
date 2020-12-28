@@ -27,10 +27,13 @@ const offsetTime = (time = 0) => {
   return now.setMinutes(now.getMinutes() + time);
 };
 
+const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+
 module.exports = {
   day: day,
   now: now,
   time: time,
   hour: hour,
   offsetTime: offsetTime,
+  days: days,
 };
