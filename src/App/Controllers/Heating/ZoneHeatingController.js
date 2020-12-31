@@ -1,6 +1,6 @@
 const { getStore, getEnvironmentalData } = require("../../../helpers/StorageDrivers/LowLevelDriver");
 const { isValveOpen, getValveState } = require("../../../helpers/StorageDrivers/Valves");
-const { radiatorFanControl, heatingControl } = require("../../Interfaces/out/mqttOut");
+const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
 const { scheduleHeating, scheduleRadiatorFan } = require("./ScheduleHeatingController");
 const { radiatorFanOff } = require("../../../helpers/HeatingFunctions");
 

@@ -159,8 +159,8 @@ const rooms = [
 
 rooms.map((room, index) => {
   heatingSensor.newSensor(room.name, room.offset);
-  radiatorValve.newValve(room.name);
-  newValveController(room.name);
+  // radiatorValve.newValve(room.name);
+  // newValveController(room.name);
 });
 
 // const radiatorValve = require("./App/Interfaces/RadiatorValve");

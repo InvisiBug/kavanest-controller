@@ -21,7 +21,7 @@
 // Express
 const express = require("express");
 const app = (module.exports = express());
-const { plugControl } = require("../../Interfaces/out/mqttOut");
+const { plugControl } = require("../../Interfaces/Out/mqttOut");
 
 ////////////////////////////////////////////////////////////////////////
 //

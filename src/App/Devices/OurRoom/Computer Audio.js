@@ -20,7 +20,7 @@
 ////////////////////////////////////////////////////////////////////////
 const express = require("express");
 const app = (module.exports = express());
-const { computerAudioControl } = require("../../Interfaces/out/mqttOut");
+const { computerAudioControl } = require("../../Interfaces/Out/mqttOut");
 
 ////////////////////////////////////////////////////////////////////////
 //

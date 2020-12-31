@@ -20,7 +20,7 @@
 ////////////////////////////////////////////////////////////////////////
 const express = require("express");
 const app = (module.exports = express());
-const { tableLampControl } = require("../../Interfaces/out/mqttOut");
+const { tableLampControl } = require("../../Interfaces/Out/mqttOut");
 
 ////////////////////////////////////////////////////////////////////////
 //
