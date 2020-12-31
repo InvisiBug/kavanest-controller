@@ -35,29 +35,30 @@ const { getStore } = require("../../helpers/StorageDrivers/LowLevelDriver");
 //    #    # #    # ###### #    #  ####
 //
 ////////////////////////////////////////////////////////////////////////
-const newZoneController = (room) => {
+const newValveController = (room) => {
   setInterval(() => {
-    const environmentalData = getStore("Environmental Data");
-    const auto = environmentalData.climateControl.isAuto;
-    const mode = environmentalData.heatingMode;
-
-    if (auto && mode === "zones") {
-      checkValveDemand(room);
-      signalValve(room);
-    }
+    checkValveDemand(room);
+    signalValve(room);
   }, 1 * 1000);
 };
 
 const checkValveDemand = (room) => {
-  // console.log("Here");
+  const environmentalData = getStore("Environmental Data");
+  const auto = environmentalData.climateControl.isAuto;
+  const mode = environmentalData.heatingMode;
+
   let setpoint = getRoomSetpoints(camelRoomName(room));
   let currentTemp = getRoomTemperature(camelRoomName(room));
 
-  if (currentTemp < setpoint[hour()] && currentTemp > -1) {
-    // ! the -1 bit may need to open the valve, fail safe
-    setValveDemand(camelRoomName(room), true);
+  if (auto && mode === "zones") {
+    if (currentTemp < setpoint[hour()] && currentTemp > -1) {
+      // ! the -1 bit may need to open the valve, fail safe
+      setValveDemand(camelRoomName(room), true);
+    } else {
+      setValveDemand(camelRoomName(room), false);
+    }
   } else {
-    setValveDemand(camelRoomName(room), false);
+    setValveDemand(camelRoomName(room), true);
   }
   // console.log(`${room} \t Current Temp: ${currentTemp} \t Target Temp: ${setpoint[hour()]}`);
 };
@@ -76,5 +77,5 @@ const signalValve = (room) => {
 };
 
 module.exports = {
-  newZoneController: newZoneController,
+  newValveController: newValveController,
 };

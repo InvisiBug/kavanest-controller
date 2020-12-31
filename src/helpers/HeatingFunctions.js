@@ -1,5 +1,5 @@
-const { getHeatingSchedule, setHeatingSchedule } = require("./StorageDrivers/ClimateControl");
-const { updateValue, readValue, getStore } = require("./StorageDrivers/LowLevelDriver");
+const { getHeatingSchedule, setHeatingSchedule } = require("./StorageDrivers/Schedule");
+const { updateValue, readValue, getStore, getEnvironmentalData } = require("./StorageDrivers/LowLevelDriver");
 const { offsetTime } = require("./Time");
 
 const overRunTime = 20;
@@ -122,6 +122,10 @@ const getHeatingMode = () => {
   const data = getStore("Environmental Data");
   return data.heatingMode;
 };
+const getHeatingController = () => {
+  let heatingController = getStore("Environmental Data").heatingController;
+  return heatingController;
+};
 
 module.exports = {
   boostOn: boostOn,
@@ -137,4 +141,5 @@ module.exports = {
   setHeatingModeSchedule: setHeatingModeSchedule,
   setHeatingModeZones: setHeatingModeZones,
   getHeatingMode: getHeatingMode,
+  getHeatingController: getHeatingController,
 };

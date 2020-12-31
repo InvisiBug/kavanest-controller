@@ -116,7 +116,7 @@ app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
 app.use(require("./App/Calor Imperium.js"));
 app.use(require("./App/Interfaces/In/Heating.js"));
 require("./App/Services/HouseClimateStats");
-app.use(require("./App/Controllers/HeatingModeController"));
+require("./App/Controllers/HeatingModeController");
 // app.use(require("./App/Controllers/ScheduleHeatingController"));
 
 ////////////////////////////////////////////////////////////////////////
@@ -132,7 +132,7 @@ app.use(require("./App/Controllers/HeatingModeController"));
 ////////////////////////////////////////////////////////////////////////
 const heatingSensor = require("./App/Interfaces/In/HeatingSensor");
 const radiatorValve = require("./App/Interfaces/In/RadiatorValve");
-const zoneHeatingController = require("./App/Controllers/ValveController");
+const { newValveController } = require("./App/Controllers/ValveController");
 
 const rooms = [
   {
@@ -160,7 +160,7 @@ const rooms = [
 rooms.map((room, index) => {
   heatingSensor.newSensor(room.name, room.offset);
   radiatorValve.newValve(room.name);
-  zoneHeatingController.newZoneController(room.name);
+  newValveController(room.name);
 });
 
 // const radiatorValve = require("./App/Interfaces/RadiatorValve");
@@ -220,3 +220,5 @@ rooms.map((room, index) => {
 // Start the app
 app.listen(fetchPort, console.log("App is listening on port " + fetchPort));
 io.listen(socketPort, console.log("Socket is open on port " + socketPort));
+
+// require("./helpers/StorageDrivers/Schedule");

@@ -1,13 +1,3 @@
-////////////////////////////////////////////////////////////////////////
-//
-//  ██████╗ ███████╗██████╗ ██████╗  ██████╗  ██████╗ ███╗   ███╗     ██████╗██╗     ██╗███╗   ███╗ █████╗ ████████╗███████╗
-//  ██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔═══██╗██╔═══██╗████╗ ████║    ██╔════╝██║     ██║████╗ ████║██╔══██╗╚══██╔══╝██╔════╝
-//  ██████╔╝█████╗  ██║  ██║██████╔╝██║   ██║██║   ██║██╔████╔██║    ██║     ██║     ██║██╔████╔██║███████║   ██║   █████╗
-//  ██╔══██╗██╔══╝  ██║  ██║██╔══██╗██║   ██║██║   ██║██║╚██╔╝██║    ██║     ██║     ██║██║╚██╔╝██║██╔══██║   ██║   ██╔══╝
-//  ██████╔╝███████╗██████╔╝██║  ██║╚██████╔╝╚██████╔╝██║ ╚═╝ ██║    ╚██████╗███████╗██║██║ ╚═╝ ██║██║  ██║   ██║   ███████╗
-//  ╚═════╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝     ╚═╝     ╚═════╝╚══════╝╚═╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
-//
-////////////////////////////////////////////////////////////////////////
 //
 //   #####
 //  #     #  ####  #    # ###### #  ####
@@ -23,9 +13,17 @@ const express = require("express");
 var app = (module.exports = express());
 const { getStore, setStore, updateValue, readValue } = require("../helpers/StorageDrivers/LowLevelDriver");
 const { backendToFrontend, frontendToBackend } = require("../helpers/Functions");
-const { boostOn, boostOff, setHeatingModeSchedule, setHeatingModeZones } = require("../helpers/HeatingFunctions");
-const { isClimateControlAuto, setClimateControlAuto, getHeatingSchedule, setHeatingSchedule } = require("../helpers/StorageDrivers/ClimateControl");
-const { setRoomSetpoints } = require("../helpers/StorageDrivers/Conditions");
+const {
+  boostOn,
+  boostOff,
+  setHeatingModeSchedule,
+  setHeatingModeZones,
+  heatingOn,
+  heatingOff,
+  getHeatingMode,
+} = require("../helpers/HeatingFunctions");
+const { setZonesSetpoints, setZonesAuto, setZonesManual } = require("../helpers/StorageDrivers/Zones");
+const { setHeatingScheduleAuto, setHeatingScheduleManual, setHeatingSchedule } = require("../helpers/StorageDrivers/Schedule");
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -42,6 +40,13 @@ const { setRoomSetpoints } = require("../helpers/StorageDrivers/Conditions");
 app.post("/api/ci/schedule/update", (req, res) => {
   setHeatingSchedule(frontendToBackend(req.body.data));
   // setStore("heatingSchedule", frontendToBackend(req.body.data));
+  sendEnvironmentalData();
+  res.end(null);
+});
+
+// ----------  Zone Setpoints  ----------
+app.post("/api/ci/setpoints", (req, res) => {
+  setZonesSetpoints(req.body.room, req.body.vals);
   sendEnvironmentalData();
   res.end(null);
 });
@@ -65,29 +70,21 @@ app.get("/api/ci/boost/off", (req, res) => {
   Manual
 */
 app.get("/api/ci/manual", (req, res) => {
-  const data = getStore("Environmental Data");
-
-  if (data.heatingMode === "schedule") {
-    data.heatingSchedule.auto = false;
-  } else if (data.heatingMode === "zones") {
-    data.climateControl.isAuto = false;
+  if (getHeatingMode() === "schedule") {
+    setHeatingScheduleManual();
+  } else if (getHeatingMode() === "zones") {
+    setZonesManual();
   }
-
-  setStore("Environmental Data", data);
   sendEnvironmentalData();
   res.end(null);
 });
 
 app.get("/api/ci/auto", (req, res) => {
-  const data = getStore("Environmental Data");
-
-  if (data.heatingMode === "schedule") {
-    data.heatingSchedule.auto = true;
-  } else if (data.heatingMode === "zones") {
-    data.climateControl.isAuto = true;
+  if (getHeatingMode() === "schedule") {
+    setHeatingScheduleAuto();
+  } else if (getHeatingMode() === "zones") {
+    setZonesAuto();
   }
-
-  setStore("Environmental Data", data);
   sendEnvironmentalData();
   res.end(null);
 });
@@ -96,24 +93,22 @@ app.get("/api/ci/auto", (req, res) => {
   On / Off
 */
 app.get("/api/ci/on", (req, res) => {
-  const data = getStore("Environmental Data");
-
-  if (data.heatingMode === "schedule") {
-    console.log("Schedule Heating On");
-  } else if (data.heatingMode === "zones") {
+  if (getHeatingMode() === "schedule") {
+    heatingOn();
+  } else if (getHeatingMode() === "zones") {
     console.log("Zones Heating On");
+    heatingOn();
   }
 
   res.end(null);
 });
 
 app.get("/api/ci/off", (req, res) => {
-  const data = getStore("Environmental Data");
-
-  if (data.heatingMode === "schedule") {
-    console.log("Schedule Heating Off");
-  } else if (data.heatingMode === "zones") {
+  if (getHeatingMode() === "schedule") {
+    heatingOff();
+  } else if (getHeatingMode() === "zones") {
     console.log("Zones Heating Off");
+    heatingOff();
   }
   res.end(null);
 });
@@ -132,6 +127,7 @@ app.get("/api/ci/mode/schedule", (req, res) => {
   sendEnvironmentalData();
   res.end(null);
 });
+
 ////////////////////////////////////////////////////////////////////////
 //
 //  #####
@@ -164,9 +160,3 @@ const sendEnvironmentalData = () => {
     console.log(e);
   }
 };
-
-app.post("/api/ci/setpoints", (req, res) => {
-  setRoomSetpoints(req.body.room, req.body.vals);
-  sendEnvironmentalData();
-  res.end(null);
-});

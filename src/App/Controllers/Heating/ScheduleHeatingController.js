@@ -1,9 +1,10 @@
-const { getHeatingSchedule, getHeatingController } = require("../../helpers/StorageDrivers/ClimateControl");
-const { day, now, time, days } = require("../../helpers/Time");
-const { heatingOn, heatingOff } = require("../../helpers/HeatingFunctions");
-const { getStore } = require("../../helpers/StorageDrivers/LowLevelDriver");
+const { getHeatingSchedule } = require("../../../helpers/StorageDrivers/Schedule");
 
-const heatingScheduleChecker = () => {
+const { day, now, time, days } = require("../../../helpers/Time");
+const { heatingOn, heatingOff, getHeatingController } = require("../../../helpers/HeatingFunctions");
+const { getStore } = require("../../../helpers/StorageDrivers/LowLevelDriver");
+
+const scheduleChecker = () => {
   const scheduleData = getHeatingSchedule();
 
   if (scheduleData.boostTime < now()) {
@@ -22,7 +23,7 @@ const heatingScheduleChecker = () => {
   }
 };
 
-const scheduleSignalHeating = () => {
+const scheduleHeating = () => {
   let heatingSchedule = getHeatingSchedule();
   let heatingController = getHeatingController();
 
@@ -35,7 +36,7 @@ const scheduleSignalHeating = () => {
   }
 };
 
-const scheduleSignalRadiatorFan = () => {
+const scheduleRadiatorFan = () => {
   let radiatorFan = getStore("Radiator Fan");
   let heating = getHeatingSchedule();
 
@@ -51,7 +52,7 @@ const scheduleSignalRadiatorFan = () => {
 };
 
 module.exports = {
-  heatingScheduleChecker: heatingScheduleChecker,
-  scheduleSignalHeating: scheduleSignalHeating,
-  scheduleSignalRadiatorFan: scheduleSignalRadiatorFan,
+  scheduleChecker: scheduleChecker,
+  scheduleHeating: scheduleHeating,
+  scheduleRadiatorFan: scheduleRadiatorFan,
 };

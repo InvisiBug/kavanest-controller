@@ -1,20 +1,17 @@
-const express = require("express");
-var app = (module.exports = express());
-const { getStore, setStore } = require("../../helpers/StorageDrivers/LowLevelDriver");
-const { heatingScheduleChecker, scheduleSignalHeating, scheduleSignalRadiatorFan } = require("./ScheduleHeatingController");
-const { autoSignalHeating, autoSignalRadiatorFan } = require("./ZoneHeatingController");
+const { getStore } = require("../../helpers/StorageDrivers/LowLevelDriver");
+const { scheduleChecker, scheduleHeating, scheduleRadiatorFan } = require("./Heating/ScheduleHeatingController");
+const { zoneHeating, zoneRadiatorFan, zoneManualOverride } = require("./Heating/ZoneHeatingController");
 
 setInterval(() => {
   const mode = getStore("Environmental Data").heatingMode;
 
   if (mode === "zones") {
-    console.log("Zones");
-    autoSignalHeating();
-    autoSignalRadiatorFan();
+    zoneHeating();
+    zoneRadiatorFan();
+    zoneManualOverride();
   } else if (mode === "schedule") {
-    console.log("Schedule");
-    heatingScheduleChecker();
-    scheduleSignalHeating();
-    scheduleSignalRadiatorFan();
+    scheduleChecker();
+    scheduleHeating();
+    scheduleRadiatorFan();
   }
 }, 1 * 1000);
