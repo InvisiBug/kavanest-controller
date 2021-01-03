@@ -121,17 +121,17 @@ require("./App/Controllers/HeatingModeController");
 
 ////////////////////////////////////////////////////////////////////////
 //
-// #     #                                         #####
-// #     # ######   ##   ##### # #    #  ####     #     # ###### #    #  ####   ####  #####
-// #     # #       #  #    #   # ##   # #    #    #       #      ##   # #      #    # #    #
-// ####### #####  #    #   #   # # #  # #          #####  #####  # #  #  ####  #    # #    #
-// #     # #      ######   #   # #  # # #  ###          # #      #  # #      # #    # #####
-// #     # #      #    #   #   # #   ## #    #    #     # #      #   ## #    # #    # #   #
-// #     # ###### #    #   #   # #    #  ####      #####  ###### #    #  ####   ####  #    #
+//  #     #  #####     ######
+//  #     # #     #    #     # ###### #    # #  ####  ######  ####
+//  #     #       #    #     # #      #    # # #    # #      #
+//  #     #  #####     #     # #####  #    # # #      #####   ####
+//   #   #        #    #     # #      #    # # #      #           #
+//    # #   #     #    #     # #       #  #  # #    # #      #    #
+//     #     #####     ######  ######   ##   #  ####  ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-const heatingSensor = require("./App/Interfaces/In/HeatingSensor");
-const radiatorValve = require("./App/Interfaces/In/RadiatorValve");
+const { newSensor } = require("./App/Interfaces/In/HeatingSensor");
+const { newValve } = require("./App/Interfaces/In/RadiatorValve");
 const { newValveController } = require("./App/Controllers/ValveController");
 
 const rooms = [
@@ -156,17 +156,12 @@ const rooms = [
     offset: -0.4,
   },
 ];
-
+// newValveController("Living Room");
 rooms.map((room, index) => {
-  heatingSensor.newSensor(room.name, room.offset);
-  // radiatorValve.newValve(room.name);
-  // newValveController(room.name);
+  newSensor(room.name, room.offset);
+  newValve(room.name);
+  newValveController(room.name);
 });
-
-// const radiatorValve = require("./App/Interfaces/RadiatorValve");
-// radiatorValve.newValve("Our Room");
-
-// zoneHeatingController.newZoneController("Our Room");
 
 [
   ////////////////////////////////////////////////////////////////////////

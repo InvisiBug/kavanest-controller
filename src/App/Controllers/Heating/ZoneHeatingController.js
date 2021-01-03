@@ -1,38 +1,36 @@
-const { getStore, getEnvironmentalData } = require("../../../helpers/StorageDrivers/LowLevelDriver");
-const { isValveOpen, getValveState } = require("../../../helpers/StorageDrivers/Valves");
+const { getEnvironmentalData } = require("../../../helpers/StorageDrivers/LowLevelDriver");
+const { getRoomSetpoints, getRoomTemperature } = require("../../../helpers/StorageDrivers/Conditions");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
 const { scheduleHeating, scheduleRadiatorFan } = require("./ScheduleHeatingController");
-const { radiatorFanOff } = require("../../../helpers/HeatingFunctions");
+const { radiatorFanOff, getHeatingMode } = require("../../../helpers/HeatingFunctions");
+const { setZonesDemand, isZoneDemand, isZonesDemand, isZonesAuto } = require("../../../helpers/StorageDrivers/Zones");
+const { isRadiatorFanAuto, isRadiatorFanConnected, isRadiatorFanOn } = require("../../../helpers/StorageDrivers/RadiatorFan");
+const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../../helpers/StorageDrivers/HeatingController");
+const { camelRoomName } = require("../../../helpers/Functions");
+const { hour } = require("../../../helpers/Time");
 
 const zoneHeating = () => {
-  const heatingController = getStore("Environmental Data").heatingController;
-  const environmentalData = getEnvironmentalData();
-
-  if (environmentalData.climateControl.isAuto && isValveOpen()) {
-    if (heatingController.isConnected && !heatingController.isOn) {
-      heatingControl("1");
+  if (isZonesAuto()) {
+    if (isZonesDemand()) {
+      if (isHeatingControllerConnected() && !isHeatingControllerOn()) {
+        heatingControl("1");
+      }
+    } else if (isHeatingControllerConnected() && isHeatingControllerOn()) {
+      heatingControl("0");
     }
-  } else if (heatingController.isConnected && heatingController.isOn) {
-    heatingControl("0");
   }
 };
 
 const zoneRadiatorFan = () => {
-  const radiatorFan = getStore("Radiator Fan");
-  const ourRoomValve = getValveState("ourRoom");
-  const environmentalData = getEnvironmentalData();
-  var timer;
-
-  if (environmentalData.climateControl.isAuto && radiatorFan.isAutomatic) {
-    if (isValveOpen()) {
-      if (radiatorFan.isConnected && !radiatorFan.isOn) {
+  if (isZonesAuto() && isRadiatorFanAuto()) {
+    if (isZonesDemand()) {
+      if (isRadiatorFanConnected() && !isRadiatorFanOn()) {
         radiatorFanControl("1");
-        clearTimeout(timer);
       }
-    } else if (radiatorFan.isConnected && radiatorFan.isOn) {
-      timer = setTimeout(() => {
+    } else if (isRadiatorFanConnected() && isRadiatorFanOn()) {
+      setTimeout(() => {
         radiatorFanControl("0");
-      }, 15 * 60 * 1000);
+      }, 2 * 1000);
     }
   }
 };
@@ -40,15 +38,36 @@ const zoneRadiatorFan = () => {
 radiatorFanOff();
 
 const zoneManualOverride = () => {
-  const environmentalData = getEnvironmentalData();
-  if (!environmentalData.climateControl.isAuto) {
+  if (!isZonesAuto()) {
     scheduleHeating();
     scheduleRadiatorFan();
   }
+};
+
+const checkRoomDemand = (room) => {
+  const environmentalData = getEnvironmentalData();
+  const auto = environmentalData.heatingZones.isAuto;
+  const mode = getHeatingMode();
+
+  let setpoint = getRoomSetpoints(camelRoomName(room));
+  let currentTemp = getRoomTemperature(camelRoomName(room));
+
+  if (auto && mode === "zones") {
+    if (currentTemp < setpoint[hour()] && currentTemp > -1) {
+      // ! the -1 bit may need to open the valve, fail safe
+      setZonesDemand(camelRoomName(room), true);
+    } else {
+      setZonesDemand(camelRoomName(room), false);
+    }
+  } else {
+    setZonesDemand(camelRoomName(room), true);
+  }
+  // console.log(`${room} \t Current Temp: ${currentTemp} \t Target Temp: ${setpoint[hour()]}`);
 };
 
 module.exports = {
   zoneHeating: zoneHeating,
   zoneRadiatorFan: zoneRadiatorFan,
   zoneManualOverride: zoneManualOverride,
+  checkRoomDemand: checkRoomDemand,
 };

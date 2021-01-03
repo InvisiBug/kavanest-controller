@@ -96,7 +96,6 @@ app.get("/api/ci/on", (req, res) => {
   if (getHeatingMode() === "schedule") {
     heatingOn();
   } else if (getHeatingMode() === "zones") {
-    console.log("Zones Heating On");
     heatingOn();
   }
 
@@ -107,7 +106,6 @@ app.get("/api/ci/off", (req, res) => {
   if (getHeatingMode() === "schedule") {
     heatingOff();
   } else if (getHeatingMode() === "zones") {
-    console.log("Zones Heating Off");
     heatingOff();
   }
   res.end(null);
@@ -125,6 +123,13 @@ app.get("/api/ci/mode/zones", (req, res) => {
 app.get("/api/ci/mode/schedule", (req, res) => {
   setHeatingModeSchedule();
   sendEnvironmentalData();
+  res.end(null);
+});
+
+app.get("/api/ci/mode/manual", (req, res) => {
+  // setHeatingModeSchedule();
+  // sendEnvironmentalData();
+  console.log("Manual Mode");
   res.end(null);
 });
 

@@ -1,7 +1,4 @@
-const express = require("express");
-const app = (module.exports = express());
-// const { getStore, setStore } = require("../../helpers/StorageDrivers/StorageDriver");
-const { getStore, setStore } = require("../../../helpers/StorageDrivers/LowLevelDriver");
+const { getStore, setStore, getEnvironmentalData } = require("../../../helpers/StorageDrivers/LowLevelDriver");
 const { camelRoomName, printTime } = require("../../../helpers/Functions");
 
 const disconnectedState = {
@@ -29,11 +26,12 @@ const newValve = (room) => {
             [camelRoomName(room)]: deviceData,
           },
         };
+
         setStore("Environmental Data", environmentalData); // TODO break this out in to its own setValve function
       }, 10 * 1000);
 
       if (payload != `${room} ${"Radiator Valve Disconnected"}`) {
-        let environmentalData = getStore("Environmental Data");
+        let environmentalData = getEnvironmentalData();
         let oldValveData = environmentalData.radiatorValves[camelRoomName(room)];
         var mqttData = JSON.parse(payload);
 

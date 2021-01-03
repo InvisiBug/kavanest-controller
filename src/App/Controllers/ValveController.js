@@ -22,7 +22,9 @@ const { setValveDemand, getValveStatus } = require("../../helpers/StorageDrivers
 const { openValve, closeValve } = require("../Interfaces/Out/Valves");
 const { camelRoomName } = require("../../helpers/Functions");
 const { hour } = require("../../helpers/Time");
-const { getStore } = require("../../helpers/StorageDrivers/LowLevelDriver");
+const { getStore, getEnvironmentalData } = require("../../helpers/StorageDrivers/LowLevelDriver");
+const { getHeatingMode } = require("../../helpers/HeatingFunctions");
+const { setZonesDemand, isZoneDemand, isZonesDemand } = require("../../helpers/StorageDrivers/Zones");
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -37,39 +39,17 @@ const { getStore } = require("../../helpers/StorageDrivers/LowLevelDriver");
 ////////////////////////////////////////////////////////////////////////
 const newValveController = (room) => {
   setInterval(() => {
-    checkValveDemand(room);
     signalValve(room);
   }, 1 * 1000);
-};
-
-const checkValveDemand = (room) => {
-  const environmentalData = getStore("Environmental Data");
-  const auto = environmentalData.climateControl.isAuto;
-  const mode = environmentalData.heatingMode;
-
-  let setpoint = getRoomSetpoints(camelRoomName(room));
-  let currentTemp = getRoomTemperature(camelRoomName(room));
-
-  if (auto && mode === "zones") {
-    if (currentTemp < setpoint[hour()] && currentTemp > -1) {
-      // ! the -1 bit may need to open the valve, fail safe
-      setValveDemand(camelRoomName(room), true);
-    } else {
-      setValveDemand(camelRoomName(room), false);
-    }
-  } else {
-    setValveDemand(camelRoomName(room), true);
-  }
-  // console.log(`${room} \t Current Temp: ${currentTemp} \t Target Temp: ${setpoint[hour()]}`);
 };
 
 const signalValve = (room) => {
   let valve = getValveStatus(camelRoomName(room));
   if (valve.isConnected) {
-    if (valve.demand && !valve.isOpen) {
+    if (isZoneDemand(camelRoomName(room)) && !valve.isOpen) {
       openValve(room);
       // console.log("Opening Valve");
-    } else if (!valve.demand && valve.isOpen) {
+    } else if (!isZoneDemand(camelRoomName(room)) && valve.isOpen) {
       closeValve(room);
       // console.log("Closing Valve");
     }

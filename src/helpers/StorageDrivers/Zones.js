@@ -1,29 +1,37 @@
-const { getStore, setStore } = require("./LowLevelDriver");
+const { getStore, setStore, getEnvironmentalData, setEnvironmentalData } = require("./LowLevelDriver");
 
 const isZonesAuto = () => {
-  let environmentalData = getStore("Environmental Data").climateControl;
+  let environmentalData = getEnvironmentalData().heatingZones;
   return environmentalData.isAuto;
 };
 
+const setZonesDemand = (room, state) => {
+  const data = getEnvironmentalData();
+  data.heatingZones[room].demand = state;
+  setEnvironmentalData(data);
+};
+
+const isZonesDemand = () => {
+  return isZoneDemand("livingRoom") || isZoneDemand("kitchen") || isZoneDemand("liamsRoom") || isZoneDemand("study") || isZoneDemand("ourRoom");
+};
+
+const isZoneDemand = (zone) => {
+  const data = getEnvironmentalData().heatingZones[zone].demand;
+  return data;
+};
+
 const setZonesAuto = () => {
-  setClimateControl("isAuto", true);
+  setZonesIsAuto(true);
 };
 
 const setZonesManual = () => {
-  setClimateControl("isAuto", false);
+  setZonesIsAuto(false);
 };
 
-const setClimateControl = (point = null, value = null) => {
-  let environmentalData = getStore("Environmental Data");
-  environmentalData = {
-    ...environmentalData,
-    climateControl: {
-      ...environmentalData.climateControl,
-      [point]: value,
-    },
-  };
-
-  setStore("Environmental Data", environmentalData);
+const setZonesIsAuto = (val) => {
+  const data = getEnvironmentalData();
+  data.heatingZones.isAuto = val;
+  setEnvironmentalData(data);
 };
 
 const setZonesSetpoints = (room, vals) => {
@@ -45,4 +53,7 @@ module.exports = {
   setZonesAuto: setZonesAuto,
   setZonesManual: setZonesManual,
   setZonesSetpoints: setZonesSetpoints,
+  isZonesDemand: isZonesDemand,
+  setZonesDemand: setZonesDemand,
+  isZoneDemand: isZoneDemand,
 };

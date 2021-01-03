@@ -30,14 +30,19 @@ const updateValue = (store, point, value) => {
 };
 
 const readValue = (store, point) => {
-  // let data = getStore(store);
-  // return data[point];
-
   return getStore(store)[point];
 };
 
 const getEnvironmentalData = () => {
   return getStore("Environmental Data");
+};
+
+const setEnvironmentalData = (data) => {
+  setStore("Environmental Data", data);
+};
+
+const getRadiatorFan = () => {
+  return getStore("Radiator Fan");
 };
 
 module.exports = {
@@ -46,4 +51,6 @@ module.exports = {
   updateValue: updateValue,
   readValue: readValue,
   getEnvironmentalData: getEnvironmentalData,
+  getRadiatorFan: getRadiatorFan,
+  setEnvironmentalData: setEnvironmentalData,
 };
