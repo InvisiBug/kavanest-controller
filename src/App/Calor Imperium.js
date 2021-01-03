@@ -18,13 +18,14 @@ const {
   boostOff,
   setHeatingModeSchedule,
   setHeatingModeZones,
+  setHeatingModeManual,
   heatingOn,
   heatingOff,
   getHeatingMode,
 } = require("../helpers/HeatingFunctions");
 const { setZonesSetpoints, setZonesAuto, setZonesManual } = require("../helpers/StorageDrivers/Zones");
 const { setHeatingScheduleAuto, setHeatingScheduleManual, setHeatingSchedule } = require("../helpers/StorageDrivers/Schedule");
-
+const { manualheatingOn, manualheatingOff } = require("../helpers/StorageDrivers/Manual");
 ////////////////////////////////////////////////////////////////////////
 //
 //    #    ######  ###
@@ -67,56 +68,27 @@ app.get("/api/ci/boost/off", (req, res) => {
 });
 
 /*
-  Manual
-*/
-app.get("/api/ci/manual", (req, res) => {
-  if (getHeatingMode() === "schedule") {
-    setHeatingScheduleManual();
-  } else if (getHeatingMode() === "zones") {
-    setZonesManual();
-  }
-  sendEnvironmentalData();
-  res.end(null);
-});
-
-app.get("/api/ci/auto", (req, res) => {
-  if (getHeatingMode() === "schedule") {
-    setHeatingScheduleAuto();
-  } else if (getHeatingMode() === "zones") {
-    setZonesAuto();
-  }
-  sendEnvironmentalData();
-  res.end(null);
-});
-
-/*
   On / Off
 */
 app.get("/api/ci/on", (req, res) => {
-  if (getHeatingMode() === "schedule") {
-    heatingOn();
-  } else if (getHeatingMode() === "zones") {
-    heatingOn();
-  }
+  manualheatingOn();
+  sendEnvironmentalData();
 
-  res.end(null);
+  res.end(sendEnvironmentalData());
 });
 
 app.get("/api/ci/off", (req, res) => {
-  if (getHeatingMode() === "schedule") {
-    heatingOff();
-  } else if (getHeatingMode() === "zones") {
-    heatingOff();
-  }
-  res.end(null);
+  manualheatingOff();
+  sendEnvironmentalData();
+  res.end(sendEnvironmentalData());
 });
 
 /*
   Heating Modes
 */
 app.get("/api/ci/mode/zones", (req, res) => {
-  sendEnvironmentalData();
   setHeatingModeZones();
+  sendEnvironmentalData();
   res.end(null);
 });
 
@@ -127,9 +99,9 @@ app.get("/api/ci/mode/schedule", (req, res) => {
 });
 
 app.get("/api/ci/mode/manual", (req, res) => {
-  // setHeatingModeSchedule();
-  // sendEnvironmentalData();
-  console.log("Manual Mode");
+  setHeatingModeManual();
+  sendEnvironmentalData();
+  // console.log("Manual Mode");
   res.end(null);
 });
 

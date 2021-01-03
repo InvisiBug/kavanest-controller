@@ -1,6 +1,6 @@
 const { getHeatingSchedule, setHeatingSchedule } = require("./StorageDrivers/Schedule");
 const { updateValue, readValue, getStore, getEnvironmentalData } = require("./StorageDrivers/LowLevelDriver");
-const { offsetTime } = require("./Time");
+const { offsetTimeMins } = require("./Time");
 
 const overRunTime = 20;
 const boostTime = 20;
@@ -81,26 +81,26 @@ const isHeatingOn = () => {
 
 const updateBoostTime = (time = 0) => {
   const heatingSchedule = getHeatingSchedule();
-  heatingSchedule.boostTime = offsetTime(time);
+  heatingSchedule.boostTime = offsetTimeMins(time);
   setHeatingSchedule(heatingSchedule);
 
-  // updateValue("heatingSchedule", "boostTime", offsetTime(time));
+  // updateValue("heatingSchedule", "boostTime", offsetTimeMins(time));
 };
 
 const updateRadiatorFanTime = (time = 0) => {
   const now = new Date();
   const heatingSchedule = getHeatingSchedule();
-  heatingSchedule.radiatorFanTime = offsetTime(time);
+  heatingSchedule.radiatorFanTime = offsetTimeMins(time);
   setHeatingSchedule(heatingSchedule);
-  // updateValue("heatingSchedule", "radiatorFanTime", offsetTime(time));
+  // updateValue("heatingSchedule", "radiatorFanTime", offsetTimeMins(time));
 };
 
 const updateHeatingTime = (time = 0) => {
   const now = new Date();
   const heatingSchedule = getHeatingSchedule();
-  heatingSchedule.heatingTime = offsetTime(time);
+  heatingSchedule.heatingTime = offsetTimeMins(time);
   setHeatingSchedule(heatingSchedule);
-  // updateValue("heatingSchedule", "heatingTime", offsetTime(time));
+  // updateValue("heatingSchedule", "heatingTime", offsetTimeMins(time));
 };
 
 // radiatorFanOff();
@@ -116,6 +116,10 @@ const setHeatingModeSchedule = () => {
 
 const setHeatingModeZones = () => {
   updateValue("Environmental Data", "heatingMode", "zones");
+};
+
+const setHeatingModeManual = () => {
+  updateValue("Environmental Data", "heatingMode", "manual");
 };
 
 const getHeatingMode = () => {
@@ -142,4 +146,5 @@ module.exports = {
   setHeatingModeZones: setHeatingModeZones,
   getHeatingMode: getHeatingMode,
   getHeatingController: getHeatingController,
+  setHeatingModeManual: setHeatingModeManual,
 };

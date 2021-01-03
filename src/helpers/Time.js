@@ -22,7 +22,7 @@ const hour = () => {
   return date.getHours();
 };
 
-const offsetTime = (time = 0) => {
+const offsetTimeMins = (time = 0) => {
   let now = new Date();
   return now.setMinutes(now.getMinutes() + time);
 };
@@ -34,6 +34,6 @@ module.exports = {
   now: now,
   time: time,
   hour: hour,
-  offsetTime: offsetTime,
+  offsetTimeMins: offsetTimeMins,
   days: days,
 };

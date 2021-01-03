@@ -5,18 +5,6 @@
   which have to be qued for reading and writing
   if the file is accessed too quickly there may be issues
 */
-////////////////////////////////////////////////////////////////////////
-//
-//   #####
-//  #     #  ####  #    # ###### #  ####
-//  #       #    # ##   # #      # #    #
-//  #       #    # # #  # #####  # #
-//  #       #    # #  # # #      # #  ###
-//  #     # #    # #   ## #      # #    #
-//   #####   ####  #    # #      #  ####
-//
-////////////////////////////////////////////////////////////////////////
-// Express
 const { getRoomSetpoints, getRoomTemperature } = require("../../helpers/StorageDrivers/Conditions");
 const { setValveDemand, getValveStatus } = require("../../helpers/StorageDrivers/Valves");
 const { openValve, closeValve } = require("../Interfaces/Out/Valves");
@@ -26,17 +14,6 @@ const { getStore, getEnvironmentalData } = require("../../helpers/StorageDrivers
 const { getHeatingMode } = require("../../helpers/HeatingFunctions");
 const { setZonesDemand, isZoneDemand, isZonesDemand } = require("../../helpers/StorageDrivers/Zones");
 
-////////////////////////////////////////////////////////////////////////
-//
-// #######
-//    #    # #    # ###### #####   ####
-//    #    # ##  ## #      #    # #
-//    #    # # ## # #####  #    #  ####
-//    #    # #    # #      #####       #
-//    #    # #    # #      #   #  #    #
-//    #    # #    # ###### #    #  ####
-//
-////////////////////////////////////////////////////////////////////////
 const newValveController = (room) => {
   setInterval(() => {
     signalValve(room);

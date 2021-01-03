@@ -1,3 +1,4 @@
+const { camelRoomName } = require("../Functions");
 const { getStore, setStore, getEnvironmentalData, setEnvironmentalData } = require("./LowLevelDriver");
 
 const isZonesAuto = () => {
@@ -5,9 +6,19 @@ const isZonesAuto = () => {
   return environmentalData.isAuto;
 };
 
+const setAllZonesDemand = () => {
+  setZonesDemand("Living Room", true);
+  setZonesDemand("Kitchen", true);
+  setZonesDemand("Liams Room", true);
+  setZonesDemand("Study", true);
+  setZonesDemand("Our Room", true);
+};
+
 const setZonesDemand = (room, state) => {
   const data = getEnvironmentalData();
-  data.heatingZones[room].demand = state;
+
+  // console.log(data.heatingZones[camelRoomName(room)]);
+  data.heatingZones[camelRoomName(room)].demand = state;
   setEnvironmentalData(data);
 };
 
@@ -56,4 +67,5 @@ module.exports = {
   isZonesDemand: isZonesDemand,
   setZonesDemand: setZonesDemand,
   isZoneDemand: isZoneDemand,
+  setAllZonesDemand: setAllZonesDemand,
 };

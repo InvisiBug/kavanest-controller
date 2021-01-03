@@ -6,7 +6,6 @@ const isHeatingScheduleAuto = () => {
 };
 
 const setHeatingScheduleAuto = () => {
-  console.log("here");
   const data = getEnvironmentalData();
   data.heatingSchedule.auto = true;
   setStore("Environmental Data", data);

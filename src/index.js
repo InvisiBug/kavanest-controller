@@ -69,8 +69,8 @@ global.io = require("socket.io")(server);
 const mqtt = require("mqtt");
 
 // global.client = mqtt.connect("mqtt://192.168.1.46");
-// global.client = mqtt.connect("mqtt://kavanet.io");
-global.client = mqtt.connect("mqtt://localhost");
+global.client = mqtt.connect("mqtt://kavanet.io");
+// global.client = mqtt.connect("mqtt://localhost");
 
 client.setMaxListeners(50); // TODO Sort this out later, Disables event listener warning
 
