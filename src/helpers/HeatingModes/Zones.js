@@ -1,5 +1,5 @@
 const { camelRoomName } = require("../Functions");
-const { getStore, setStore, getEnvironmentalData, setEnvironmentalData } = require("./LowLevelDriver");
+const { getStore, setStore, getEnvironmentalData, setEnvironmentalData } = require("../StorageDrivers/LowLevelDriver");
 
 const isZonesAuto = () => {
   let environmentalData = getEnvironmentalData().heatingZones;

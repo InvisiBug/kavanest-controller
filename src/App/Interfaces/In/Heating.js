@@ -1,8 +1,9 @@
 const express = require("express");
 const app = (module.exports = express());
-const { getStore, setStore, updateValue, readValue } = require("../../../helpers/StorageDrivers/LowLevelDriver");
-const { boostOn, boostOff } = require("../../../helpers/HeatingFunctions");
-const functions = require("../../../helpers/Functions");
+const { getStore, setStore, updateValue, readValue } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
+const { boostOn, boostOff } = require("../../../Helpers/HeatingModes/Functions");
+const functions = require("../../../Helpers/Functions");
+const { getHeatingSchedule } = require("../../../Helpers/HeatingModes/Schedule");
 
 const disconnectedState = {
   isConnected: false,
@@ -35,12 +36,13 @@ client.on("message", (topic, payload) => {
       console.log(`${"Heating Disconnected"} ${functions.printTime()}`);
     }
   } else if (topic === "Heating Button") {
-    // const now = new Date().getTime();
-    // if (readValue("heatingSchedule", "boostTime") < now) {
-    //   boostOn();
-    // } else {
-    //   boostOff();
-    // }
+    const now = new Date().getTime();
+    if (getHeatingSchedule().boostTime < now) {
+      // if (readValue("heatingSchedule", "boostTime") < now) {
+      boostOn();
+    } else {
+      boostOff();
+    }
   }
 });
 

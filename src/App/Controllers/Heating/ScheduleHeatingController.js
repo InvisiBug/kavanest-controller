@@ -1,9 +1,20 @@
-const { getHeatingSchedule } = require("../../../helpers/StorageDrivers/Schedule");
+const { getHeatingSchedule } = require("../../../Helpers/HeatingModes/Schedule");
 
-const { day, now, time, days } = require("../../../helpers/Time");
-const { heatingOn, heatingOff, getHeatingController } = require("../../../helpers/HeatingFunctions");
-const { getStore } = require("../../../helpers/StorageDrivers/LowLevelDriver");
+const { day, now, time, days } = require("../../../Helpers/Time");
+const { heatingOn, heatingOff, getHeatingController } = require("../../../Helpers/HeatingModes/Functions");
+const { getStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 
+////////////////////////////////////////////////////////////////////////
+//
+//   #
+//   #        ####   ####  #  ####
+//   #       #    # #    # # #    #
+//   #       #    # #      # #
+//   #       #    # #  ### # #
+//   #       #    # #    # # #    #
+//   #######  ####   ####  #  ####
+//
+////////////////////////////////////////////////////////////////////////
 const scheduleChecker = () => {
   const scheduleData = getHeatingSchedule();
 
@@ -50,6 +61,18 @@ const scheduleRadiatorFan = () => {
     }
   }
 };
+
+////////////////////////////////////////////////////////////////////////
+//
+//    #######
+//    #       #    # #    #  ####  ##### #  ####  #    #  ####
+//    #       #    # ##   # #    #   #   # #    # ##   # #
+//    #####   #    # # #  # #        #   # #    # # #  #  ####
+//    #       #    # #  # # #        #   # #    # #  # #      #
+//    #       #    # #   ## #    #   #   # #    # #   ## #    #
+//    #        ####  #    #  ####    #   #  ####  #    #  ####
+//
+////////////////////////////////////////////////////////////////////////
 
 module.exports = {
   scheduleChecker: scheduleChecker,

@@ -1,6 +1,6 @@
-const { getHeatingSchedule, setHeatingSchedule } = require("./StorageDrivers/Schedule");
-const { updateValue, readValue, getStore, getEnvironmentalData } = require("./StorageDrivers/LowLevelDriver");
-const { offsetTimeMins } = require("./Time");
+const { getHeatingSchedule, setHeatingSchedule } = require("./Schedule");
+const { updateValue, readValue, getStore, getEnvironmentalData } = require("../StorageDrivers/LowLevelDriver");
+const { offsetTimeMins } = require("../Time");
 
 const overRunTime = 20;
 const boostTime = 20;
