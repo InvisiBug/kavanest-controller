@@ -38,7 +38,7 @@ const db = new Engine.Db(path.join(__dirname, "../../Databases/Heating/"), {});
 //
 ////////////////////////////////////////////////////////////////////////
 app.post("/api/heatingSensor/historical", (req, res) => {
-  console.log(req.body.timescale.toUpperCase());
+  // console.log(req.body.timescale.toUpperCase());
   var points;
   if (req.body.timescale.toUpperCase() == "DAY") points = 24;
   else if (req.body.timescale.toUpperCase() == "WEEK") points = 168;
