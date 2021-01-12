@@ -29,4 +29,4 @@ jobs:
           node-version: ${{matrix.node-version}}
           
       - run: cd ${{ github.workspace }}
-      - run: ls
+      - run: yarn dev
