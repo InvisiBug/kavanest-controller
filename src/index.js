@@ -157,6 +157,7 @@ const rooms = [
     offset: 0,
   },
 ];
+//boop
 
 rooms.map((room, index) => {
   newSensor(room.name, room.offset);
