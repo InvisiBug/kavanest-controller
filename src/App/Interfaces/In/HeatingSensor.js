@@ -4,7 +4,7 @@ const { camelRoomName, printTime, currentTime } = require("../../../helpers/Func
 // Historical Data (Tingo)
 const path = require("path");
 const Engine = require("tingodb")();
-const db = new Engine.Db(path.join(__dirname, "../../../Databases/Heating"), {});
+const db = new Engine.Db(path.join(__dirname, "../../../../PersistantStorage/Historical"), {});
 const schedule = require("node-schedule");
 
 const disconnectedState = {
