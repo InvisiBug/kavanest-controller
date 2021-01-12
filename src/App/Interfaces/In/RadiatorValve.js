@@ -1,5 +1,5 @@
-const { getStore, setStore, getEnvironmentalData } = require("../../../helpers/StorageDrivers/LowLevelDriver");
-const { camelRoomName, printTime } = require("../../../helpers/Functions");
+const { getStore, setStore, getEnvironmentalData } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
+const { camelRoomName, printTime } = require("../../../Helpers/Functions");
 
 const disconnectedState = {
   isConnected: false,
