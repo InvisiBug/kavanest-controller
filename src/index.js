@@ -68,8 +68,8 @@ global.io = require("socket.io")(server);
 ////////////////////////////////////////////////////////////////////////
 const mqtt = require("mqtt");
 
-// global.client = mqtt.connect("mqtt://192.168.1.46");
-global.client = mqtt.connect("mqtt://kavanet.io");
+global.client = mqtt.connect("mqtt://192.168.1.46");
+// global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
 // global.client = mqtt.connect("mqtt://localhost");
 
 client.setMaxListeners(50); // TODO Sort this out later, Disables event listener warning
@@ -118,6 +118,7 @@ app.use(require("./App/Interfaces/In/Heating.js"));
 require("./App/Services/HouseClimateStats");
 require("./App/Controllers/HeatingModeController");
 // app.use(require("./App/Controllers/ScheduleHeatingController"));
+app.use(require("./App/Services/HistoricalClimate"));
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -137,26 +138,27 @@ const { newValveController } = require("./App/Controllers/ValveController");
 const rooms = [
   {
     name: "Our Room",
-    offset: 2.6,
+    offset: 0,
   },
   {
     name: "Study",
-    offset: -5,
+    offset: 0,
   },
   {
     name: "Living Room",
-    offset: -0.3,
+    offset: 0,
   },
   {
     name: "Kitchen",
-    offset: -1.2,
+    offset: 0,
   },
   {
     name: "Liams Room",
-    offset: -0.4,
+    offset: 0,
   },
 ];
-// newValveController("Living Room");
+//boop
+
 rooms.map((room, index) => {
   newSensor(room.name, room.offset);
   newValve(room.name);
@@ -215,5 +217,3 @@ rooms.map((room, index) => {
 // Start the app
 app.listen(fetchPort, console.log("App is listening on port " + fetchPort));
 io.listen(socketPort, console.log("Socket is open on port " + socketPort));
-
-// require("./helpers/StorageDrivers/Schedule");

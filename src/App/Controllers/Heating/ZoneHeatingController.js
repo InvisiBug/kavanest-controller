@@ -1,13 +1,13 @@
-const { getEnvironmentalData } = require("../../../helpers/StorageDrivers/LowLevelDriver");
-const { getRoomSetpoints, getRoomTemperature } = require("../../../helpers/StorageDrivers/Conditions");
+const { getEnvironmentalData } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
+const { getRoomSetpoints, getRoomTemperature } = require("../../../Helpers/StorageDrivers/Devices/HeatingSensors");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
 const { scheduleHeating, scheduleRadiatorFan } = require("./ScheduleHeatingController");
-const { radiatorFanOff, getHeatingMode } = require("../../../helpers/HeatingFunctions");
-const { setZonesDemand, isZoneDemand, isZonesDemand, isZonesAuto } = require("../../../helpers/StorageDrivers/Zones");
-const { isRadiatorFanAuto, isRadiatorFanConnected, isRadiatorFanOn } = require("../../../helpers/StorageDrivers/RadiatorFan");
-const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../../helpers/StorageDrivers/HeatingController");
-const { camelRoomName } = require("../../../helpers/Functions");
-const { hour } = require("../../../helpers/Time");
+const { radiatorFanOff, getHeatingMode } = require("../../../Helpers/HeatingModes/Functions");
+const { setZonesDemand, isZoneDemand, isZonesDemand, isZonesAuto } = require("../../../Helpers/HeatingModes/Zones");
+const { isRadiatorFanAuto, isRadiatorFanConnected, isRadiatorFanOn } = require("../../../Helpers/StorageDrivers/Devices/RadiatorFan");
+const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../../Helpers/StorageDrivers/Devices/HeatingController");
+const { camelRoomName } = require("../../../Helpers/Functions");
+const { hour } = require("../../../Helpers/Time");
 
 const zoneHeating = () => {
   // if (isZonesAuto()) {

@@ -1,7 +1,7 @@
-const { getStore, setStore } = require("./LowLevelDriver");
+const { getStore, setStore } = require("../LowLevelDriver");
 
 // Conditions
-const getRoomConditions = (room) => {
+const getRoomHeatingSensor = (room) => {
   return getStore("Environmental Data").heatingSensors[room];
 };
 
@@ -32,7 +32,7 @@ const setRoomSetpoints = (room, vals) => {
 // setRoomSetpoints("kitchen", [2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24]);
 
 module.exports = {
-  getRoomConditions: getRoomConditions,
+  getRoomHeatingSensor: getRoomHeatingSensor,
   getRoomTemperature: getRoomTemperature,
   getRoomSetpoints: getRoomSetpoints,
   setRoomSetpoints: setRoomSetpoints,

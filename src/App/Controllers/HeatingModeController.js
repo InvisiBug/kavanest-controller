@@ -1,8 +1,8 @@
-const { getStore } = require("../../helpers/StorageDrivers/LowLevelDriver");
+const { getStore } = require("../../Helpers/StorageDrivers/LowLevelDriver");
 const { scheduleChecker, scheduleHeating, scheduleRadiatorFan } = require("./Heating/ScheduleHeatingController");
 const { zoneHeating, zoneRadiatorFan, zoneManualOverride, checkRoomDemand } = require("./Heating/ZoneHeatingController");
 const { checkFan, checkHeating } = require("./Heating/ManualHeatingController");
-const { setAllZonesDemand } = require("../../helpers/StorageDrivers/Zones");
+const { setAllZonesDemand } = require("../../Helpers/HeatingModes/Zones");
 
 setInterval(() => {
   const mode = getStore("Environmental Data").heatingMode;

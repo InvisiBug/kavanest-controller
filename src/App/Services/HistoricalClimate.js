@@ -24,7 +24,7 @@ const app = (module.exports = express());
 
 const path = require("path");
 const Engine = require("tingodb")();
-const db = new Engine.Db(path.join(__dirname, "../Databases/Heating"), {});
+const db = new Engine.Db(path.join(__dirname, "../../Databases/Heating/"), {});
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -37,19 +37,20 @@ const db = new Engine.Db(path.join(__dirname, "../Databases/Heating"), {});
 //  #     # #       ###
 //
 ////////////////////////////////////////////////////////////////////////
-app.post("/api/heating/sensor/historical", (req, res) => {
+app.post("/api/heatingSensor/historical", (req, res) => {
+  // console.log(req.body.timescale.toUpperCase());
   var points;
-  if (req.body.timescale == "day") points = 24;
-  else if (req.body.timescale == "week") points = 168;
-  else if (req.body.timescale == "month") points = 720;
-  else if (req.body.timescale == "year") points = 8760;
+  if (req.body.timescale.toUpperCase() == "DAY") points = 24;
+  else if (req.body.timescale.toUpperCase() == "WEEK") points = 168;
+  else if (req.body.timescale.toUpperCase() == "MONTH") points = 720;
+  else if (req.body.timescale.toUpperCase() == "YEAR") points = 8760;
 
   db.collection(req.body.room)
     .find()
     .toArray((error, result) => {
       var data = [];
 
-      if (error) res.end(error);
+      if (error) console.log(error);
       else {
         if (result.length < points) {
           for (i = result.length - 1; i >= 0; i--) {
@@ -60,11 +61,7 @@ app.post("/api/heating/sensor/historical", (req, res) => {
             });
           }
         } else {
-          for (
-            i = result.length - 1;
-            i >= result.length - 1 - (points - 1);
-            i--
-          ) {
+          for (i = result.length - 1; i >= result.length - 1 - (points - 1); i--) {
             data.push({
               temperature: result[i].temperature,
               humidity: result[i].humidity,

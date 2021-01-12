@@ -1,4 +1,4 @@
-const { getStore, setStore, getEnvironmentalData } = require("./LowLevelDriver");
+const { getStore, setStore, getEnvironmentalData } = require("../StorageDrivers/LowLevelDriver");
 
 const isHeatingScheduleAuto = () => {
   const data = getEnvironmentalData();

@@ -1,6 +1,6 @@
-const { getHeatingController } = require("../../../helpers/HeatingFunctions");
-const { getStore } = require("../../../helpers/StorageDrivers/LowLevelDriver");
-const { getManualHeating } = require("../../../helpers/StorageDrivers/Manual");
+const { getHeatingController } = require("../../../Helpers/HeatingModes/Functions");
+const { getStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
+const { getManualHeating } = require("../../../Helpers/HeatingModes/Manual");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
 
 const checkFan = () => {

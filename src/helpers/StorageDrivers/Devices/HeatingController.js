@@ -1,4 +1,4 @@
-const { getStore, setStore } = require("./LowLevelDriver");
+const { getStore, setStore } = require("../LowLevelDriver");
 const storeName = "Environmental Data";
 
 const isHeatingControllerConnected = () => {

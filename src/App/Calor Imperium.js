@@ -11,8 +11,8 @@
 // Express
 const express = require("express");
 var app = (module.exports = express());
-const { getStore, setStore, updateValue, readValue } = require("../helpers/StorageDrivers/LowLevelDriver");
-const { backendToFrontend, frontendToBackend } = require("../helpers/Functions");
+const { getStore, setStore, updateValue, readValue } = require("../Helpers/StorageDrivers/LowLevelDriver");
+const { backendToFrontend, frontendToBackend } = require("../Helpers/Functions");
 const {
   boostOn,
   boostOff,
@@ -22,10 +22,10 @@ const {
   heatingOn,
   heatingOff,
   getHeatingMode,
-} = require("../helpers/HeatingFunctions");
-const { setZonesSetpoints, setZonesAuto, setZonesManual } = require("../helpers/StorageDrivers/Zones");
-const { setHeatingScheduleAuto, setHeatingScheduleManual, setHeatingSchedule } = require("../helpers/StorageDrivers/Schedule");
-const { manualheatingOn, manualheatingOff } = require("../helpers/StorageDrivers/Manual");
+} = require("../Helpers/HeatingModes/Functions");
+const { setZonesSetpoints, setZonesAuto, setZonesManual } = require("../Helpers/HeatingModes/Zones");
+const { setHeatingScheduleAuto, setHeatingScheduleManual, setHeatingSchedule } = require("../Helpers/HeatingModes/Schedule");
+const { manualheatingOn, manualheatingOff } = require("../Helpers/HeatingModes/Manual");
 ////////////////////////////////////////////////////////////////////////
 //
 //    #    ######  ###
