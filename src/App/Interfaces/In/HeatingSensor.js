@@ -1,5 +1,11 @@
 const { getStore, setStore } = require("../../../helpers/StorageDrivers/LowLevelDriver");
-const { camelRoomName, printTime } = require("../../../helpers/Functions");
+const { camelRoomName, printTime, currentTime } = require("../../../helpers/Functions");
+
+// Historical Data (Tingo)
+const path = require("path");
+const Engine = require("tingodb")();
+const db = new Engine.Db(path.join(__dirname, "../../../Databases/Heating"), {});
+const schedule = require("node-schedule");
 
 const disconnectedState = {
   isConnected: false,
@@ -7,6 +13,9 @@ const disconnectedState = {
   humidity: -1,
   pressure: -1,
 };
+
+var Hourly = new schedule.RecurrenceRule();
+Hourly.minute = 0;
 
 const newSensor = (room, offset) => {
   var timer;
@@ -31,6 +40,7 @@ const newSensor = (room, offset) => {
         setStore("Environmental Data", environmentalData);
       }, 10 * 1000);
 
+      // * Good MQTT data in
       if (payload != `${room} ${"Heating Sensor Disconnected"}`) {
         var mqttData = JSON.parse(payload);
 
@@ -55,6 +65,17 @@ const newSensor = (room, offset) => {
         console.log(`${room} ${"Heating Sensor Disconnected at "} ${printTime()}`);
       }
     }
+  });
+
+  schedule.scheduleJob(Hourly, () => {
+    let data = {
+      temperature: deviceData.temperature,
+      humidity: deviceData.humidity,
+      timestamp: currentTime(),
+    };
+    db.collection(room).insert(data, (err, res) => {
+      if (err) console.log(err);
+    });
   });
 };
 

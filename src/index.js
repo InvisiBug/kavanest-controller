@@ -118,6 +118,7 @@ app.use(require("./App/Interfaces/In/Heating.js"));
 require("./App/Services/HouseClimateStats");
 require("./App/Controllers/HeatingModeController");
 // app.use(require("./App/Controllers/ScheduleHeatingController"));
+app.use(require("./App/Services/HistoricalClimate"));
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -215,5 +216,3 @@ rooms.map((room, index) => {
 // Start the app
 app.listen(fetchPort, console.log("App is listening on port " + fetchPort));
 io.listen(socketPort, console.log("Socket is open on port " + socketPort));
-
-// require("./helpers/StorageDrivers/Schedule");
