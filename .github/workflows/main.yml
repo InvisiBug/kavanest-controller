@@ -28,5 +28,5 @@ jobs:
         with:
           node-version: ${{matrix.node-version}}
           
-      - run: cd _work/Kavanet-Controller/Kavanet-Controller
+      - run: cd /_work/Kavanet-Controller/Kavanet-Controller
       - run: yarn-dev
