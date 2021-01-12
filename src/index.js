@@ -138,30 +138,30 @@ const { newValveController } = require("./App/Controllers/ValveController");
 const rooms = [
   {
     name: "Our Room",
-    offset: 2.6,
+    offset: 0,
   },
   {
     name: "Study",
-    offset: -5,
+    offset: 0,
   },
   {
     name: "Living Room",
-    offset: -0.3,
+    offset: 0,
   },
   {
     name: "Kitchen",
-    offset: -1.2,
+    offset: 0,
   },
   {
     name: "Liams Room",
-    offset: -0.4,
+    offset: 0,
   },
 ];
-// newValveController("Living Room");
+
 rooms.map((room, index) => {
   newSensor(room.name, room.offset);
   newValve(room.name);
-  // newValveController(room.name);
+  newValveController(room.name);
 });
 
 [
