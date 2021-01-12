@@ -24,7 +24,7 @@ const app = (module.exports = express());
 
 const path = require("path");
 const Engine = require("tingodb")();
-const db = new Engine.Db(path.join(__dirname, "../../Databases/Heating/"), {});
+const db = new Engine.Db(path.join(__dirname, "../../../PersistantStorage/Historical/"), {});
 
 ////////////////////////////////////////////////////////////////////////
 //
