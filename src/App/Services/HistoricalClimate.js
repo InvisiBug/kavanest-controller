@@ -38,11 +38,12 @@ const db = new Engine.Db(path.join(__dirname, "../../Databases/Heating/"), {});
 //
 ////////////////////////////////////////////////////////////////////////
 app.post("/api/heatingSensor/historical", (req, res) => {
+  console.log(req.body.timescale.toUpperCase());
   var points;
-  if (req.body.timescale == "day") points = 24;
-  else if (req.body.timescale == "week") points = 168;
-  else if (req.body.timescale == "month") points = 720;
-  else if (req.body.timescale == "year") points = 8760;
+  if (req.body.timescale.toUpperCase() == "DAY") points = 24;
+  else if (req.body.timescale.toUpperCase() == "WEEK") points = 168;
+  else if (req.body.timescale.toUpperCase() == "MONTH") points = 720;
+  else if (req.body.timescale.toUpperCase() == "YEAR") points = 8760;
 
   db.collection(req.body.room)
     .find()
