@@ -162,7 +162,7 @@ const rooms = [
 rooms.map((room, index) => {
   newSensor(room.name, room.offset);
   newValve(room.name);
-  newValveController(room.name);
+  // newValveController(room.name);
 });
 
 [
