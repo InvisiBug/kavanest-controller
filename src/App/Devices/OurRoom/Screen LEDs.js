@@ -23,7 +23,7 @@ const app = (module.exports = express());
 const { screenLEDsControl } = require("../../Interfaces/Out/mqttOut");
 
 // Functions
-const functions = require("../../../helpers/Functions.js");
+const functions = require("../../../Helpers/Functions.js");
 
 ////////////////////////////////////////////////////////////////////////
 //

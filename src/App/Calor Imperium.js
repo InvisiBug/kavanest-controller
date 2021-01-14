@@ -26,6 +26,7 @@ const {
 const { setZonesSetpoints, setZonesAuto, setZonesManual } = require("../Helpers/HeatingModes/Zones");
 const { setHeatingScheduleAuto, setHeatingScheduleManual, setHeatingSchedule } = require("../Helpers/HeatingModes/Schedule");
 const { manualheatingOn, manualheatingOff } = require("../Helpers/HeatingModes/Manual");
+const { openValve, closeValve } = require("./Interfaces/Out/Valves");
 ////////////////////////////////////////////////////////////////////////
 //
 //    #    ######  ###
@@ -137,3 +138,69 @@ const sendEnvironmentalData = () => {
     console.log(e);
   }
 };
+
+////////////
+/*
+  Living Room
+*/
+app.get("/api/radiatorValves/livingRoom/open", (req, res) => {
+  openValve("Living Room");
+  res.end(null);
+});
+
+app.get("/api/radiatorValves/livingRoom/close", (req, res) => {
+  closeValve("Living Room");
+  res.end(null);
+});
+
+/*
+  Kitchen
+*/
+app.get("/api/radiatorValves/kitchen/open", (req, res) => {
+  openValve("Kitchen");
+  res.end(null);
+});
+
+app.get("/api/radiatorValves/kitchen/close", (req, res) => {
+  closeValve("Kitchen");
+  res.end(null);
+});
+
+/*
+  Liams Room
+*/
+app.get("/api/radiatorValves/liamsRoom/open", (req, res) => {
+  openValve("Liams Room");
+  res.end(null);
+});
+
+app.get("/api/radiatorValves/liamsRoom/close", (req, res) => {
+  closeValve("Liams Room");
+  res.end(null);
+});
+
+/*
+  Study
+*/
+app.get("/api/radiatorValves/study/open", (req, res) => {
+  openValve("Study");
+  res.end(null);
+});
+
+app.get("/api/radiatorValves/study/close", (req, res) => {
+  closeValve("Study");
+  res.end(null);
+});
+
+/*
+  Our Room
+*/
+app.get("/api/radiatorValves/ourRoom/open", (req, res) => {
+  openValve("Our Room");
+  res.end(null);
+});
+
+app.get("/api/radiatorValves/ourRoom/close", (req, res) => {
+  closeValve("Our Room");
+  res.end(null);
+});

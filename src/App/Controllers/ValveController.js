@@ -35,4 +35,5 @@ const signalValve = (room) => {
 
 module.exports = {
   newValveController: newValveController,
+  signalValve: signalValve,
 };

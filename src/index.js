@@ -68,9 +68,9 @@ global.io = require("socket.io")(server);
 ////////////////////////////////////////////////////////////////////////
 const mqtt = require("mqtt");
 
-global.client = mqtt.connect("mqtt://192.168.1.46");
+global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
+// global.client = mqtt.connect("mqtt://localhost"); //  Production
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
-// global.client = mqtt.connect("mqtt://localhost");
 
 client.setMaxListeners(50); // TODO Sort this out later, Disables event listener warning
 
@@ -162,7 +162,7 @@ const rooms = [
 rooms.map((room, index) => {
   newSensor(room.name, room.offset);
   newValve(room.name);
-  newValveController(room.name);
+  // newValveController(room.name);
 });
 
 [
