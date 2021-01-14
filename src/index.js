@@ -71,6 +71,7 @@ const mqtt = require("mqtt");
 global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
 // global.client = mqtt.connect("mqtt://localhost"); //  Production
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
+// test;
 
 client.setMaxListeners(50); // TODO Sort this out later, Disables event listener warning
 
