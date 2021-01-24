@@ -1,8 +1,9 @@
-const { getHeatingSchedule } = require("../../../Helpers/HeatingModes/Schedule");
+const { getScheduleHeating } = require("../../../Helpers/HeatingModes/Schedule");
 
 const { day, now, time, days } = require("../../../Helpers/Time");
 const { heatingOn, heatingOff, getHeatingController } = require("../../../Helpers/HeatingModes/Functions");
 const { getStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
+const { radiatorFanControl } = require("../../Interfaces/Out/mqttOut");
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -16,7 +17,7 @@ const { getStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 //
 ////////////////////////////////////////////////////////////////////////
 const scheduleChecker = () => {
-  const scheduleData = getHeatingSchedule();
+  const scheduleData = getScheduleHeating();
 
   if (scheduleData.boostTime < now()) {
     if (scheduleData.auto) {
@@ -35,7 +36,7 @@ const scheduleChecker = () => {
 };
 
 const scheduleHeating = () => {
-  let heatingSchedule = getHeatingSchedule();
+  let heatingSchedule = getScheduleHeating();
   let heatingController = getHeatingController();
 
   if (now() < heatingSchedule.heatingTime) {
@@ -49,15 +50,17 @@ const scheduleHeating = () => {
 
 const scheduleRadiatorFan = () => {
   let radiatorFan = getStore("Radiator Fan");
-  let heating = getHeatingSchedule();
+  let heating = getScheduleHeating();
 
-  if (radiatorFan.isAutomatic) {
-    if (now() < heating.radiatorFanTime) {
-      if (radiatorFan.isConnected && !radiatorFan.isOn) {
-        client.publish("Radiator Fan Control", "1");
+  if (radiatorFan.isAutomatic && radiatorFan.isConnected) {
+    if (new Date() < heating.radiatorFanTime) {
+      if (!radiatorFan.isOn) {
+        radiatorFanControl("1");
       }
-    } else if (radiatorFan.isConnected && radiatorFan.isOn) {
-      client.publish("Radiator Fan Control", "0");
+    } else {
+      if (radiatorFan.isOn) {
+        radiatorFanControl("0");
+      }
     }
   }
 };

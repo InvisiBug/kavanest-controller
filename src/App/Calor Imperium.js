@@ -123,7 +123,7 @@ var heatingScheduleSocket = setInterval(() => {
 
 const sendEnvironmentalData = () => {
   try {
-    // const data = getHeatingSchedule();
+    // const data = getScheduleHeating();
     // const adjustedData = backendToFrontend(data);
 
     // // io.emit("Heating Schedule", adjustedData);
@@ -150,19 +150,6 @@ app.get("/api/radiatorValves/livingRoom/open", (req, res) => {
 
 app.get("/api/radiatorValves/livingRoom/close", (req, res) => {
   closeValve("Living Room");
-  res.end(null);
-});
-
-/*
-  Kitchen
-*/
-app.get("/api/radiatorValves/kitchen/open", (req, res) => {
-  openValve("Kitchen");
-  res.end(null);
-});
-
-app.get("/api/radiatorValves/kitchen/close", (req, res) => {
-  closeValve("Kitchen");
   res.end(null);
 });
 

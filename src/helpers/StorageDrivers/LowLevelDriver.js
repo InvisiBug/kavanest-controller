@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-// const { getHeatingSchedule, setHeatingSchedule } = require("./ClimateControl");
+// const { getScheduleHeating, setHeatingSchedule } = require("./ClimateControl");
 
 const setStore = (store, data) => {
   const storePath = path.join(`${__dirname}${"/../../../PersistantStorage/"}${store}${".json"}`);

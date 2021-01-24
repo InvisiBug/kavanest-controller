@@ -1,4 +1,4 @@
-const { getHeatingSchedule, setHeatingSchedule } = require("./Schedule");
+const { getScheduleHeating, setHeatingSchedule } = require("./Schedule");
 const { updateValue, readValue, getStore, getEnvironmentalData } = require("../StorageDrivers/LowLevelDriver");
 const { offsetTimeMins } = require("../Time");
 
@@ -74,13 +74,13 @@ const heatingOff = () => {
 };
 
 const isHeatingOn = () => {
-  const heatingSchedule = getHeatingSchedule();
+  const heatingSchedule = getScheduleHeating();
   return heatingSchedule.heatingTime > new Date();
   // return readValue("heatingSchedule", "heatingTime") > new Date();
 };
 
 const updateBoostTime = (time = 0) => {
-  const heatingSchedule = getHeatingSchedule();
+  const heatingSchedule = getScheduleHeating();
   heatingSchedule.boostTime = offsetTimeMins(time);
   setHeatingSchedule(heatingSchedule);
 
@@ -89,7 +89,7 @@ const updateBoostTime = (time = 0) => {
 
 const updateRadiatorFanTime = (time = 0) => {
   const now = new Date();
-  const heatingSchedule = getHeatingSchedule();
+  const heatingSchedule = getScheduleHeating();
   heatingSchedule.radiatorFanTime = offsetTimeMins(time);
   setHeatingSchedule(heatingSchedule);
   // updateValue("heatingSchedule", "radiatorFanTime", offsetTimeMins(time));
@@ -97,7 +97,7 @@ const updateRadiatorFanTime = (time = 0) => {
 
 const updateHeatingTime = (time = 0) => {
   const now = new Date();
-  const heatingSchedule = getHeatingSchedule();
+  const heatingSchedule = getScheduleHeating();
   heatingSchedule.heatingTime = offsetTimeMins(time);
   setHeatingSchedule(heatingSchedule);
   // updateValue("heatingSchedule", "heatingTime", offsetTimeMins(time));
@@ -105,7 +105,7 @@ const updateHeatingTime = (time = 0) => {
 
 // radiatorFanOff();
 
-// const getHeatingSchedule = () => {
+// const getScheduleHeating = () => {
 //   const data = getStore("Environmental Data");
 //   return data.heatingSchedule;
 // };

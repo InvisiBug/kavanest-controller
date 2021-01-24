@@ -10,7 +10,6 @@ const { camelRoomName } = require("../../../Helpers/Functions");
 const { hour } = require("../../../Helpers/Time");
 
 const zoneHeating = () => {
-  // if (isZonesAuto()) {
   if (isZonesDemand()) {
     if (isHeatingControllerConnected() && !isHeatingControllerOn()) {
       heatingControl("1");
@@ -18,11 +17,10 @@ const zoneHeating = () => {
   } else if (isHeatingControllerConnected() && isHeatingControllerOn()) {
     heatingControl("0");
   }
-  // }
 };
 
 const zoneRadiatorFan = () => {
-  if (/* isZonesAuto() &&*/ isRadiatorFanAuto()) {
+  if (isRadiatorFanAuto()) {
     if (isZonesDemand()) {
       if (isRadiatorFanConnected() && !isRadiatorFanOn()) {
         radiatorFanControl("1");
@@ -35,7 +33,7 @@ const zoneRadiatorFan = () => {
   }
 };
 
-radiatorFanOff();
+// radiatorFanOff();
 
 const checkRoomDemand = (room) => {
   const environmentalData = getEnvironmentalData();

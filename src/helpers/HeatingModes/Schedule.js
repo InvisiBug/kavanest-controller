@@ -17,7 +17,7 @@ const setHeatingScheduleManual = () => {
   setStore("Environmental Data", data);
 };
 
-const getHeatingSchedule = () => {
+const getScheduleHeating = () => {
   const heatingSchedule = getStore("Environmental Data").heatingSchedule;
   return heatingSchedule;
 };
@@ -32,7 +32,7 @@ const setHeatingSchedule = (data) => {
 };
 
 module.exports = {
-  getHeatingSchedule: getHeatingSchedule,
+  getScheduleHeating: getScheduleHeating,
   setHeatingSchedule: setHeatingSchedule,
   isHeatingScheduleAuto: isHeatingScheduleAuto,
   setHeatingScheduleAuto: setHeatingScheduleAuto,

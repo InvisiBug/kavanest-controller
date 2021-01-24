@@ -1,13 +1,15 @@
 const { getHeatingController } = require("../../../Helpers/HeatingModes/Functions");
 const { getStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 const { getManualHeating } = require("../../../Helpers/HeatingModes/Manual");
+const { getScheduleHeating } = require("../../../Helpers/HeatingModes/Schedule");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
 
 const checkFan = () => {
   let radiatorFan = getStore("Radiator Fan");
+  let heating = getScheduleHeating(); // * Changed from getManualHeating, manual & schedule radiator cfan now use same control point
 
   if (radiatorFan.isAutomatic && radiatorFan.isConnected) {
-    if (getManualHeating().radiatorFanTime > new Date()) {
+    if (new Date() < heating.radiatorFanTime) {
       if (!radiatorFan.isOn) {
         radiatorFanControl("1");
       }
@@ -21,9 +23,10 @@ const checkFan = () => {
 
 const checkHeating = () => {
   let heatingController = getHeatingController();
+  let heating = getScheduleHeating();
 
   if (heatingController.isConnected) {
-    if (getManualHeating().heatingTime > new Date()) {
+    if (new Date() < heating.heatingTime) {
       if (!heatingController.isOn) {
         heatingControl("1");
       }

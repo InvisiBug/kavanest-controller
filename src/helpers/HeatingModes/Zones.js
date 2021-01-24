@@ -8,7 +8,6 @@ const isZonesAuto = () => {
 
 const setAllZonesDemand = () => {
   setZonesDemand("Living Room", true);
-  setZonesDemand("Kitchen", true);
   setZonesDemand("Liams Room", true);
   setZonesDemand("Study", true);
   setZonesDemand("Our Room", true);
@@ -17,13 +16,12 @@ const setAllZonesDemand = () => {
 const setZonesDemand = (room, state) => {
   const data = getEnvironmentalData();
 
-  // console.log(data.heatingZones[camelRoomName(room)]);
   data.heatingZones[camelRoomName(room)].demand = state;
   setEnvironmentalData(data);
 };
 
 const isZonesDemand = () => {
-  return isZoneDemand("livingRoom") || isZoneDemand("kitchen") || isZoneDemand("liamsRoom") || isZoneDemand("study") || isZoneDemand("ourRoom");
+  return isZoneDemand("livingRoom") || isZoneDemand("liamsRoom") || isZoneDemand("study") || isZoneDemand("ourRoom");
 };
 
 const isZoneDemand = (zone) => {

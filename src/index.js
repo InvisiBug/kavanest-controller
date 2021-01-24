@@ -68,8 +68,8 @@ global.io = require("socket.io")(server);
 ////////////////////////////////////////////////////////////////////////
 const mqtt = require("mqtt");
 
-global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
-// global.client = mqtt.connect("mqtt://localhost"); //  Production
+// global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
+global.client = mqtt.connect("mqtt://localhost"); //  Production
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
 // test;
 
@@ -135,34 +135,43 @@ app.use(require("./App/Services/HistoricalClimate"));
 const { newSensor } = require("./App/Interfaces/In/HeatingSensor");
 const { newValve } = require("./App/Interfaces/In/RadiatorValve");
 const { newValveController } = require("./App/Controllers/ValveController");
+const { isRadiatorFanAuto } = require("./Helpers/StorageDrivers/Devices/RadiatorFan.js");
 
 const rooms = [
   {
     name: "Our Room",
-    offset: 0,
+    offset: 2.2,
+    valve: true,
   },
   {
     name: "Study",
-    offset: 0,
+    offset: -7.1,
+    valve: true,
   },
   {
     name: "Living Room",
-    offset: 0,
+    offset: -0,
+    valve: true,
   },
   {
     name: "Kitchen",
     offset: 0,
+    valve: false,
   },
   {
     name: "Liams Room",
-    offset: 0,
+    offset: -0.9,
+    valve: true,
   },
 ];
 //boop
 
 rooms.map((room, index) => {
   newSensor(room.name, room.offset);
-  newValve(room.name);
+
+  if (room.valve) {
+    newValve(room.name);
+  }
   // newValveController(room.name);
 });
 

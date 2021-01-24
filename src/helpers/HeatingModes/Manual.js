@@ -9,8 +9,11 @@ const getManualHeating = () => {
 const manualheatingOn = () => {
   const data = getEnvironmentalData();
 
-  data.heatingManual.radiatorFanTime = offsetTimeMins(9999);
-  data.heatingManual.heatingTime = offsetTimeMins(9999);
+  // data.heatingManual.radiatorFanTime = offsetTimeMins(9999);
+  // data.heatingManual.heatingTime = offsetTimeMins(9999);
+
+  data.heatingSchedule.radiatorFanTime = offsetTimeMins(9999);
+  data.heatingSchedule.heatingTime = offsetTimeMins(9999);
 
   setEnvironmentalData(data);
 };
@@ -18,8 +21,11 @@ const manualheatingOn = () => {
 const manualheatingOff = () => {
   const data = getEnvironmentalData();
 
-  data.heatingManual.radiatorFanTime = offsetTimeMins(15);
-  data.heatingManual.heatingTime = offsetTimeMins();
+  // data.heatingManual.radiatorFanTime = offsetTimeMins(15);
+  // data.heatingManual.heatingTime = offsetTimeMins();
+
+  data.heatingSchedule.radiatorFanTime = offsetTimeMins(15);
+  data.heatingSchedule.heatingTime = offsetTimeMins();
 
   setEnvironmentalData(data);
 };
