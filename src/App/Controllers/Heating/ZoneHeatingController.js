@@ -12,7 +12,9 @@ const { hour } = require("../../../Helpers/Time");
 const zoneHeating = () => {
   if (isZonesDemand()) {
     if (isHeatingControllerConnected() && !isHeatingControllerOn()) {
-      heatingControl("1");
+      setTimeout(() => {
+        heatingControl("1");
+      }, 2.5 * 60 * 1000);
     }
   } else if (isHeatingControllerConnected() && isHeatingControllerOn()) {
     heatingControl("0");
@@ -25,10 +27,10 @@ const zoneRadiatorFan = () => {
       if (isRadiatorFanConnected() && !isRadiatorFanOn()) {
         radiatorFanControl("1");
       }
-    } else if (isRadiatorFanConnected() && isRadiatorFanOn()) {
+    } else if (isRadiatorFanConnected() && isRadiatorFanOn() && !isZoneDemand("ourRoom")) {
       setTimeout(() => {
         radiatorFanControl("0");
-      }, 2 * 1000);
+      }, 15 * 60 * 1000);
     }
   }
 };
