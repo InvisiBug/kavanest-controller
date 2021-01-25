@@ -1,4 +1,4 @@
-const { getEnvironmentalData } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
+const { getEnvironmentalData, setEnvironmentalData } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 const { getRoomSetpoints, getRoomTemperature } = require("../../../Helpers/StorageDrivers/Devices/HeatingSensors");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
 const { scheduleHeating, scheduleRadiatorFan } = require("./ScheduleHeatingController");
@@ -21,7 +21,7 @@ const zoneHeating = () => {
 
 const zoneRadiatorFan = () => {
   if (isRadiatorFanAuto()) {
-    if (isZonesDemand()) {
+    if (isZoneDemand("ourRoom")) {
       if (isRadiatorFanConnected() && !isRadiatorFanOn()) {
         radiatorFanControl("1");
       }
@@ -33,27 +33,16 @@ const zoneRadiatorFan = () => {
   }
 };
 
-// radiatorFanOff();
-
 const checkRoomDemand = (room) => {
-  const environmentalData = getEnvironmentalData();
-  const auto = environmentalData.heatingZones.isAuto;
-  const mode = getHeatingMode();
-
   let setpoint = getRoomSetpoints(camelRoomName(room));
   let currentTemp = getRoomTemperature(camelRoomName(room));
+  const hysteresis = 1;
 
-  if (auto && mode === "zones") {
-    if (currentTemp < setpoint[hour()] && currentTemp > -1) {
-      // ! the -1 bit may need to open the valve, fail safe
-      setZonesDemand(room, true);
-    } else {
-      setZonesDemand(room, false);
-    }
-  } else {
+  if (currentTemp < setpoint[hour()] - hysteresis) {
     setZonesDemand(room, true);
+  } else if (currentTemp > setpoint[hour()]) {
+    setZonesDemand(room, false);
   }
-  // console.log(`${room} \t Current Temp: ${currentTemp} \t Target Temp: ${setpoint[hour()]}`);
 };
 
 module.exports = {
