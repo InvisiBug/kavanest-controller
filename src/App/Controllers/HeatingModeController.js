@@ -5,29 +5,6 @@ const { checkFan, checkHeating } = require("./Heating/ManualHeatingController");
 const { setAllZonesDemand } = require("../../Helpers/HeatingModes/Zones");
 const { signalValve } = require("./ValveController");
 
-// const rooms = [
-//   {
-//     name: "Our Room",
-//     offset: 0,
-//   },
-//   {
-//     name: "Study",
-//     offset: 0,
-//   },
-//   {
-//     name: "Living Room",
-//     offset: 0,
-//   },
-//   // {
-//   //   name: "Kitchen",
-//   //   offset: 0,
-//   // },
-//   {
-//     name: "Liams Room",
-//     offset: 0,
-//   },
-// ];
-
 const rooms = ["Our Room", "Study", "Living Room", "Liams Room"];
 
 setInterval(() => {
@@ -37,11 +14,6 @@ setInterval(() => {
     case "zones":
       zoneHeating();
       zoneRadiatorFan();
-
-      // checkRoomDemand("Living Room");
-      // checkRoomDemand("Liams Room");
-      // checkRoomDemand("Study");
-      // checkRoomDemand("Our Room");
 
       rooms.map((room, index) => {
         signalValve(room);

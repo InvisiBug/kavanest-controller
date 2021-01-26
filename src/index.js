@@ -112,7 +112,7 @@ app.use(require("./App/Devices/OurRoom/Sun.js"));
 app.use(require("./App/Devices/OurRoom/Computer Audio.js"));
 app.use(require("./App/Devices/OurRoom/Computer Power.js"));
 
-app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
+app.use(require("./App/Interfaces/In/RadiatorFan.js"));
 
 app.use(require("./App/Calor Imperium.js"));
 app.use(require("./App/Interfaces/In/Heating.js"));
@@ -134,8 +134,6 @@ app.use(require("./App/Services/HistoricalClimate"));
 ////////////////////////////////////////////////////////////////////////
 const { newSensor } = require("./App/Interfaces/In/HeatingSensor");
 const { newValve } = require("./App/Interfaces/In/RadiatorValve");
-const { newValveController } = require("./App/Controllers/ValveController");
-const { isRadiatorFanAuto } = require("./Helpers/StorageDrivers/Devices/RadiatorFan.js");
 
 const rooms = [
   {
@@ -150,7 +148,7 @@ const rooms = [
   },
   {
     name: "Living Room",
-    offset: -0,
+    offset: -1.8,
     valve: true,
   },
   {
@@ -164,15 +162,10 @@ const rooms = [
     valve: true,
   },
 ];
-//boop
 
 rooms.map((room, index) => {
   newSensor(room.name, room.offset);
-
-  if (room.valve) {
-    newValve(room.name);
-  }
-  // newValveController(room.name);
+  if (room.valve) newValve(room.name);
 });
 
 [

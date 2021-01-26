@@ -4,33 +4,67 @@ const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqt
 const { scheduleHeating, scheduleRadiatorFan } = require("./ScheduleHeatingController");
 const { radiatorFanOff, getHeatingMode } = require("../../../Helpers/HeatingModes/Functions");
 const { setZonesDemand, isZoneDemand, isZonesDemand, isZonesAuto } = require("../../../Helpers/HeatingModes/Zones");
-const { isRadiatorFanAuto, isRadiatorFanConnected, isRadiatorFanOn } = require("../../../Helpers/StorageDrivers/Devices/RadiatorFan");
+const { isRadiatorFanAuto, isRadiatorFanConnected, isRadiatorFanOn, getRadiatorFan } = require("../../../Helpers/StorageDrivers/Devices/RadiatorFan");
 const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../../Helpers/StorageDrivers/Devices/HeatingController");
 const { camelRoomName } = require("../../../Helpers/Functions");
 const { hour } = require("../../../Helpers/Time");
 
+/*
+  These are used as a latch to prevent
+  messages queuing due to the setTimeout().
+  Messages are queued everytime the functions are run
+  while the set timeout is waiting, all these messages
+  then get sent later regardless of what the systems state 
+*/
+// TODO, Come up with a better way for dealing with this
+var fan = false;
+var heat = false;
+
 const zoneHeating = () => {
-  if (isZonesDemand()) {
-    if (isHeatingControllerConnected() && !isHeatingControllerOn()) {
-      setTimeout(() => {
-        heatingControl("1");
-      }, 2.5 * 60 * 1000);
+  const heatingControllerConnected = isHeatingControllerConnected();
+  const zonesDemand = isZonesDemand();
+  const heatingOn = isHeatingControllerOn();
+
+  if (heatingControllerConnected) {
+    if (zonesDemand) {
+      if (!heatingOn) {
+        if (!heat) {
+          heat = true;
+          setTimeout(() => {
+            heatingControl("1");
+          }, 2 * 1000);
+        }
+      }
+    } else if (heatingOn) {
+      heat = false;
+      heatingControl("0");
     }
-  } else if (isHeatingControllerConnected() && isHeatingControllerOn()) {
-    heatingControl("0");
   }
 };
 
 const zoneRadiatorFan = () => {
-  if (isRadiatorFanAuto()) {
-    if (isZoneDemand("ourRoom")) {
-      if (isRadiatorFanConnected() && !isRadiatorFanOn()) {
-        radiatorFanControl("1");
+  console.log(fan);
+  const ourRoomDemand = isZoneDemand("ourRoom");
+
+  const radiatorFan = getRadiatorFan();
+
+  const on = radiatorFan.isOn;
+  const connected = radiatorFan.isConnected;
+  const auto = radiatorFan.isAutomatic;
+
+  if (connected && auto) {
+    if (ourRoomDemand && !on) {
+      fan = false;
+      radiatorFanControl("1");
+    } else if (!ourRoomDemand && on) {
+      console.log("Here");
+      if (!fan) {
+        fan = true;
+        setTimeout(() => {
+          console.log("Radiator Fan Off 1");
+          radiatorFanControl("0");
+        }, 2 * 1000);
       }
-    } else if (isRadiatorFanConnected() && isRadiatorFanOn() && !isZoneDemand("ourRoom")) {
-      setTimeout(() => {
-        radiatorFanControl("0");
-      }, 15 * 60 * 1000);
     }
   }
 };

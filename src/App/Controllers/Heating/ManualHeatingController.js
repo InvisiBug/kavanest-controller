@@ -8,13 +8,17 @@ const checkFan = () => {
   let radiatorFan = getStore("Radiator Fan");
   let heating = getScheduleHeating(); // * Changed from getManualHeating, manual & schedule radiator cfan now use same control point
 
-  if (radiatorFan.isAutomatic && radiatorFan.isConnected) {
+  const radiatorFanAuto = radiatorFan.isAutomatic;
+  const radiatorFanOn = radiatorFan.isOn;
+  const radiatorFanConnected = radiatorFan.isConnected;
+
+  if (radiatorFanAuto && radiatorFanConnected) {
     if (new Date() < heating.radiatorFanTime) {
-      if (!radiatorFan.isOn) {
+      if (!radiatorFanOn) {
         radiatorFanControl("1");
       }
     } else {
-      if (radiatorFan.isOn) {
+      if (radiatorFanOn) {
         radiatorFanControl("0");
       }
     }
@@ -25,13 +29,16 @@ const checkHeating = () => {
   let heatingController = getHeatingController();
   let heating = getScheduleHeating();
 
-  if (heatingController.isConnected) {
+  const heatingConnected = heatingController.isConnected;
+  const heatingOn = heatingController.isOn;
+
+  if (heatingConnected) {
     if (new Date() < heating.heatingTime) {
-      if (!heatingController.isOn) {
+      if (!heatingOn) {
         heatingControl("1");
       }
     } else {
-      if (heatingController.isOn) {
+      if (heatingOn) {
         heatingControl("0");
       }
     }

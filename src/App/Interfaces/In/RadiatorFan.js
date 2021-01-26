@@ -1,6 +1,6 @@
 const express = require("express");
 const app = (module.exports = express());
-const { radiatorFanControl } = require("../../Interfaces/Out/mqttOut");
+const { radiatorFanControl } = require("../Out/mqttOut");
 
 const { getStore, setStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 
@@ -75,12 +75,15 @@ client.on("message", (topic, payload) => {
     }, 10 * 1000);
 
     if (payload != "Radiator Fan Disconnected") {
+      const mqttData = JSON.parse(payload);
+
       deviceData = {
         ...deviceData,
         isConnected: true,
-        isOn: JSON.parse(payload).state,
+        isOn: mqttData.state,
       };
       setStore("Radiator Fan", deviceData);
+      // console.log(`MQTT: ${mqttData.state}, Storage: ${getStore("Radiator Fan").isOn}`);
     } else {
       console.log("Radiator Fan Disconnected");
     }
