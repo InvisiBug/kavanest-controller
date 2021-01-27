@@ -11,20 +11,13 @@
 // Express
 const express = require("express");
 var app = (module.exports = express());
-const { getStore, setStore, updateValue, readValue } = require("../Helpers/StorageDrivers/LowLevelDriver");
+
+const { getStore } = require("../Helpers/StorageDrivers/LowLevelDriver");
 const { backendToFrontend, frontendToBackend } = require("../Helpers/Functions");
-const {
-  boostOn,
-  boostOff,
-  setHeatingModeSchedule,
-  setHeatingModeZones,
-  setHeatingModeManual,
-  heatingOn,
-  heatingOff,
-  getHeatingMode,
-} = require("../Helpers/HeatingModes/Functions");
-const { setZonesSetpoints, setZonesAuto, setZonesManual } = require("../Helpers/HeatingModes/Zones");
-const { setHeatingScheduleAuto, setHeatingScheduleManual, setHeatingSchedule } = require("../Helpers/HeatingModes/Schedule");
+const { setHeatingModeSchedule, setHeatingModeZones, setHeatingModeManual } = require("../Helpers/HeatingModes/Modes");
+const { boostOn, boostOff } = require("../Helpers/HeatingModes/Schedule");
+const { setZonesSetpoints } = require("../Helpers/HeatingModes/Zones");
+const { setHeatingSchedule } = require("../Helpers/HeatingModes/Schedule");
 const { manualheatingOn, manualheatingOff } = require("../Helpers/HeatingModes/Manual");
 const { openValve, closeValve } = require("./Interfaces/Out/Valves");
 ////////////////////////////////////////////////////////////////////////
@@ -41,7 +34,6 @@ const { openValve, closeValve } = require("./Interfaces/Out/Valves");
 // -----  Schedule  -----
 app.post("/api/ci/schedule/update", (req, res) => {
   setHeatingSchedule(frontendToBackend(req.body.data));
-  // setStore("heatingSchedule", frontendToBackend(req.body.data));
   sendEnvironmentalData();
   res.end(null);
 });
@@ -57,14 +49,12 @@ app.post("/api/ci/setpoints", (req, res) => {
 app.get("/api/ci/boost/on", (req, res) => {
   boostOn();
   sendEnvironmentalData();
-  console.log("Boost On");
   res.end(null);
 });
 
 app.get("/api/ci/boost/off", (req, res) => {
   boostOff();
   sendEnvironmentalData();
-  console.log("Boost Off");
   res.end(null);
 });
 
@@ -102,7 +92,6 @@ app.get("/api/ci/mode/schedule", (req, res) => {
 app.get("/api/ci/mode/manual", (req, res) => {
   setHeatingModeManual();
   sendEnvironmentalData();
-  // console.log("Manual Mode");
   res.end(null);
 });
 

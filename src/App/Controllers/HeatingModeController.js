@@ -1,33 +1,32 @@
-const { getStore } = require("../../Helpers/StorageDrivers/LowLevelDriver");
 const { scheduleChecker, scheduleHeating, scheduleRadiatorFan } = require("./Heating/ScheduleHeatingController");
-const { zoneHeating, zoneRadiatorFan, zoneManualOverride, checkRoomDemand } = require("./Heating/ZoneHeatingController");
+const { zoneHeating, zoneRadiatorFan, zoneManualOverride, roomDemandSetter, zoneDemandChecker } = require("./Heating/ZoneHeatingController");
 const { checkFan, checkHeating } = require("./Heating/ManualHeatingController");
 const { setAllZonesDemand } = require("../../Helpers/HeatingModes/Zones");
 const { signalValve } = require("./ValveController");
+const { getHeatingMode } = require("../../Helpers/HeatingModes/Modes");
 
 const rooms = ["Our Room", "Study", "Living Room", "Liams Room"];
 
 setInterval(() => {
-  const mode = getStore("Environmental Data").heatingMode;
-
-  switch (mode) {
+  switch (getHeatingMode()) {
     case "zones":
       zoneHeating();
       zoneRadiatorFan();
+      zoneDemandChecker();
 
-      rooms.map((room, index) => {
+      rooms.map((room) => {
         signalValve(room);
-        checkRoomDemand(room);
+        roomDemandSetter(room);
       });
       break;
 
     case "schedule":
-      setAllZonesDemand(true);
       scheduleChecker();
       scheduleHeating();
       scheduleRadiatorFan();
 
-      rooms.map((room, index) => {
+      setAllZonesDemand(true);
+      rooms.map((room) => {
         signalValve(room);
       });
       break;

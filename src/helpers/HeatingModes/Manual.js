@@ -12,7 +12,7 @@ const manualheatingOn = () => {
   // data.heatingManual.radiatorFanTime = offsetTimeMins(9999);
   // data.heatingManual.heatingTime = offsetTimeMins(9999);
 
-  data.heatingSchedule.radiatorFanTime = offsetTimeMins(9999);
+  data.heatingSchedule.radiatorFanTime = offsetTimeMins(9999); // now runs on schedule
   data.heatingSchedule.heatingTime = offsetTimeMins(9999);
 
   setEnvironmentalData(data);

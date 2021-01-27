@@ -1,4 +1,4 @@
-const { getHeatingController } = require("../../../Helpers/HeatingModes/Functions");
+const { getHeatingController } = require("../../../Helpers/HeatingModes/Schedule");
 const { getStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 const { getManualHeating } = require("../../../Helpers/HeatingModes/Manual");
 const { getScheduleHeating } = require("../../../Helpers/HeatingModes/Schedule");
