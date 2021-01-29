@@ -1,9 +1,9 @@
+const { zoneHeating, zoneRadiatorFan, roomDemandSetter, zoneDemandChecker } = require("./Heating/ZoneHeatingController");
 const { scheduleChecker, scheduleHeating, scheduleRadiatorFan } = require("./Heating/ScheduleHeatingController");
-const { zoneHeating, zoneRadiatorFan, zoneManualOverride, roomDemandSetter, zoneDemandChecker } = require("./Heating/ZoneHeatingController");
 const { checkFan, checkHeating } = require("./Heating/ManualHeatingController");
 const { setAllZonesDemand } = require("../../Helpers/HeatingModes/Zones");
-const { signalValve } = require("./ValveController");
 const { getHeatingMode } = require("../../Helpers/HeatingModes/Modes");
+const { signalValve } = require("./ValveController");
 
 const rooms = ["Our Room", "Study", "Living Room", "Liams Room"];
 

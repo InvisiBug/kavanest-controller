@@ -1,55 +1,38 @@
-const { day, now, time, days } = require("../../../Helpers/Time");
-const { heatingOn, heatingOff, getHeatingController, getScheduleHeating } = require("../../../Helpers/HeatingModes/Schedule");
+const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../../Helpers/StorageDrivers/Devices/HeatingController");
+const { getRadiatorFanTime, getBoostTime, getHeatingTime } = require("../../../Helpers/HeatingModes/Timers");
+const { heatingOn, heatingOff, getScheduleHeating } = require("../../../Helpers/HeatingModes/Schedule");
+const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
 const { getStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
-const { radiatorFanControl } = require("../../Interfaces/Out/mqttOut");
+const { day, now, time, days } = require("../../../Helpers/Time");
 
-////////////////////////////////////////////////////////////////////////
-//
-//   #
-//   #        ####   ####  #  ####
-//   #       #    # #    # # #    #
-//   #       #    # #      # #
-//   #       #    # #  ### # #
-//   #       #    # #    # # #    #
-//   #######  ####   ####  #  ####
-//
-////////////////////////////////////////////////////////////////////////
 const scheduleChecker = () => {
-  const scheduleData = getScheduleHeating();
-
-  if (scheduleData.boostTime < now()) {
+  if (getBoostTime() < now()) {
     if (
-      (scheduleData[days[day()]][0] <= time() && time() <= scheduleData[days[day()]][1]) || // Seems to be some overlap ie schedule on at 16:02 when should be on at 16:15
-      (scheduleData[days[day()]][2] <= time() && time() <= scheduleData[days[day()]][3])
+      (getScheduleHeating()[days[day()]][0] <= time() && time() <= getScheduleHeating()[days[day()]][1]) || // Seems to be some overlap ie schedule on at 16:02 when should be on at 16:15
+      (getScheduleHeating()[days[day()]][2] <= time() && time() <= getScheduleHeating()[days[day()]][3])
     ) {
-      // console.log("Heating On (A)");
-      heatingOn(); // On demand from schedule
+      heatingOn();
     } else {
-      // console.log("Heating Off (B)");
-      heatingOff(); // off demand from schedule
+      heatingOff();
     }
   }
 };
 
 const scheduleHeating = () => {
-  let heatingSchedule = getScheduleHeating();
-  let heatingController = getHeatingController();
-
-  if (now() < heatingSchedule.heatingTime) {
-    if (heatingController.isConnected && !heatingController.isOn) {
-      client.publish("Heating Control", "1");
+  if (now() < getHeatingTime()) {
+    if (isHeatingControllerConnected() && !isHeatingControllerOn()) {
+      heatingControl("1");
     }
-  } else if (heatingController.isConnected && heatingController.isOn) {
-    client.publish("Heating Control", "0");
+  } else if (isHeatingControllerConnected() && isHeatingControllerOn()) {
+    heatingControl("0");
   }
 };
 
 const scheduleRadiatorFan = () => {
   let radiatorFan = getStore("Radiator Fan");
-  let heating = getScheduleHeating();
 
   if (radiatorFan.isAutomatic && radiatorFan.isConnected) {
-    if (new Date() < heating.radiatorFanTime) {
+    if (now() < getRadiatorFanTime()) {
       if (!radiatorFan.isOn) {
         radiatorFanControl("1");
       }
@@ -60,18 +43,6 @@ const scheduleRadiatorFan = () => {
     }
   }
 };
-
-/////////////////////git checkout dev///////////////////////////////////////////////////
-//
-//    #######
-//    #       #    # #    #  ####  ##### #  ####  #    #  ####
-//    #       #    # ##   # #    #   #   # #    # ##   # #
-//    #####   #    # # #  # #        #   # #    # # #  #  ####
-//    #       #    # #  # # #        #   # #    # #  # #      #
-//    #       #    # #   ## #    #   #   # #    # #   ## #    #
-//    #        ####  #    #  ####    #   #  ####  #    #  ####
-//
-////////////////////////////////////////////////////////////////////////
 
 module.exports = {
   scheduleChecker: scheduleChecker,

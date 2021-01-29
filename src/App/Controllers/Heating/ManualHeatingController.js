@@ -1,24 +1,17 @@
-const { getHeatingController } = require("../../../Helpers/HeatingModes/Schedule");
-const { getStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
-const { getManualHeating } = require("../../../Helpers/HeatingModes/Manual");
-const { getScheduleHeating } = require("../../../Helpers/HeatingModes/Schedule");
+const { isRadiatorFanConnected, isRadiatorFanOn, isRadiatorFanAuto } = require("../../../Helpers/StorageDrivers/Devices/RadiatorFan");
+const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../../Helpers/StorageDrivers/Devices/HeatingController");
+const { getHeatingTime, getRadiatorFanTime } = require("../../../Helpers/HeatingModes/Timers");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
+const { now } = require("../../../Helpers/Time");
 
 const checkFan = () => {
-  let radiatorFan = getStore("Radiator Fan");
-  let heating = getScheduleHeating(); // * Changed from getManualHeating, manual & schedule radiator cfan now use same control point
-
-  const radiatorFanAuto = radiatorFan.isAutomatic;
-  const radiatorFanOn = radiatorFan.isOn;
-  const radiatorFanConnected = radiatorFan.isConnected;
-
-  if (radiatorFanAuto && radiatorFanConnected) {
-    if (new Date() < heating.radiatorFanTime) {
-      if (!radiatorFanOn) {
+  if (isRadiatorFanAuto() && isRadiatorFanConnected()) {
+    if (now() < getRadiatorFanTime()) {
+      if (!isRadiatorFanOn()) {
         radiatorFanControl("1");
       }
     } else {
-      if (radiatorFanOn) {
+      if (isRadiatorFanOn()) {
         radiatorFanControl("0");
       }
     }
@@ -26,19 +19,13 @@ const checkFan = () => {
 };
 
 const checkHeating = () => {
-  let heatingController = getHeatingController();
-  let heating = getScheduleHeating();
-
-  const heatingConnected = heatingController.isConnected;
-  const heatingOn = heatingController.isOn;
-
-  if (heatingConnected) {
-    if (new Date() < heating.heatingTime) {
-      if (!heatingOn) {
+  if (isHeatingControllerConnected()) {
+    if (now() < getHeatingTime()) {
+      if (!isHeatingControllerOn()) {
         heatingControl("1");
       }
     } else {
-      if (heatingOn) {
+      if (isHeatingControllerOn()) {
         heatingControl("0");
       }
     }

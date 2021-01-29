@@ -15,8 +15,8 @@ const getStore = (store) => {
   const storePath = path.join(`${__dirname}${"/../../../PersistantStorage/"}${store}${".json"}`);
   try {
     return JSON.parse(fs.readFileSync(storePath));
-  } catch (e) {
-    console.log(e);
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -45,6 +45,23 @@ const getRadiatorFan = () => {
   return getStore("Radiator Fan");
 };
 
+const getHeatingController = () => {
+  return getStore("Environmental Data").heatingController;
+};
+
+/*
+  Heating Timers
+*/
+const getHeatingTimers = () => {
+  return getEnvironmentalData().heatingTimers;
+};
+
+const setHeatingTimers = (timer, value) => {
+  let data = getEnvironmentalData();
+  data.heatingTimers[timer] = value;
+  setEnvironmentalData(data);
+};
+
 module.exports = {
   getStore: getStore,
   setStore: setStore,
@@ -53,4 +70,7 @@ module.exports = {
   getEnvironmentalData: getEnvironmentalData,
   getRadiatorFan: getRadiatorFan,
   setEnvironmentalData: setEnvironmentalData,
+  getHeatingTimers: getHeatingTimers,
+  setHeatingTimers: setHeatingTimers,
+  getHeatingController: getHeatingController,
 };

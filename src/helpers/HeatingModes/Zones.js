@@ -1,11 +1,6 @@
 const { camelRoomName } = require("../Functions");
 const { getStore, setStore, getEnvironmentalData, setEnvironmentalData } = require("../StorageDrivers/LowLevelDriver");
 
-const isZonesAuto = () => {
-  let environmentalData = getEnvironmentalData().heatingZones;
-  return environmentalData.isAuto;
-};
-
 const setAllZonesDemand = () => {
   setZonesDemand("Living Room", true);
   setZonesDemand("Liams Room", true);
@@ -29,20 +24,6 @@ const isZoneDemand = (zone) => {
   return data;
 };
 
-const setZonesAuto = () => {
-  setZonesIsAuto(true);
-};
-
-const setZonesManual = () => {
-  setZonesIsAuto(false);
-};
-
-const setZonesIsAuto = (val) => {
-  const data = getEnvironmentalData();
-  data.heatingZones.isAuto = val;
-  setEnvironmentalData(data);
-};
-
 const setZonesSetpoints = (room, vals) => {
   let environmentalData = getStore("Environmental Data");
 
@@ -58,9 +39,6 @@ const setZonesSetpoints = (room, vals) => {
 };
 
 module.exports = {
-  isZonesAuto: isZonesAuto,
-  setZonesAuto: setZonesAuto,
-  setZonesManual: setZonesManual,
   setZonesSetpoints: setZonesSetpoints,
   isZonesDemand: isZonesDemand,
   setZonesDemand: setZonesDemand,

@@ -1,6 +1,6 @@
 {
-  "heatingMode": "manual",
-  "heatingController": { "isConnected": true, "isOn": false },
+  "heatingMode": "zones",
+  "heatingController": { "isConnected": true, "isOn": true },
   "heatingSensors": {
     "livingRoom": { "isConnected": true, "temperature": 14.2, "humidity": 10, "pressure": 101459.2 },
     "kitchen": { "isConnected": true, "temperature": 16, "humidity": 10, "pressure": 101459.2 },
@@ -13,26 +13,25 @@
     "kitchen": { "isConnected": true, "isOpen": true, "demand": false },
     "liamsRoom": { "isConnected": true, "isOpen": true, "demand": false },
     "study": { "isConnected": true, "isOpen": true, "demand": false },
-    "ourRoom": { "isConnected": true, "isOpen": true, "demand": false }
+    "ourRoom": { "isConnected": true, "isOpen": false, "demand": false }
   },
   "setpoints": {
-    "livingRoom": [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 18, 18, 18, 18, 15, 16, 18],
-    "kitchen": [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 12, 13, 14, 15, 17, 17, 18, 18, 18, 18, 16, 17],
-    "study": [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16],
-    "liamsRoom": [6, 6, 6, 6, 6, 6, 6, 6, 17, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 17, 17],
-    "ourRoom": [15, 15, 15, 15, 15, 15, 15, 15, 19, 19, 19, 19, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 20, 16]
+    "livingRoom": [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 18, 18, 18, 18, 15, 15, 15],
+    "study": [16, 16, 16, 16, 16, 16, 16, 16, 16, 19, 19, 19, 19, 19, 19, 19, 19, 19, 18, 18, 18, 18, 16, 16],
+    "liamsRoom": [6, 6, 6, 6, 6, 6, 6, 6, 17, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19, 12, 19, 19, 17, 17],
+    "ourRoom": [15, 15, 15, 15, 15, 15, 15, 15, 19, 19, 19, 19, 19, 21, 20, 20, 20, 20, 19, 19, 19, 18, 18, 16]
   },
   "heatingSchedule": {
     "monday": [8, 10, 16.3, 18.3],
     "tuesday": [8, 10, 16.3, 18.3],
-    "wednesday": [8, 10, 16.3, 17.15],
+    "wednesday": [8, 10, 16.3, 18.3],
     "thursday": [8, 10, 16.3, 18.3],
     "friday": [8, 10, 16.3, 18.3],
     "saturday": [10, 12, 17, 19.3],
     "sunday": [10, 12, 17, 20],
     "boostTime": 1611771652455,
-    "radiatorFanTime": 1611772851231,
-    "heatingTime": 1611771951231
+    "radiatorFanTime": 1611861263494,
+    "heatingTime": 1611860363494
   },
   "heatingZones": {
     "isAuto": true,
@@ -40,39 +39,49 @@
     "kitchen": { "demand": true },
     "liamsRoom": { "demand": true },
     "study": { "demand": true },
-    "ourRoom": { "demand": true },
-    "radiatorFanTime": 1611700319349,
-    "heatingTime": 1611699419349
+    "ourRoom": { "demand": false }
   },
-  "heatingManual": { "radiatorFanTime": 1611503585005, "heatingTime": 1611502685005 },
+  "heatingTimers": { "boost": 1611865650422, "fan": 1611868801590, "heating": 1617870226711 },
+  "radiatorFans (not implemented)": {
+    "ourRoom": { "isAutomatic": true, "isConnected": true, "isOn": true },
+    "livingRoom": { "isAutomatic": true, "isConnected": true, "isOn": true }
+  },
   "houseStats": { "average": 14.5, "minimumTemp": 8.9, "maximumTemp": 18.2 },
   "outside": {
-    "current": { "temperature": 2.67, "humidity": 1, "pressure": 1009.4, "windSpeed": 2.9, "windBearing": 219, "cloudCover": 1, "isConnected": true },
+    "current": {
+      "temperature": 7.09,
+      "humidity": 0.96,
+      "pressure": 993.2,
+      "windSpeed": 4.75,
+      "windBearing": 215,
+      "cloudCover": 1,
+      "isConnected": true
+    },
     "next24Hrs": [
-      2.7,
-      2.73,
-      2.7,
-      2.93,
-      2.91,
-      2.86,
-      2.87,
-      2.77,
-      2.56,
-      2.54,
-      2.69,
-      2.91,
-      3.14,
+      6.87,
+      7.29,
+      6.67,
+      6.18,
+      5.38,
+      4.63,
+      4.08,
+      3.6,
+      3.61,
+      3.52,
       3.4,
-      3.63,
-      3.95,
-      4.65,
-      5.93,
-      10.04,
-      10.65,
-      10.7,
-      10.66,
-      6.86,
-      5.6
+      3.49,
+      4.26,
+      5.05,
+      6.02,
+      6.4,
+      6.49,
+      6.55,
+      6,
+      4.98,
+      4.07,
+      3.38,
+      3.11,
+      2.67
     ]
   }
 }

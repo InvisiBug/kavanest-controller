@@ -1,7 +1,8 @@
-const { getStore, setStore, getEnvironmentalData } = require("../StorageDrivers/LowLevelDriver");
-const { offsetTimeMins } = require("../Time");
+const { getStore, setStore } = require("../StorageDrivers/LowLevelDriver");
+const { now } = require("../Time");
+const { updateBoostTime, updateHeatingTime, updateRadiatorFanTime, getHeatingTime } = require("./Timers");
 
-const overRunTime = 1;
+const overRunTime = 20;
 const boostTime = 20;
 
 ////////////////////////////////////////////////////////////////////////
@@ -59,54 +60,22 @@ const radiatorFanOverrun = () => {
 //  #    # ###### #    #   #   # #    #  ####
 //
 ////////////////////////////////////////////////////////////////////////
-// Heating
 const heatingOn = (time = 99999) => {
   radiatorFanOn(time + overRunTime);
   updateHeatingTime(time);
 };
 
 const heatingOff = () => {
-  if (isHeatingOn()) {
+  // Need to check if the heating is on to prevent the
+  // fan overrun time being constantly written
+  // therefore keeping the fan on
+  if (now() < getHeatingTime()) {
     radiatorFanOverrun();
     updateHeatingTime();
   }
 };
 
-const isHeatingOn = () => {
-  const heatingSchedule = getScheduleHeating();
-  return heatingSchedule.heatingTime > new Date();
-  // return readValue("heatingSchedule", "heatingTime") > new Date();
-};
-
-const updateBoostTime = (time = 0) => {
-  const heatingSchedule = getScheduleHeating();
-  heatingSchedule.boostTime = offsetTimeMins(time);
-  setHeatingSchedule(heatingSchedule);
-
-  // updateValue("heatingSchedule", "boostTime", offsetTimeMins(time));
-};
-
-const updateRadiatorFanTime = (time = 0) => {
-  const heatingSchedule = getScheduleHeating();
-  heatingSchedule.radiatorFanTime = offsetTimeMins(time);
-  setHeatingSchedule(heatingSchedule);
-  // updateValue("heatingSchedule", "radiatorFanTime", offsetTimeMins(time));
-};
-
-const updateHeatingTime = (time = 0) => {
-  const heatingSchedule = getScheduleHeating();
-  heatingSchedule.heatingTime = offsetTimeMins(time);
-  setHeatingSchedule(heatingSchedule);
-  // updateValue("heatingSchedule", "heatingTime", offsetTimeMins(time));
-};
-
-// radiatorFanOff();
-
-// const getScheduleHeating = () => {
-//   const data = getStore("Environmental Data");
-//   return data.heatingSchedule;
-// };
-
+// TODO, move the below out of the schedule file
 const getHeatingController = () => {
   let heatingController = getStore("Environmental Data").heatingController;
   return heatingController;
@@ -136,8 +105,5 @@ module.exports = {
   radiatorFanOff: radiatorFanOff,
   heatingOn: heatingOn,
   heatingOff: heatingOff,
-  updateBoostTime: updateBoostTime,
-  updateRadiatorFanTime: updateRadiatorFanTime,
-  updateHeatingTime: updateHeatingTime,
-  getHeatingController: getHeatingController,
+  // getHeatingController: getHeatingController,
 };

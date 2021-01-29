@@ -1,37 +1,20 @@
-const { getEnvironmentalData, setEnvironmentalData } = require("../StorageDrivers/LowLevelDriver");
-const { offsetTimeMins } = require("../Time");
-
-const getManualHeating = () => {
-  const data = getEnvironmentalData().heatingManual;
-  return data;
-};
+/*
+ TODO This currently turns on the radiator fan regardless of whether
+ or not our room valve is open
+*/
+const { updateHeatingTime, updateRadiatorFanTime } = require("../HeatingModes/Timers");
 
 const manualheatingOn = () => {
-  const data = getEnvironmentalData();
-
-  // data.heatingManual.radiatorFanTime = offsetTimeMins(9999);
-  // data.heatingManual.heatingTime = offsetTimeMins(9999);
-
-  data.heatingSchedule.radiatorFanTime = offsetTimeMins(9999); // now runs on schedule
-  data.heatingSchedule.heatingTime = offsetTimeMins(9999);
-
-  setEnvironmentalData(data);
+  updateHeatingTime(9999);
+  updateRadiatorFanTime(9999);
 };
 
 const manualheatingOff = () => {
-  const data = getEnvironmentalData();
-
-  // data.heatingManual.radiatorFanTime = offsetTimeMins(15);
-  // data.heatingManual.heatingTime = offsetTimeMins();
-
-  data.heatingSchedule.radiatorFanTime = offsetTimeMins(15);
-  data.heatingSchedule.heatingTime = offsetTimeMins();
-
-  setEnvironmentalData(data);
+  updateHeatingTime(0);
+  updateRadiatorFanTime(20); // should be 20
 };
 
 module.exports = {
   manualheatingOn: manualheatingOn,
   manualheatingOff: manualheatingOff,
-  getManualHeating: getManualHeating,
 };
