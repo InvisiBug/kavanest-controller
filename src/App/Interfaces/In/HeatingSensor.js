@@ -7,16 +7,15 @@ const Engine = require("tingodb")();
 const db = new Engine.Db(path.join(__dirname, "../../../../PersistantStorage/Historical"), {});
 const schedule = require("node-schedule");
 
+var Hourly = new schedule.RecurrenceRule();
+Hourly.minute = 0;
+
 const disconnectedState = {
   isConnected: false,
-  // direction: "rising",
   temperature: -1,
   humidity: -1,
   pressure: -1,
 };
-
-var Hourly = new schedule.RecurrenceRule();
-Hourly.minute = 0;
 
 const newSensor = (room, offset) => {
   var timer;
@@ -44,30 +43,17 @@ const newSensor = (room, offset) => {
       // * Good MQTT data in
       if (payload != `${room} ${"Heating Sensor Disconnected"}`) {
         var mqttData = JSON.parse(payload);
-        var direction;
-
-        // if (mqttData.temperature > deviceData.temperature) {
-        //   direction = "rising";
-        // } else if (mqttData.temperature < deviceData.temperature) {
-        //   direction = "falling";
-        // } else {
-        //   // console.log("Same");
-        // }
 
         let oldData = getStore("Environmental Data");
 
         deviceData = {
           ...deviceData,
           isConnected: true,
-          // direction: direction,
-          // direction: "rising",
           direction: oldData.heatingSensors[camelRoomName(room)].direction,
           temperature: Math.round((mqttData.temperature + offset) * 100) / 100,
           humidity: mqttData.humidity,
           pressure: mqttData.pressure,
         };
-
-        // let oldData = getStore("Environmental Data");
 
         setStore("Environmental Data", {
           ...oldData,

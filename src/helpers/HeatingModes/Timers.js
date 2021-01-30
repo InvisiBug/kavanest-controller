@@ -25,9 +25,6 @@ const getHeatingTime = () => {
   return getHeatingTimers().heating;
 };
 
-// console.log(getRadiatorFanTime() - new Date());
-// console.log(getRadiatorFanTime());
-
 module.exports = {
   updateBoostTime: updateBoostTime,
   updateRadiatorFanTime: updateRadiatorFanTime,

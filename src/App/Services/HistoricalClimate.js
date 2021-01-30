@@ -69,7 +69,6 @@ app.post("/api/heatingSensor/historical", (req, res) => {
             });
           }
         }
-        console.log("sfdha");
         // console.log(data.reverse());
         res.json(data.reverse());
       }

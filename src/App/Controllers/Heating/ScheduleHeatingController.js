@@ -1,8 +1,8 @@
 const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../../Helpers/StorageDrivers/Devices/HeatingController");
+const { isRadiatorFanAuto, isRadiatorFanConnected, isRadiatorFanOn } = require("../../../Helpers/StorageDrivers/Devices/RadiatorFan");
 const { getRadiatorFanTime, getBoostTime, getHeatingTime } = require("../../../Helpers/HeatingModes/Timers");
 const { heatingOn, heatingOff, getScheduleHeating } = require("../../../Helpers/HeatingModes/Schedule");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
-const { getStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 const { day, now, time, days } = require("../../../Helpers/Time");
 
 const scheduleChecker = () => {
@@ -29,15 +29,13 @@ const scheduleHeating = () => {
 };
 
 const scheduleRadiatorFan = () => {
-  let radiatorFan = getStore("Radiator Fan");
-
-  if (radiatorFan.isAutomatic && radiatorFan.isConnected) {
+  if (isRadiatorFanAuto() && isRadiatorFanConnected()) {
     if (now() < getRadiatorFanTime()) {
-      if (!radiatorFan.isOn) {
+      if (!isRadiatorFanOn()) {
         radiatorFanControl("1");
       }
     } else {
-      if (radiatorFan.isOn) {
+      if (isRadiatorFanOn()) {
         radiatorFanControl("0");
       }
     }

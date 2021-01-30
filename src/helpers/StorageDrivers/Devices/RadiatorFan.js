@@ -1,4 +1,4 @@
-const { getStore, setStore } = require("../LowLevelDriver");
+const { getStore, setStore, getEnvironmentalData } = require("../LowLevelDriver");
 
 const getRadiatorFan = () => {
   const data = getStore("Radiator Fan");
@@ -20,9 +20,29 @@ const isRadiatorFanOn = () => {
   return data.isOn;
 };
 
+const setRadiatorFan = (state) => {
+  // ! Not working yet
+  // TODO, will need to scale this later when new fans are added
+  const data = getEnvironmentalData().radiatorFans.ourRoom;
+
+  // data
+
+  // data.isAutomatic = auto;
+  // data.isConnected = connected;
+  // data.isOn = on;
+
+  // setEnvironmentalData(data);
+
+  console.log(data);
+  console.log(state);
+};
+
+// setRadiatorFan(true, true, true);
+
 module.exports = {
   getRadiatorFan: getRadiatorFan,
   isRadiatorFanAuto: isRadiatorFanAuto,
   isRadiatorFanConnected: isRadiatorFanConnected,
   isRadiatorFanOn: isRadiatorFanOn,
+  setRadiatorFan: setRadiatorFan,
 };

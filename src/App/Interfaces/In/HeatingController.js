@@ -1,7 +1,6 @@
 const express = require("express");
 const app = (module.exports = express());
-const { getStore, setStore, updateValue, readValue } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
-const { boostOn, boostOff } = require("../../../Helpers/HeatingModes/Functions");
+const { getStore, setStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 const functions = require("../../../Helpers/Functions");
 const { getScheduleHeating } = require("../../../Helpers/HeatingModes/Schedule");
 
@@ -38,7 +37,7 @@ client.on("message", (topic, payload) => {
   } else if (topic === "Heating Button") {
     const now = new Date().getTime();
     if (getScheduleHeating().boostTime < now) {
-      // if (readValue("heatingSchedule", "boostTime") < now) {
+      // TODO, Decide what to do when the heating button is pressed
       boostOn();
     } else {
       boostOff();

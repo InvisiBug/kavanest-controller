@@ -20,10 +20,6 @@ const zoneDemandChecker = () => {
     if (getRadiatorFanTime() - now() > 1199998) {
       updateRadiatorFanTime(20);
     }
-    // } else { // may not be needed
-    //   console.log("skjdha");
-    //   updateRadiatorFanTime(0);
-    // }
   }
 };
 

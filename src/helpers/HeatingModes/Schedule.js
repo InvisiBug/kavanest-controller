@@ -105,5 +105,5 @@ module.exports = {
   radiatorFanOff: radiatorFanOff,
   heatingOn: heatingOn,
   heatingOff: heatingOff,
-  // getHeatingController: getHeatingController,
+  getHeatingController: getHeatingController,
 };

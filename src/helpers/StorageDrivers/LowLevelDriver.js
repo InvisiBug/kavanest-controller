@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-// const { getScheduleHeating, setHeatingSchedule } = require("./ClimateControl");
 
 const setStore = (store, data) => {
   const storePath = path.join(`${__dirname}${"/../../../PersistantStorage/"}${store}${".json"}`);
@@ -41,14 +40,6 @@ const setEnvironmentalData = (data) => {
   setStore("Environmental Data", data);
 };
 
-const getRadiatorFan = () => {
-  return getStore("Radiator Fan");
-};
-
-const getHeatingController = () => {
-  return getStore("Environmental Data").heatingController;
-};
-
 /*
   Heating Timers
 */
@@ -68,9 +59,7 @@ module.exports = {
   updateValue: updateValue,
   readValue: readValue,
   getEnvironmentalData: getEnvironmentalData,
-  getRadiatorFan: getRadiatorFan,
   setEnvironmentalData: setEnvironmentalData,
   getHeatingTimers: getHeatingTimers,
   setHeatingTimers: setHeatingTimers,
-  getHeatingController: getHeatingController,
 };
