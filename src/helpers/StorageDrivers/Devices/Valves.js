@@ -25,11 +25,11 @@ const getValveDemand = (room) => {
   return getStore("Environmental Data").radiatorValves[room].demand;
 };
 
-const getValveState = (room) => {
+const isValveOpen = (room) => {
   return getStore("Environmental Data").radiatorValves[room].isOpen;
 };
 
-const getValveConnection = (room) => {
+const isValveConnected = (room) => {
   return getStore("Environmental Data").radiatorValves[room].isConnected;
 };
 
@@ -37,16 +37,16 @@ const getValveStatus = (room) => {
   return getStore("Environmental Data").radiatorValves[room];
 };
 
-const isValveOpen = () => {
+const isAnyValveOpen = () => {
   return getValveState("livingRoom") || getValveState("kitchen") || getValveState("liamsRoom") || getValveState("study") || getValveState("ourRoom");
 };
 
 module.exports = {
   setValveState: setValveState,
-  getValveState: getValveState,
+  isValveOpen: isValveOpen,
   getValveDemand: getValveDemand,
   setValveDemand: setValveDemand,
-  getValveConnection: getValveConnection,
+  isValveConnected: isValveConnected,
   getValveStatus: getValveStatus,
-  isValveOpen: isValveOpen,
+  isAnyValveOpen: isAnyValveOpen,
 };

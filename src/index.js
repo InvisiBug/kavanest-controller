@@ -1,77 +1,21 @@
-////////////////////////////////////////////////////////////////////////
-//
-//  ██╗███╗   ██╗██████╗ ███████╗██╗  ██╗
-//  ██║████╗  ██║██╔══██╗██╔════╝╚██╗██╔╝
-//  ██║██╔██╗ ██║██║  ██║█████╗   ╚███╔╝
-//  ██║██║╚██╗██║██║  ██║██╔══╝   ██╔██╗
-//  ██║██║ ╚████║██████╔╝███████╗██╔╝ ██╗
-//  ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝
-//
-////////////////////////////////////////////////////////////////////////
-//
-//   #####
-//  #     #  ####  #    # ###### #  ####
-//  #       #    # ##   # #      # #    #
-//  #       #    # # #  # #####  # #
-//  #       #    # #  # # #      # #  ###
-//  #     # #    # #   ## #      # #    #
-//   #####   ####  #    # #      #  ####
-//
-////////////////////////////////////////////////////////////////////////
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = (module.exports = express());
-const chalk = require("chalk");
 
 app.use(bodyParser.json()); // Used to handle data in post requests
-// process.stdout.write("\033c"); // Clear the console
 console.clear();
 
-////////////////////////////////////////////////////////////////////////
-//
-//  ######
-//  #     #  ####  #####  #####  ####
-//  #     # #    # #    #   #   #
-//  ######  #    # #    #   #    ####
-//  #       #    # #####    #        #
-//  #       #    # #   #    #   #    #
-//  #        ####  #    #   #    ####
-//
-////////////////////////////////////////////////////////////////////////
 const fetchPort = process.env.PORT || 5000;
 const socketPort = process.env.PORT || 5001;
 
-////////////////////////////////////////////////////////////////////////
-//
-//   #####
-//  #     #  ####   ####  #    # ###### #####
-//  #       #    # #    # #   #  #        #
-//   #####  #    # #      ####   #####    #
-//        # #    # #      #  #   #        #
-//  #     # #    # #    # #   #  #        #
-//   #####   ####   ####  #    # ######   #
-//
-////////////////////////////////////////////////////////////////////////
 let server = require("http").createServer(app);
 global.io = require("socket.io")(server);
 
-////////////////////////////////////////////////////////////////////////
-//
-//  #     #  #####  ####### #######
-//  ##   ## #     #    #       #
-//  # # # # #     #    #       #
-//  #  #  # #     #    #       #
-//  #     # #   # #    #       #
-//  #     # #    #     #       #
-//  #     #  #### #    #       #
-//
-////////////////////////////////////////////////////////////////////////
 const mqtt = require("mqtt");
 
-global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
-// global.client = mqtt.connect("mqtt://localhost"); //  Production
+// global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
+global.client = mqtt.connect("mqtt://localhost"); //  Production, Can stay as this one
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
-// test;
 
 client.setMaxListeners(50); // TODO Sort this out later, Disables event listener warning
 
@@ -112,13 +56,12 @@ app.use(require("./App/Devices/OurRoom/Sun.js"));
 app.use(require("./App/Devices/OurRoom/Computer Audio.js"));
 app.use(require("./App/Devices/OurRoom/Computer Power.js"));
 
-app.use(require("./App/Devices/OurRoom/RadiatorFan.js"));
+app.use(require("./App/Interfaces/In/RadiatorFan.js"));
 
 app.use(require("./App/Calor Imperium.js"));
-app.use(require("./App/Interfaces/In/Heating.js"));
+app.use(require("./App/Interfaces/In/HeatingController.js"));
 require("./App/Services/HouseClimateStats");
 require("./App/Controllers/HeatingModeController");
-// app.use(require("./App/Controllers/ScheduleHeatingController"));
 app.use(require("./App/Services/HistoricalClimate"));
 
 ////////////////////////////////////////////////////////////////////////
@@ -134,8 +77,6 @@ app.use(require("./App/Services/HistoricalClimate"));
 ////////////////////////////////////////////////////////////////////////
 const { newSensor } = require("./App/Interfaces/In/HeatingSensor");
 const { newValve } = require("./App/Interfaces/In/RadiatorValve");
-const { newValveController } = require("./App/Controllers/ValveController");
-const { isRadiatorFanAuto } = require("./Helpers/StorageDrivers/Devices/RadiatorFan.js");
 
 const rooms = [
   {
@@ -150,7 +91,7 @@ const rooms = [
   },
   {
     name: "Living Room",
-    offset: -0,
+    offset: -1.8,
     valve: true,
   },
   {
@@ -164,53 +105,10 @@ const rooms = [
     valve: true,
   },
 ];
-//boop
 
 rooms.map((room, index) => {
   newSensor(room.name, room.offset);
-
-  if (room.valve) {
-    newValve(room.name);
-  }
-  // newValveController(room.name);
-});
-
-[
-  ////////////////////////////////////////////////////////////////////////
-  //
-  //   #####
-  //  #     #  ####  #    #  ####   ####  #      ######
-  //  #       #    # ##   # #      #    # #      #
-  //  #       #    # # #  #  ####  #    # #      #####
-  //  #       #    # #  # #      # #    # #      #
-  //  #     # #    # #   ## #    # #    # #      #
-  //   #####   ####  #    #  ####   ####  ###### ######
-  //
-  ////////////////////////////////////////////////////////////////////////
-  //This adds the the line printed information to all console.logs
-  ("log", "warn", "error"),
-].forEach((methodName) => {
-  const originalMethod = console[methodName];
-  console[methodName] = (...args) => {
-    try {
-      throw new Error();
-    } catch (error) {
-      originalMethod.apply(console, [
-        ...args,
-        chalk.yellow(
-          "\t",
-          error.stack // Grabs the stack trace
-            .split("\n")[2] // Grabs third line
-            .trim(3) // Removes spaces
-            .replace(__dirname, "") // Removes script folder path
-            .replace(/\s\(./, " ") // Removes first parentheses and replaces it with " at "
-            .replace(/\)/, "") // Removes last parentheses
-            .split(" ")
-            .pop()
-        ),
-      ]);
-    }
-  };
+  if (room.valve) newValve(room.name);
 });
 
 ////////////////////////////////////////////////////////////////////////

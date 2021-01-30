@@ -1,61 +1,32 @@
-const { getStore } = require("../../Helpers/StorageDrivers/LowLevelDriver");
+const { zoneHeating, zoneRadiatorFan, roomDemandSetter, zoneDemandChecker } = require("./Heating/ZoneHeatingController");
 const { scheduleChecker, scheduleHeating, scheduleRadiatorFan } = require("./Heating/ScheduleHeatingController");
-const { zoneHeating, zoneRadiatorFan, zoneManualOverride, checkRoomDemand } = require("./Heating/ZoneHeatingController");
 const { checkFan, checkHeating } = require("./Heating/ManualHeatingController");
 const { setAllZonesDemand } = require("../../Helpers/HeatingModes/Zones");
+const { getHeatingMode } = require("../../Helpers/HeatingModes/Modes");
 const { signalValve } = require("./ValveController");
-
-// const rooms = [
-//   {
-//     name: "Our Room",
-//     offset: 0,
-//   },
-//   {
-//     name: "Study",
-//     offset: 0,
-//   },
-//   {
-//     name: "Living Room",
-//     offset: 0,
-//   },
-//   // {
-//   //   name: "Kitchen",
-//   //   offset: 0,
-//   // },
-//   {
-//     name: "Liams Room",
-//     offset: 0,
-//   },
-// ];
 
 const rooms = ["Our Room", "Study", "Living Room", "Liams Room"];
 
 setInterval(() => {
-  const mode = getStore("Environmental Data").heatingMode;
-
-  switch (mode) {
+  switch (getHeatingMode()) {
     case "zones":
       zoneHeating();
       zoneRadiatorFan();
+      zoneDemandChecker();
 
-      // checkRoomDemand("Living Room");
-      // checkRoomDemand("Liams Room");
-      // checkRoomDemand("Study");
-      // checkRoomDemand("Our Room");
-
-      rooms.map((room, index) => {
+      rooms.map((room) => {
         signalValve(room);
-        checkRoomDemand(room);
+        roomDemandSetter(room);
       });
       break;
 
     case "schedule":
-      setAllZonesDemand(true);
       scheduleChecker();
       scheduleHeating();
       scheduleRadiatorFan();
 
-      rooms.map((room, index) => {
+      setAllZonesDemand(true);
+      rooms.map((room) => {
         signalValve(room);
       });
       break;

@@ -1,20 +1,84 @@
-const { getStore, setStore, getEnvironmentalData } = require("../StorageDrivers/LowLevelDriver");
+const { getStore, setStore } = require("../StorageDrivers/LowLevelDriver");
+const { now } = require("../Time");
+const { updateBoostTime, updateHeatingTime, updateRadiatorFanTime, getHeatingTime } = require("./Timers");
 
-const isHeatingScheduleAuto = () => {
-  const data = getEnvironmentalData();
-  return data.heatingSchedule.auto;
+const overRunTime = 20;
+const boostTime = 20;
+
+////////////////////////////////////////////////////////////////////////
+//
+//  ######
+//  #     #  ####   ####   ####  #####
+//  #     # #    # #    # #        #
+//  ######  #    # #    #  ####    #
+//  #     # #    # #    #      #   #
+//  #     # #    # #    # #    #   #
+//  ######   ####   ####   ####    #
+//
+////////////////////////////////////////////////////////////////////////
+const boostOn = () => {
+  updateBoostTime(boostTime);
+  heatingOn(boostTime);
 };
 
-const setHeatingScheduleAuto = () => {
-  const data = getEnvironmentalData();
-  data.heatingSchedule.auto = true;
-  setStore("Environmental Data", data);
+const boostOff = () => {
+  updateBoostTime();
+  heatingOff();
 };
 
-const setHeatingScheduleManual = () => {
-  const data = getEnvironmentalData();
-  data.heatingSchedule.auto = false;
-  setStore("Environmental Data", data);
+////////////////////////////////////////////////////////////////////////
+//
+//  ######                                                #######
+//  #     #   ##   #####  #   ##   #####  ####  #####     #         ##   #    #
+//  #     #  #  #  #    # #  #  #    #   #    # #    #    #        #  #  ##   #
+//  ######  #    # #    # # #    #   #   #    # #    #    #####   #    # # #  #
+//  #   #   ###### #    # # ######   #   #    # #####     #       ###### #  # #
+//  #    #  #    # #    # # #    #   #   #    # #   #     #       #    # #   ##
+//  #     # #    # #####  # #    #   #    ####  #    #    #       #    # #    #
+//
+////////////////////////////////////////////////////////////////////////
+// Radiator Fan
+const radiatorFanOn = (time = 99999) => {
+  updateRadiatorFanTime(time);
+};
+
+const radiatorFanOff = () => {
+  updateRadiatorFanTime();
+};
+
+const radiatorFanOverrun = () => {
+  updateRadiatorFanTime(overRunTime);
+};
+
+////////////////////////////////////////////////////////////////////////
+//
+//  #    # ######   ##   ##### # #    #  ####
+//  #    # #       #  #    #   # ##   # #    #
+//  ###### #####  #    #   #   # # #  # #
+//  #    # #      ######   #   # #  # # #  ###
+//  #    # #      #    #   #   # #   ## #    #
+//  #    # ###### #    #   #   # #    #  ####
+//
+////////////////////////////////////////////////////////////////////////
+const heatingOn = (time = 99999) => {
+  radiatorFanOn(time + overRunTime);
+  updateHeatingTime(time);
+};
+
+const heatingOff = () => {
+  // Need to check if the heating is on to prevent the
+  // fan overrun time being constantly written
+  // therefore keeping the fan on
+  if (now() < getHeatingTime()) {
+    radiatorFanOverrun();
+    updateHeatingTime();
+  }
+};
+
+// TODO, move the below out of the schedule file
+const getHeatingController = () => {
+  let heatingController = getStore("Environmental Data").heatingController;
+  return heatingController;
 };
 
 const getScheduleHeating = () => {
@@ -34,7 +98,12 @@ const setHeatingSchedule = (data) => {
 module.exports = {
   getScheduleHeating: getScheduleHeating,
   setHeatingSchedule: setHeatingSchedule,
-  isHeatingScheduleAuto: isHeatingScheduleAuto,
-  setHeatingScheduleAuto: setHeatingScheduleAuto,
-  setHeatingScheduleManual: setHeatingScheduleManual,
+  boostOn: boostOn,
+  boostOff: boostOff,
+  radiatorFanOverrun: radiatorFanOverrun,
+  radiatorFanOn: radiatorFanOn,
+  radiatorFanOff: radiatorFanOff,
+  heatingOn: heatingOn,
+  heatingOff: heatingOff,
+  getHeatingController: getHeatingController,
 };

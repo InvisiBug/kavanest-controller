@@ -1,42 +1,56 @@
-const { getEnvironmentalData, setEnvironmentalData } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 const { getRoomSetpoints, getRoomTemperature } = require("../../../Helpers/StorageDrivers/Devices/HeatingSensors");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
-const { scheduleHeating, scheduleRadiatorFan } = require("./ScheduleHeatingController");
-const { radiatorFanOff, getHeatingMode } = require("../../../Helpers/HeatingModes/Functions");
-const { setZonesDemand, isZoneDemand, isZonesDemand, isZonesAuto } = require("../../../Helpers/HeatingModes/Zones");
+const { setZonesDemand, isZoneDemand, isZonesDemand } = require("../../../Helpers/HeatingModes/Zones");
 const { isRadiatorFanAuto, isRadiatorFanConnected, isRadiatorFanOn } = require("../../../Helpers/StorageDrivers/Devices/RadiatorFan");
 const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../../Helpers/StorageDrivers/Devices/HeatingController");
 const { camelRoomName } = require("../../../Helpers/Functions");
-const { hour } = require("../../../Helpers/Time");
+const { hour, now } = require("../../../Helpers/Time");
+const { getRadiatorFanTime, getHeatingTime, updateHeatingTime, updateRadiatorFanTime } = require("../../../Helpers/HeatingModes/Timers");
 
-const zoneHeating = () => {
+const zoneDemandChecker = () => {
   if (isZonesDemand()) {
-    if (isHeatingControllerConnected() && !isHeatingControllerOn()) {
-      heatingControl("1");
+    if (isZoneDemand("ourRoom")) {
+      updateRadiatorFanTime(9999);
+    } else if (getRadiatorFanTime() - now() > 1199998) {
+      updateRadiatorFanTime(20);
     }
-  } else if (isHeatingControllerConnected() && isHeatingControllerOn()) {
-    heatingControl("0");
+    updateHeatingTime(99999);
+  } else {
+    updateHeatingTime(0);
+    if (getRadiatorFanTime() - now() > 1199998) {
+      updateRadiatorFanTime(20);
+    }
   }
 };
 
 const zoneRadiatorFan = () => {
-  if (isRadiatorFanAuto()) {
-    if (isZoneDemand("ourRoom")) {
-      if (isRadiatorFanConnected() && !isRadiatorFanOn()) {
+  if (isRadiatorFanAuto() && isRadiatorFanConnected()) {
+    if (new Date() < getRadiatorFanTime()) {
+      if (!isRadiatorFanOn()) {
         radiatorFanControl("1");
       }
-    } else if (isRadiatorFanConnected() && isRadiatorFanOn()) {
-      setTimeout(() => {
+    } else {
+      if (isRadiatorFanOn()) {
         radiatorFanControl("0");
-      }, 2 * 1000);
+      }
     }
   }
 };
 
-const checkRoomDemand = (room) => {
+const zoneHeating = () => {
+  if (now() < getHeatingTime() && isHeatingControllerConnected()) {
+    if (!isHeatingControllerOn()) {
+      heatingControl("1");
+    }
+  } else if (isHeatingControllerOn()) {
+    heatingControl("0");
+  }
+};
+
+const roomDemandSetter = (room) => {
   let setpoint = getRoomSetpoints(camelRoomName(room));
   let currentTemp = getRoomTemperature(camelRoomName(room));
-  const hysteresis = 1;
+  const hysteresis = 0.5;
 
   if (currentTemp < setpoint[hour()] - hysteresis) {
     setZonesDemand(room, true);
@@ -46,7 +60,8 @@ const checkRoomDemand = (room) => {
 };
 
 module.exports = {
-  zoneHeating: zoneHeating,
+  zoneDemandChecker: zoneDemandChecker,
   zoneRadiatorFan: zoneRadiatorFan,
-  checkRoomDemand: checkRoomDemand,
+  roomDemandSetter: roomDemandSetter,
+  zoneHeating: zoneHeating,
 };

@@ -1,18 +1,7 @@
-/* 
-  * NB *
-  The timers here may cause issues if they are too short 
-  the system uses file system sync which references files 
-  which have to be qued for reading and writing
-  if the file is accessed too quickly there may be issues
-*/
-const { getRoomSetpoints, getRoomTemperature } = require("../../Helpers/StorageDrivers/Devices/HeatingSensors");
-const { setValveDemand, getValveStatus } = require("../../Helpers/StorageDrivers/Devices/Valves");
+const { isValveOpen, isValveConnected } = require("../../Helpers/StorageDrivers/Devices/Valves");
 const { openValve, closeValve } = require("../Interfaces/Out/Valves");
+const { isZoneDemand } = require("../../Helpers/HeatingModes/Zones");
 const { camelRoomName } = require("../../Helpers/Functions");
-const { hour } = require("../../Helpers/Time");
-const { getStore, getEnvironmentalData } = require("../../Helpers/StorageDrivers/LowLevelDriver");
-const { getHeatingMode } = require("../../Helpers/HeatingModes/Functions");
-const { setZonesDemand, isZoneDemand, isZonesDemand } = require("../../Helpers/HeatingModes/Zones");
 
 const newValveController = (room) => {
   setInterval(() => {
@@ -21,14 +10,11 @@ const newValveController = (room) => {
 };
 
 const signalValve = (room) => {
-  let valve = getValveStatus(camelRoomName(room));
-  if (valve.isConnected) {
-    if (isZoneDemand(camelRoomName(room)) && !valve.isOpen) {
+  if (isValveConnected(camelRoomName(room))) {
+    if (isZoneDemand(camelRoomName(room)) && !isValveOpen(camelRoomName(room))) {
       openValve(room);
-      // console.log("Opening Valve");
-    } else if (!isZoneDemand(camelRoomName(room)) && valve.isOpen) {
+    } else if (!isZoneDemand(camelRoomName(room)) && isValveOpen(camelRoomName(room))) {
       closeValve(room);
-      // console.log("Closing Valve");
     }
   }
 };

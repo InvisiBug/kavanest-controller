@@ -1,12 +1,9 @@
 const { radiatorValveControl } = require("./mqttOut");
-// * Decided to not have valve transit time
 
 const open = "0";
 const close = "1";
 
 const openAllValves = () => {
-  console.log("Opening All Valves");
-
   radiatorValveControl("Living Room", open);
   radiatorValveControl("Kitchen", open);
   radiatorValveControl("Liams Room", open);
@@ -15,8 +12,6 @@ const openAllValves = () => {
 };
 
 const closeAllValves = () => {
-  console.log("Closing All Valves");
-
   radiatorValveControl("Living Room", close);
   radiatorValveControl("Kitchen", close);
   radiatorValveControl("Liams Room", close);

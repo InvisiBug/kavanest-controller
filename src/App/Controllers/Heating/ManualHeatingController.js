@@ -1,20 +1,17 @@
-const { getHeatingController } = require("../../../Helpers/HeatingModes/Functions");
-const { getStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
-const { getManualHeating } = require("../../../Helpers/HeatingModes/Manual");
-const { getScheduleHeating } = require("../../../Helpers/HeatingModes/Schedule");
+const { isRadiatorFanConnected, isRadiatorFanOn, isRadiatorFanAuto } = require("../../../Helpers/StorageDrivers/Devices/RadiatorFan");
+const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../../Helpers/StorageDrivers/Devices/HeatingController");
+const { getHeatingTime, getRadiatorFanTime } = require("../../../Helpers/HeatingModes/Timers");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
+const { now } = require("../../../Helpers/Time");
 
 const checkFan = () => {
-  let radiatorFan = getStore("Radiator Fan");
-  let heating = getScheduleHeating(); // * Changed from getManualHeating, manual & schedule radiator cfan now use same control point
-
-  if (radiatorFan.isAutomatic && radiatorFan.isConnected) {
-    if (new Date() < heating.radiatorFanTime) {
-      if (!radiatorFan.isOn) {
+  if (isRadiatorFanAuto() && isRadiatorFanConnected()) {
+    if (now() < getRadiatorFanTime()) {
+      if (!isRadiatorFanOn()) {
         radiatorFanControl("1");
       }
     } else {
-      if (radiatorFan.isOn) {
+      if (isRadiatorFanOn()) {
         radiatorFanControl("0");
       }
     }
@@ -22,16 +19,13 @@ const checkFan = () => {
 };
 
 const checkHeating = () => {
-  let heatingController = getHeatingController();
-  let heating = getScheduleHeating();
-
-  if (heatingController.isConnected) {
-    if (new Date() < heating.heatingTime) {
-      if (!heatingController.isOn) {
+  if (isHeatingControllerConnected()) {
+    if (now() < getHeatingTime()) {
+      if (!isHeatingControllerOn()) {
         heatingControl("1");
       }
     } else {
-      if (heatingController.isOn) {
+      if (isHeatingControllerOn()) {
         heatingControl("0");
       }
     }
