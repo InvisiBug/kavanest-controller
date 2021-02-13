@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
-    "start": "nodemon -L --ignore 'PersistantStorage'",
+    
+    "start": "node index.js",
+    "start:server": "nodemon --ignore 'PersistantStorage'",
     "dev": "cd src && nodemon"
   },
   "keywords": [],

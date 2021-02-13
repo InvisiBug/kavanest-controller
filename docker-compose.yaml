@@ -6,17 +6,17 @@ services:
       context: .
       dockerfile: Dockerfile
     image: kavanet-controller:latest
-    volumes: 
-      - ".:/" # copy everything to app inside container
-      - "/app/node_modules" # Ignore node modules
-    ports:
-      - 4000:4000
-      - 5001:5001
-    environment:
-      - CHOKIDAR_USEPOLLING=true # Enables hot reloading # do need this
-    networks:
-      - proxynet
+    # volumes: 
+    #   - "./:/usr" # copy everything to app inside container
+    #   - "/app/node_modules" # Ignore node modules
+    # ports:
+    #   - 4000:4000
+    #   - 5001:5001
+    # environment:
+    #   - CHOKIDAR_USEPOLLING=true # Enables hot reloading # do need this
+    # networks:
+    #   - proxynet
 
-networks:
-  proxynet:
-    name: kavanet
+# networks:
+#   proxynet:
+#     name: kavanet
