@@ -11,10 +11,10 @@ COPY package*.json ./
 COPY ./ ./
 # COPY ./PersistantStorage ./PersistantStorage
 
-RUN npm install -g nodemon
+RUN npm install --save-dev nodemon
 RUN npm install
 
 # EXPOSE 8080
 EXPOSE 4000
-EXPOSE 5002
+EXPOSE 5001
 CMD ["npm", "start"]
