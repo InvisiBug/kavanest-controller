@@ -1,20 +1,21 @@
 # Use Node version 14
 FROM node:14
+# FROM node:15.8.0-alpine
 
 # Create app directory within container
-WORKDIR /usr
+# Use this pattern
+WORKDIR /usr/src/app
 
 # Install app dependencies
-# A wild card is used to ensure both package.json AND package-lock.json are copied 
 COPY package*.json ./
 
+# Copy everything apart from doker ignore across
 COPY ./ ./
-# COPY ./PersistantStorage ./PersistantStorage
 
-RUN npm install --save-dev nodemon
+RUN npm install -g nodemon
 RUN npm install
 
 # EXPOSE 8080
 EXPOSE 4000
-EXPOSE 5001
+EXPOSE 5002
 CMD ["npm", "start"]

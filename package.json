@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "start": "cd src && nodemon",
+    "start:dev": "nodemon ./src/index.js --watch ./src",
     "dev": "cd src && nodemon"
   },
   "keywords": [],
