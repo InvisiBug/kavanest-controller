@@ -27,7 +27,7 @@ client.subscribe("#", (err) => {
 
 client.on("connect", () => console.log("MQTT Connected"));
 
-client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload)));
+// client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload)));
 client.on("message", (topic, payload) => {
   try {
     io.emit("MQTT Messages", JSON.parse(payload));
@@ -128,4 +128,4 @@ rooms.map((room, index) => {
 app.listen(fetchPort, console.log("App is listening on port " + fetchPort));
 io.listen(socketPort, console.log("Socket is open on port " + socketPort));
 
-console.log("Yay, it works");
+console.log("Still working?");
