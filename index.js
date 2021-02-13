@@ -44,7 +44,7 @@ client.on("message", (topic, payload) => {
 //
 ////////////////////////////////////////////////////////////////////////
 // General
-app.use(require("./App/Weather.js"));
+// app.use(require("./App/Weather.js"));
 
 // Our Room
 app.use(require("./App/Devices/OurRoom/Desk LEDs"));

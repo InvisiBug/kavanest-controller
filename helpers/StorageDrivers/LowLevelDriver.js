@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const setStore = (store, data) => {
-  const storePath = path.join(`${__dirname}${"/../../../PersistantStorage/"}${store}${".json"}`);
+  const storePath = path.join(`${__dirname}${"/../../PersistantStorage/"}${store}${".json"}`);
   try {
     fs.writeFileSync(storePath, JSON.stringify(data, null, 0));
   } catch (e) {
@@ -11,7 +11,7 @@ const setStore = (store, data) => {
 };
 
 const getStore = (store) => {
-  const storePath = path.join(`${__dirname}${"/../../../PersistantStorage/"}${store}${".json"}`);
+  const storePath = path.join(`${__dirname}${"/../../PersistantStorage/"}${store}${".json"}`);
   try {
     return JSON.parse(fs.readFileSync(storePath));
   } catch (err) {

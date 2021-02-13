@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
-    "start": "cd src && nodemon",
+    "start": "nodemon -L --ignore 'PersistantStorage'",
     "dev": "cd src && nodemon"
   },
   "keywords": [],
@@ -27,5 +27,8 @@
     "socket.io": "^2.3.0",
     "tingodb": "^0.6.1",
     "tinycolor2": "^1.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
