@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = (module.exports = express());
+const chalk = require("chalk");
 
 app.use(bodyParser.json()); // Used to handle data in post requests
 console.clear();
@@ -14,7 +15,8 @@ global.io = require("socket.io")(server);
 const mqtt = require("mqtt");
 
 // global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
-global.client = mqtt.connect("mqtt://localhost"); //  Production, Can stay as this one
+// global.client = mqtt.connect("mqtt://localhost"); //  Production, Can stay as this one
+global.client = mqtt.connect("mqtt://mosquitto"); // Docker
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
 
 client.setMaxListeners(50); // TODO Sort this out later, Disables event listener warning
@@ -25,7 +27,7 @@ client.subscribe("#", (err) => {
 
 client.on("connect", () => console.log("MQTT Connected"));
 
-// client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload)));
+client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload)));
 client.on("message", (topic, payload) => {
   try {
     io.emit("MQTT Messages", JSON.parse(payload));
@@ -125,3 +127,5 @@ rooms.map((room, index) => {
 // Start the app
 app.listen(fetchPort, console.log("App is listening on port " + fetchPort));
 io.listen(socketPort, console.log("Socket is open on port " + socketPort));
+
+console.log("Yay, it works");
