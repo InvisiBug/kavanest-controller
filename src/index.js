@@ -6,7 +6,7 @@ const chalk = require("chalk");
 app.use(bodyParser.json()); // Used to handle data in post requests
 console.clear();
 
-const fetchPort = process.env.PORT || 5000;
+const fetchPort = process.env.PORT || 4000;
 const socketPort = process.env.PORT || 5001;
 
 let server = require("http").createServer(app);
@@ -15,8 +15,8 @@ global.io = require("socket.io")(server);
 const mqtt = require("mqtt");
 
 // global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
-// global.client = mqtt.connect("mqtt://localhost"); //  Production, Can stay as this one
-global.client = mqtt.connect("mqtt://mosquitto"); // Docker
+global.client = mqtt.connect("mqtt://localhost"); //  Production, Can stay as this one
+// global.client = mqtt.connect("mqtt://mosquitto"); // Docker
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
 
 client.setMaxListeners(50); // TODO Sort this out later, Disables event listener warning
@@ -33,6 +33,7 @@ client.on("message", (topic, payload) => {
     io.emit("MQTT Messages", JSON.parse(payload));
   } catch {}
 });
+console.log("s");
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -128,4 +129,9 @@ rooms.map((room, index) => {
 app.listen(fetchPort, console.log("App is listening on port " + fetchPort));
 io.listen(socketPort, console.log("Socket is open on port " + socketPort));
 
-console.log("Still working?");
+console.log("Still working? Yep");
+
+app.get("uder", (req, res) => {
+  console.log("Alive Request");
+  res.json("yes");
+});
