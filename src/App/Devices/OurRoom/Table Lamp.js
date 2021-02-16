@@ -60,7 +60,6 @@ app.get("/api/tableLamp/Status", (req, res) => {
 
 app.post("/api/tableLamp/Update", (req, res) => {
   deviceData = {
-    Node: "Table Lamp",
     red: req.body.red,
     green: req.body.green,
     blue: req.body.blue,

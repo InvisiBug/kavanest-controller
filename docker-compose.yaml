@@ -12,7 +12,7 @@ services:
     command: "npm run start:dev"
     ports:
       - 4000:4000 # Fetch
-      # - 5001:5001 # Socket
+      - 5001:5001 # Socket
     networks:
       - proxynet
 
