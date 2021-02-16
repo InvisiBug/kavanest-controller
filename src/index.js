@@ -1,11 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = (module.exports = express());
+const chalk = require("chalk");
 
 app.use(bodyParser.json()); // Used to handle data in post requests
 console.clear();
 
-const fetchPort = process.env.PORT || 5000;
+const fetchPort = process.env.PORT || 4000;
 const socketPort = process.env.PORT || 5001;
 
 let server = require("http").createServer(app);
@@ -14,8 +15,9 @@ global.io = require("socket.io")(server);
 const mqtt = require("mqtt");
 
 // global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
-global.client = mqtt.connect("mqtt://localhost"); //  Production, Can stay as this one
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
+// global.client = mqtt.connect("mqtt://localhost"); //  Production & laptop development, Can stay as this one
+global.client = mqtt.connect("mqtt://mosquitto"); // Docker
 
 client.setMaxListeners(50); // TODO Sort this out later, Disables event listener warning
 
@@ -30,6 +32,14 @@ client.on("message", (topic, payload) => {
   try {
     io.emit("MQTT Messages", JSON.parse(payload));
   } catch {}
+});
+
+// TODO, Check this some time, seems to be needed to get custom fetch requests working
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
+  next();
 });
 
 ////////////////////////////////////////////////////////////////////////
@@ -125,3 +135,10 @@ rooms.map((room, index) => {
 // Start the app
 app.listen(fetchPort, console.log("App is listening on port " + fetchPort));
 io.listen(socketPort, console.log("Socket is open on port " + socketPort));
+
+console.log("Still working? Yep");
+
+app.get("/api/alive", (req, res) => {
+  console.log("Alive test");
+  res.end("I am alive");
+});
