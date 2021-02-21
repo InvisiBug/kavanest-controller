@@ -7,18 +7,23 @@ const { camelRoomName } = require("../../../Helpers/Functions");
 const { hour, now } = require("../../../Helpers/Time");
 const { getRadiatorFanTime, getHeatingTime, updateHeatingTime, updateRadiatorFanTime } = require("../../../Helpers/HeatingModes/Timers");
 
+// Heating and radiator fan set here
 const zoneDemandChecker = () => {
   if (isZonesDemand()) {
+    // Is a room asking for heat
     if (isZoneDemand("ourRoom")) {
-      updateRadiatorFanTime(9999);
+      // Is our room asking for heat
+      updateRadiatorFanTime(9999); // Start radiator fan
     } else if (getRadiatorFanTime() - now() > 1199998) {
-      updateRadiatorFanTime(20);
+      // ! Not sure
+      updateRadiatorFanTime(20); // Start radiator fan overrun
     }
-    updateHeatingTime(99999);
+    updateHeatingTime(99999); // Start heating
   } else {
-    updateHeatingTime(0);
+    updateHeatingTime(0); // Stop heating
     if (getRadiatorFanTime() - now() > 1199998) {
-      updateRadiatorFanTime(20);
+      // ! Not sure
+      updateRadiatorFanTime(20); // Start radiator fan overrun
     }
   }
 };

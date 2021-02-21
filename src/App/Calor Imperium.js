@@ -64,7 +64,6 @@ app.get("/api/ci/boost/off", (req, res) => {
 app.get("/api/ci/on", (req, res) => {
   manualheatingOn();
   sendEnvironmentalData();
-
   res.end(sendEnvironmentalData());
 });
 
