@@ -14,10 +14,10 @@ global.io = require("socket.io")(server);
 
 const mqtt = require("mqtt");
 
-// global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
+global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
 // global.client = mqtt.connect("mqtt://localhost"); //  Production & laptop development, Can stay as this one
-global.client = mqtt.connect("mqtt://mosquitto"); // Docker
+// global.client = mqtt.connect("mqtt://mosquitto"); // Docker
 
 client.setMaxListeners(50); // TODO Sort this out later, Disables event listener warning
 
