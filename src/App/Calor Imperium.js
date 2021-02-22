@@ -20,6 +20,7 @@ const { setZonesSetpoints } = require("../Helpers/HeatingModes/Zones");
 const { setHeatingSchedule } = require("../Helpers/HeatingModes/Schedule");
 const { manualheatingOn, manualheatingOff } = require("../Helpers/HeatingModes/Manual");
 const { openValve, closeValve } = require("./Interfaces/Out/Valves");
+const { setRoomOffset } = require("../Helpers/StorageDrivers/Devices/HeatingSensors");
 ////////////////////////////////////////////////////////////////////////
 //
 //    #    ######  ###
@@ -35,6 +36,11 @@ const { openValve, closeValve } = require("./Interfaces/Out/Valves");
 app.post("/api/ci/schedule/update", (req, res) => {
   setHeatingSchedule(frontendToBackend(req.body.data));
   sendEnvironmentalData();
+  res.end(null);
+});
+
+app.post("/api/ci/offsets", (req, res) => {
+  setRoomOffset(req.body.room, req.body.value);
   res.end(null);
 });
 

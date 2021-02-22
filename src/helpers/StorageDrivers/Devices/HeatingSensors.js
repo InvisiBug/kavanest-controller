@@ -26,9 +26,22 @@ const setRoomSetpoints = (room, vals) => {
   setStore("Environmental Data", environmentalData);
 };
 
+const setRoomOffset = (room, value) => {
+  let environmentalData = getStore("Environmental Data");
+  environmentalData.offsets[room] = parseFloat(value);
+  setStore("Environmental Data", environmentalData);
+};
+
+const getRoomOffset = (room) => {
+  let environmentalData = getStore("Environmental Data");
+  return environmentalData.offsets[room];
+};
+
 module.exports = {
   getRoomHeatingSensor: getRoomHeatingSensor,
   getRoomTemperature: getRoomTemperature,
   getRoomSetpoints: getRoomSetpoints,
   setRoomSetpoints: setRoomSetpoints,
+  setRoomOffset: setRoomOffset,
+  getRoomOffset: getRoomOffset,
 };
