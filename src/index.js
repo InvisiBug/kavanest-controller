@@ -28,7 +28,8 @@ client.subscribe("#", (err) => {
 
 client.on("connect", () => console.log("MQTT Connected"));
 
-// client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload)));
+// client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload))); // With topic
+// client.on("message", (topic, payload) => console.log(chalk.cyan(payload))); // Without topic
 client.on("message", (topic, payload) => {
   try {
     io.emit("MQTT Messages", JSON.parse(payload));

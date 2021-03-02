@@ -10,7 +10,14 @@ const computerAudioControl = (message) => {
   let data = message;
   delete data.isConnected;
 
-  client.publish("Computer Audio Control", JSON.stringify(data));
+  client.publish(
+    "Computer Audio Control",
+    JSON.stringify(data, function (prop, value) {
+      let lower = prop.charAt(0).toUpperCase() + prop.substring(1);
+      if (prop === lower) return value;
+      else this[lower] = value;
+    })
+  );
 };
 
 const computerPowerControl = (message) => {
