@@ -14,8 +14,8 @@ global.io = require("socket.io")(server);
 
 const mqtt = require("mqtt");
 
-global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
-// global.client = mqtt.connect("mqtt://localhost"); //  Production & laptop development, Can stay as this one
+global.client = mqtt.connect("mqtt://192.168.1.46"); //  Production
+// global.client = mqtt.connect("mqtt://localhost"); //  Development & laptop development, Can stay as this one
 
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
 // global.client = mqtt.connect("mqtt://mosquitto"); // Docker
@@ -28,7 +28,8 @@ client.subscribe("#", (err) => {
 
 client.on("connect", () => console.log("MQTT Connected"));
 
-// client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload)));
+// client.on("message", (topic, payload) => console.log(chalk.white("Topic: " + topic) + chalk.cyan(" \t" + payload))); // With topic
+// client.on("message", (topic, payload) => console.log(chalk.cyan(payload))); // Without topic
 client.on("message", (topic, payload) => {
   try {
     io.emit("MQTT Messages", JSON.parse(payload));
@@ -121,7 +122,7 @@ const rooms = [
 
 // TODO, create getRoomOffset and use it for sensors
 rooms.map((room, index) => {
-  newSensor(room.name, room.offset);
+  // newSensor(room.name, room.offset);
   newSensor(room.name);
   // console.log(room.name, getRoomOffset(camelRoomName(room.name)));
   if (room.valve) newValve(room.name);
