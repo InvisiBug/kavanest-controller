@@ -22,6 +22,7 @@ const signalValve = (room) => {
       closeValve(room);
     }
   } else {
+    // De-energize valves if heating is off
     if (isValveConnected(camelRoomName(room)) && !isValveOpen(camelRoomName(room))) {
       openValve(room);
     }

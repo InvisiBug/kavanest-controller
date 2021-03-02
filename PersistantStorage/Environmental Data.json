@@ -1,1 +1,89 @@
-{"heatingMode":"zones","heatingController":{"isConnected":true,"isOn":false},"heatingSensors":{"livingRoom":{"isConnected":true,"temperature":14.2,"humidity":10,"pressure":101459.2},"kitchen":{"isConnected":true,"temperature":16,"humidity":10,"pressure":101459.2},"liamsRoom":{"isConnected":true,"temperature":15.1,"humidity":10,"pressure":101459.2},"study":{"isConnected":true,"temperature":8.9,"humidity":10,"pressure":101459.2},"ourRoom":{"isConnected":true,"temperature":18.2,"humidity":10,"pressure":101459.2}},"radiatorValves":{"livingRoom":{"isConnected":true,"isOpen":true,"demand":false},"kitchen":{"isConnected":true,"isOpen":true,"demand":false},"liamsRoom":{"isConnected":true,"isOpen":true,"demand":false},"study":{"isConnected":true,"isOpen":true,"demand":false},"ourRoom":{"isConnected":true,"isOpen":true,"demand":false}},"setpoints":{"livingRoom":[15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,18,18,13,18,15,15,15],"kitchen":[15,15,15,15,15,15,15,15,15,15,15,15,12,13,14,15,17,17,18,18,18,18,16,17],"study":[16,16,16,16,16,16,16,16,16,19,19,19,19,19,19,19,18,19,18,8,18,18,16,16],"liamsRoom":[6,6,6,6,6,6,6,6,17,18,18,18,18,18,18,18,18,18,19,14,19,19,17,17],"ourRoom":[15,15,15,15,15,15,15,15,19,19,19,20,19,20,20,20,20,20,19,16,19,19,18,16]},"heatingSchedule":{"monday":[8,10,16.3,18.3],"tuesday":[8,10,16.3,18.3],"wednesday":[8,10,16.3,18.3],"thursday":[8,10,16.3,18.3],"friday":[8,10,16.3,18.3],"saturday":[10,12,17,19.3],"sunday":[10,12,17,20],"boostTime":1611771652455,"radiatorFanTime":1617864024074,"heatingTime":1617863964078},"heatingZones":{"isAuto":true,"livingRoom":{"demand":false},"kitchen":{"demand":true},"liamsRoom":{"demand":false},"study":{"demand":false},"ourRoom":{"demand":false}},"heatingTimers":{"boost":1611877244902,"fan":1613935905496,"heating":1613935910508},"radiatorFans (not implemented)":{"ourRoom":{"isAutomatic":true,"isConnected":true,"isOn":true},"livingRoom":{"isAutomatic":true,"isConnected":true,"isOn":true}},"houseStats":{"average":14.5,"minimumTemp":8.9,"maximumTemp":18.2},"outside":{"current":{"temperature":9.39,"humidity":0.85,"pressure":1008.9,"windSpeed":2.65,"windBearing":166,"cloudCover":0.9,"isConnected":true},"next24Hrs":[10.31,8.58,8.34,8.14,7.66,7.68,7.24,6.94,6.68,6.56,6.22,5.95,5.81,5.52,5.53,5.79,6.89,7.31,8.69,11.03,11.71,11.58,10.6,7.85]}}
+{
+  "heatingMode": "zones",
+  "heatingController": { "isConnected": true, "isOn": false },
+  "heatingSensors": {
+    "livingRoom": { "isConnected": true, "temperature": 15.9, "humidity": 51, "pressure": 102273 },
+    "kitchen": { "isConnected": true, "temperature": 17.6, "humidity": 71, "pressure": 102242.5 },
+    "liamsRoom": { "isConnected": true, "temperature": 18.4, "humidity": 55.6, "pressure": 102158.8 },
+    "study": { "isConnected": true, "temperature": 16.6, "humidity": 36.3, "pressure": 102203.3 },
+    "ourRoom": { "isConnected": true, "temperature": 18.3, "humidity": 51.1, "pressure": 102175.1 }
+  },
+  "radiatorValves": {
+    "livingRoom": { "isConnected": true, "isOpen": true, "demand": false },
+    "kitchen": { "isConnected": true, "isOpen": true, "demand": false },
+    "liamsRoom": { "isConnected": true, "isOpen": true, "demand": false },
+    "study": { "isConnected": true, "isOpen": true, "demand": false },
+    "ourRoom": { "isConnected": true, "isOpen": true, "demand": false }
+  },
+  "setpoints": {
+    "livingRoom": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 20, 20, 13, 13, 13, 13, 13, 13, 13, 14, 13, 13, 13],
+    "kitchen": [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 12, 13, 14, 15, 17, 17, 18, 18, 18, 18, 16, 17],
+    "study": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    "liamsRoom": [10, 10, 10, 10, 10, 10, 10, 10, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15, 15, 15, 15],
+    "ourRoom": [10, 10, 10, 10, 10, 10, 10, 10, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 16]
+  },
+  "offsets": { "livingRoom": 2.2, "kitchen": 0, "liamsRoom": -0.9, "study": -7.1, "ourRoom": 2.2 },
+  "heatingSchedule": {
+    "monday": [8, 10, 16.3, 18.3],
+    "tuesday": [8, 10, 16.3, 18.3],
+    "wednesday": [8, 10, 16.3, 18.3],
+    "thursday": [8, 10, 16.3, 18.3],
+    "friday": [8, 10, 16.3, 18.3],
+    "saturday": [10, 12, 17, 19.3],
+    "sunday": [10, 12, 17, 20],
+    "boostTime": 1611771652455,
+    "radiatorFanTime": 1617864024074,
+    "heatingTime": 1617863964078
+  },
+  "heatingZones": {
+    "isAuto": true,
+    "livingRoom": { "demand": false },
+    "kitchen": { "demand": true },
+    "liamsRoom": { "demand": false },
+    "study": { "demand": false },
+    "ourRoom": { "demand": false }
+  },
+  "heatingTimers": { "boost": 1612865110067, "fan": 1614638331261, "heating": 1614643036644 },
+  "radiatorFans (not implemented)": {
+    "ourRoom": { "isAutomatic": true, "isConnected": true, "isOn": true },
+    "livingRoom": { "isAutomatic": true, "isConnected": true, "isOn": true }
+  },
+  "houseStats": { "average": 17.4, "minimumTemp": 15.9, "maximumTemp": 18.4 },
+  "outside": {
+    "current": {
+      "temperature": -0.84,
+      "humidity": 0.86,
+      "pressure": 1032.2,
+      "windSpeed": 2.24,
+      "windBearing": 69,
+      "cloudCover": 0.67,
+      "isConnected": true
+    },
+    "next24Hrs": [
+      -0.83,
+      -0.96,
+      -1.31,
+      -1.51,
+      -1.55,
+      -1.55,
+      -1.6,
+      -1.96,
+      -1.76,
+      -1.04,
+      0.22,
+      1.74,
+      3.16,
+      4.21,
+      6.1,
+      7.4,
+      8.17,
+      8,
+      6.96,
+      5.48,
+      4.45,
+      3.43,
+      2.68,
+      2.22
+    ]
+  }
+}

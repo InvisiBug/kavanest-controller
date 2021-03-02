@@ -1,6 +1,8 @@
 const { getStore, setStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 const { camelRoomName, printTime, currentTime } = require("../../../Helpers/Functions");
 
+const { getRoomOffset } = require("../../../Helpers/StorageDrivers/Devices/HeatingSensors");
+
 // Historical Data (Tingo)
 const path = require("path");
 const Engine = require("tingodb")();
@@ -17,7 +19,7 @@ const disconnectedState = {
   pressure: -1,
 };
 
-const newSensor = (room, offset) => {
+const newSensor = (room) => {
   var timer;
   var deviceData = disconnectedState;
 
@@ -50,7 +52,7 @@ const newSensor = (room, offset) => {
           ...deviceData,
           isConnected: true,
           direction: oldData.heatingSensors[camelRoomName(room)].direction,
-          temperature: Math.round((mqttData.temperature + offset) * 100) / 100,
+          temperature: Math.round((mqttData.temperature + getRoomOffset(camelRoomName(room))) * 100) / 100,
           humidity: mqttData.humidity,
           pressure: mqttData.pressure,
         };

@@ -6,8 +6,15 @@ const radiatorFanControl = (message) => {
   client.publish("Radiator Fan Control", message);
 };
 
+// const computerAudioControl = (message) => {
+//   client.publish("Computer Audio Control", message);
+// };
+
 const computerAudioControl = (message) => {
-  client.publish("Computer Audio Control", message);
+  let data = message;
+  delete data.isConnected;
+
+  client.publish("Computer Audio Control", data);
 };
 
 const computerPowerControl = (message) => {
@@ -37,6 +44,8 @@ const screenLEDsControl = (message) => {
 const radiatorValveControl = (valve, message) => {
   client.publish(`${valve} Radiator Valve Control`, message);
 };
+
+// TODO, send out offset values
 
 module.exports = {
   heatingControl: heatingControl,
