@@ -6,7 +6,16 @@ const updateBoostTime = (time = 0) => {
 };
 
 const updateRadiatorFanTime = (time = 0) => {
-  setHeatingTimers("fan", offsetTimeMins(time));
+  let val = 0;
+  if (time === "on") {
+    val = 9999;
+  } else if (time === "off") {
+    val = 0;
+  } else if (time === "overrun") {
+    val = 20;
+  }
+
+  setHeatingTimers("fan", offsetTimeMins(val));
 };
 
 const updateHeatingTime = (time = 0) => {

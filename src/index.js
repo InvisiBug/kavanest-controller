@@ -14,8 +14,8 @@ global.io = require("socket.io")(server);
 
 const mqtt = require("mqtt");
 
-global.client = mqtt.connect("mqtt://192.168.1.46"); //  Production
-// global.client = mqtt.connect("mqtt://localhost"); //  Development & laptop development, Can stay as this one
+// global.client = mqtt.connect("mqtt://192.168.1.46"); //  Production
+global.client = mqtt.connect("mqtt://localhost"); //  Development & laptop development, Can stay as this one
 
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
 // global.client = mqtt.connect("mqtt://mosquitto"); // Docker

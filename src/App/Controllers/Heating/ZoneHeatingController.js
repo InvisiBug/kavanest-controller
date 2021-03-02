@@ -26,16 +26,16 @@ const zoneDemandChecker = () => {
     // Is a room asking for heat
     if (isZoneDemand("ourRoom")) {
       // Is our room asking for heat
-      updateRadiatorFanTime(9999); // Start radiator fan
+      updateRadiatorFanTime("on"); // Start radiator fan
     } else if (getRadiatorFanTime() - now() > overrunTime) {
-      updateRadiatorFanTime(20); // Start radiator fan overrun
+      updateRadiatorFanTime("overrun"); // Start radiator fan overrun
     }
     updateHeatingTime(99999); // Start heating
   } else {
     updateHeatingTime(0); // Stop heating
     if (getRadiatorFanTime() - now() > overrunTime) {
       // ! Not sure
-      updateRadiatorFanTime(20); // Start radiator fan overrun
+      updateRadiatorFanTime("overrun"); // Start radiator fan overrun
     }
   }
 };
