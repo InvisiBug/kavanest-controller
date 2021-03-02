@@ -1,23 +1,8 @@
-////////////////////////////////////////////////////////////////////////
-//
-//   ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗   ██╗████████╗███████╗██████╗      █████╗ ██╗   ██╗██████╗ ██╗ ██████╗
-//  ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██║   ██║╚══██╔══╝██╔════╝██╔══██╗    ██╔══██╗██║   ██║██╔══██╗██║██╔═══██╗
-//  ██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║   ██║   █████╗  ██████╔╝    ███████║██║   ██║██║  ██║██║██║   ██║
-//  ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║   ██║   ██╔══╝  ██╔══██╗    ██╔══██║██║   ██║██║  ██║██║██║   ██║
-//  ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝   ██║   ███████╗██║  ██║    ██║  ██║╚██████╔╝██████╔╝██║╚██████╔╝
-//   ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝    ╚═╝   ╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═╝ ╚═════╝
-//
-////////////////////////////////////////////////////////////////////////
-//
-//   #####
-//  #     #  ####  #    # ###### #  ####
-//  #       #    # ##   # #      # #    #
-//  #       #    # # #  # #####  # #
-//  #       #    # #  # # #      # #  ###
-//  #     # #    # #   ## #      # #    #
-//   #####   ####  #    # #      #  ####
-//
-////////////////////////////////////////////////////////////////////////
+/*
+  Computer audio works differently to prettymuch everything else
+  Its basically wireless json
+  The mqtt out has been messed with, take a look
+*/
 const express = require("express");
 const app = (module.exports = express());
 const { computerAudioControl } = require("../../Interfaces/Out/mqttOut");
@@ -33,18 +18,16 @@ const { computerAudioControl } = require("../../Interfaces/Out/mqttOut");
 //     #    #    # #    # # #    # #####  ###### ######  ####
 //
 ////////////////////////////////////////////////////////////////////////
-var computerAudio = null;
-var timer;
-var deviceData = {
+const disconnectedState = {
   isConnected: false,
   left: false,
   right: false,
   sub: false,
   mixer: false,
 };
-// var timer = setTimeout(() => {
-//   deviceData.isConnected = false;
-// }, 10 * 1000);
+
+var timer;
+var deviceData = disconnectedState;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -57,61 +40,41 @@ var deviceData = {
 // #     # #       ###
 //
 ////////////////////////////////////////////////////////////////////////
-app.get("/api/computerAudio/Status", (req, res) => {
-  res.json(computerAudio);
-});
 
 app.post("/api/ComputerAudio/On", (req, res) => {
   // console.log("Computer Audio On: " + req.body.Device);
-  if (req.body.Device == "Master") {
-    computerAudioControl("1");
-
-    computerAudio.Left = true;
-    computerAudio.Right = true;
-    computerAudio.Sub = true;
-    computerAudio.Mixer = true;
+  if (req.body.device == "master") {
+    // computerAudioControl("1");
+    client.publish("Computer Audio Control", "1");
   } else {
-    req.body.Device == "Left"
-      ? (computerAudio.Left = true)
-      : req.body.Device == "Right"
-      ? (computerAudio.Right = true)
-      : req.body.Device == "Sub"
-      ? (computerAudio.Sub = true)
-      : req.body.Device == "Mixer"
-      ? (computerAudio.Mixer = true)
-      : null;
+    deviceData[req.body.device] = true;
 
-    computerAudioControl(JSON.stringify(computerAudio));
+    // let data = deviceData;
+    // delete data.isConnected;
+    // computerAudioControl(JSON.stringify(data));
+
+    computerAudioControl(data);
   }
 
-  res.json(computerAudio);
+  sendSocketData();
+  res.json(null);
 });
 
 app.post("/api/ComputerAudio/Off", (req, res) => {
-  // console.log("Computer Audio Off: " + req.body.Device);
-  if (req.body.Device == "Master") {
-    computerAudioControl("0");
-
-    computerAudio.Left = false;
-    computerAudio.Right = false;
-    computerAudio.Sub = false;
-    computerAudio.Mixer = false;
+  if (req.body.device == "master") {
+    client.publish("Computer Audio Control", "0");
   } else {
-    req.body.Device == "Left"
-      ? (computerAudio.Left = false)
-      : req.body.Device == "Right"
-      ? (computerAudio.Right = false)
-      : req.body.Device == "Sub"
-      ? (computerAudio.Sub = false)
-      : req.body.Device == "Mixer"
-      ? (computerAudio.Mixer = false)
-      : null;
+    deviceData[req.body.device] = false;
 
-    computerAudioControl(JSON.stringify(computerAudio));
+    let data = deviceData;
+    delete data.isConnected;
+
+    computerAudioControl(JSON.stringify(data));
   }
-  // console.log(computerAudio);
+  console.log(deviceData);
 
-  res.json(computerAudio);
+  sendSocketData();
+  res.json(null);
 });
 
 ////////////////////////////////////////////////////////////////////////
@@ -127,15 +90,6 @@ app.post("/api/ComputerAudio/Off", (req, res) => {
 ////////////////////////////////////////////////////////////////////////
 client.on("message", (topic, payload) => {
   if (topic == "Computer Audio") {
-    if (payload != "Computer Audio Disconnected") {
-      computerAudio = JSON.parse(payload);
-    } else {
-      computerAudio = null;
-      console.log("Computer Audio Disconnected");
-    }
-  }
-
-  if (topic == "Computer Audio") {
     clearTimeout(timer);
 
     timer = setTimeout(() => {
@@ -143,13 +97,19 @@ client.on("message", (topic, payload) => {
     }, 10 * 1000);
 
     if (payload != "Computer Audio Disconnected") {
+      jsonData = JSON.parse(payload, function (prop, value) {
+        var lower = prop.toLowerCase();
+        if (prop === lower) return value;
+        else this[lower] = value;
+      });
+
       deviceData = {
         ...deviceData,
         isConnected: true,
-        left: JSON.parse(payload).Left,
-        right: JSON.parse(payload).Right,
-        sub: JSON.parse(payload).Sub,
-        mixer: JSON.parse(payload).Mixer,
+        left: jsonData.left,
+        right: jsonData.right,
+        sub: jsonData.sub,
+        mixer: jsonData.mixer,
       };
     } else {
       console.log("Computer Audio Disconnected");
@@ -173,6 +133,6 @@ const sensorUpdate = setInterval(() => {
 }, 1 * 1000);
 
 const sendSocketData = () => {
-  io.emit("New Computer Audio", deviceData);
-  io.emit("Computer Audio", computerAudio);
+  io.emit("Computer Audio", deviceData);
+  // console.log("Send socket data", deviceData);
 };

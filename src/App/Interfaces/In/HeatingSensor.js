@@ -22,7 +22,6 @@ const disconnectedState = {
 const newSensor = (room) => {
   var timer;
   var deviceData = disconnectedState;
-  var offset = getRoomOffset(camelRoomName(room));
 
   client.on("message", (topic, payload) => {
     if (topic == `${room} ${"Heating Sensor"}`) {

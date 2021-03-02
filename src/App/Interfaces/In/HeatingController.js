@@ -35,13 +35,7 @@ client.on("message", (topic, payload) => {
       console.log(`${"Heating Disconnected"} ${functions.printTime()}`);
     }
   } else if (topic === "Heating Button") {
-    const now = new Date().getTime();
-    if (getScheduleHeating().boostTime < now) {
-      // TODO, Decide what to do when the heating button is pressed
-      boostOn();
-    } else {
-      boostOff();
-    }
+    console.log("Heating button pressed");
   }
 });
 

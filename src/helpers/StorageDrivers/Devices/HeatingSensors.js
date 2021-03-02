@@ -1,3 +1,4 @@
+const { camelRoomName } = require("../../Functions");
 const { getStore, setStore } = require("../LowLevelDriver");
 
 const getRoomHeatingSensor = (room) => {
@@ -36,6 +37,21 @@ const getRoomOffset = (room) => {
   let environmentalData = getStore("Environmental Data");
   return environmentalData.offsets[room];
 };
+
+const broadcastOffsets = () => {
+  setInterval(() => {
+    var data = {
+      "Living Room": getRoomOffset(camelRoomName("Living Room")),
+      Kitchen: getRoomOffset(camelRoomName("Kitchen")),
+      "Liams Room": getRoomOffset(camelRoomName("Liams Room")),
+      Study: getRoomOffset(camelRoomName("Study")),
+      "Our Room": getRoomOffset(camelRoomName("Our Room")),
+    };
+    client.publish(`Room Offsets`, JSON.stringify(data));
+  }, 60 * 1000);
+};
+
+broadcastOffsets();
 
 module.exports = {
   getRoomHeatingSensor: getRoomHeatingSensor,
