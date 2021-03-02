@@ -14,8 +14,8 @@ global.io = require("socket.io")(server);
 
 const mqtt = require("mqtt");
 
-global.client = mqtt.connect("mqtt://192.168.1.46"); //  Deployment
-// global.client = mqtt.connect("mqtt://localhost"); //  Production & laptop development, Can stay as this one
+global.client = mqtt.connect("mqtt://192.168.1.46"); //  Production
+// global.client = mqtt.connect("mqtt://localhost"); //  Development & laptop development, Can stay as this one
 
 // global.client = mqtt.connect("mqtt://kavanet.io"); // Dont use this one
 // global.client = mqtt.connect("mqtt://mosquitto"); // Docker
@@ -121,7 +121,7 @@ const rooms = [
 
 // TODO, create getRoomOffset and use it for sensors
 rooms.map((room, index) => {
-  newSensor(room.name, room.offset);
+  // newSensor(room.name, room.offset);
   newSensor(room.name);
   // console.log(room.name, getRoomOffset(camelRoomName(room.name)));
   if (room.valve) newValve(room.name);

@@ -1,7 +1,7 @@
 /*
-  Computer audio works differently to prettymuch everything else
+  Computer audio works differently to pretty much everything else
   Its basically wireless json
-  The mqtt out has been messed with, take a look
+  The mqtt out has been messed with to remove the isConnected prop, take a look
 */
 const express = require("express");
 const app = (module.exports = express());
@@ -25,7 +25,6 @@ const disconnectedState = {
   sub: false,
   mixer: false,
 };
-
 var timer;
 var deviceData = disconnectedState;
 
@@ -40,39 +39,22 @@ var deviceData = disconnectedState;
 // #     # #       ###
 //
 ////////////////////////////////////////////////////////////////////////
-
-app.post("/api/ComputerAudio/On", (req, res) => {
-  // console.log("Computer Audio On: " + req.body.Device);
-  if (req.body.device == "master") {
-    // computerAudioControl("1");
-    client.publish("Computer Audio Control", "1");
-  } else {
-    deviceData[req.body.device] = true;
-
-    // let data = deviceData;
-    // delete data.isConnected;
-    // computerAudioControl(JSON.stringify(data));
-
-    computerAudioControl(data);
+app.post("/api/ComputerAudio", (req, res) => {
+  if (req.body.state === "on") {
+    if (req.body.device == "master") {
+      client.publish("Computer Audio Control", "1");
+    } else {
+      deviceData[req.body.device] = true;
+      computerAudioControl(deviceData);
+    }
+  } else if (req.body.state === "off") {
+    if (req.body.device == "master") {
+      client.publish("Computer Audio Control", "0");
+    } else {
+      deviceData[req.body.device] = false;
+      computerAudioControl(deviceData);
+    }
   }
-
-  sendSocketData();
-  res.json(null);
-});
-
-app.post("/api/ComputerAudio/Off", (req, res) => {
-  if (req.body.device == "master") {
-    client.publish("Computer Audio Control", "0");
-  } else {
-    deviceData[req.body.device] = false;
-
-    let data = deviceData;
-    delete data.isConnected;
-
-    computerAudioControl(JSON.stringify(data));
-  }
-  console.log(deviceData);
-
   sendSocketData();
   res.json(null);
 });
@@ -98,7 +80,7 @@ client.on("message", (topic, payload) => {
 
     if (payload != "Computer Audio Disconnected") {
       jsonData = JSON.parse(payload, function (prop, value) {
-        var lower = prop.toLowerCase();
+        let lower = prop.toLowerCase();
         if (prop === lower) return value;
         else this[lower] = value;
       });
@@ -134,5 +116,4 @@ const sensorUpdate = setInterval(() => {
 
 const sendSocketData = () => {
   io.emit("Computer Audio", deviceData);
-  // console.log("Send socket data", deviceData);
 };

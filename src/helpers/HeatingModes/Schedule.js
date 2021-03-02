@@ -75,7 +75,6 @@ const heatingOff = () => {
   }
 };
 
-// TODO, move the below out of the schedule file
 const getHeatingController = () => {
   let heatingController = getStore("Environmental Data").heatingController;
   return heatingController;
