@@ -6,7 +6,7 @@ const chalk = require("chalk");
 app.use(bodyParser.json()); // Used to handle data in post requests
 console.clear();
 
-const fetchPort = process.env.PORT || 4000;
+const fetchPort = process.env.PORT || 5000;
 const socketPort = process.env.PORT || 5001;
 
 let server = require("http").createServer(app);
