@@ -38,16 +38,17 @@ const boostOff = () => {
 //
 ////////////////////////////////////////////////////////////////////////
 // Radiator Fan
-const radiatorFanOn = (time = 99999) => {
-  updateRadiatorFanTime(time);
+const radiatorFanOn = () => {
+  updateRadiatorFanTime("on");
+  console.log("hjds");
 };
 
 const radiatorFanOff = () => {
-  updateRadiatorFanTime();
+  updateRadiatorFanTime("off");
 };
 
 const radiatorFanOverrun = () => {
-  updateRadiatorFanTime(overRunTime);
+  updateRadiatorFanTime("overrun");
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -61,7 +62,7 @@ const radiatorFanOverrun = () => {
 //
 ////////////////////////////////////////////////////////////////////////
 const heatingOn = (time = 99999) => {
-  radiatorFanOn(time + overRunTime);
+  radiatorFanOn();
   updateHeatingTime(time);
 };
 

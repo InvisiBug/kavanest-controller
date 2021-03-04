@@ -4,6 +4,7 @@ const { radiatorFanControl } = require("../Out/mqttOut");
 
 const { getStore, setStore } = require("../../../Helpers/StorageDrivers/LowLevelDriver");
 const { setRadiatorFan } = require("../../../Helpers/StorageDrivers/Devices/RadiatorFan");
+const { updateRadiatorFanTime } = require("../../../Helpers/HeatingModes/Timers");
 
 const disconnectedState = {
   isAutomatic: true,
@@ -42,7 +43,7 @@ app.get("/api/RadiatorFanAutomatic/off", (req, res) => {
 app.get("/api/RadiatorFan/On", (req, res) => {
   if (!deviceData.isAutomatic) {
     deviceData.isOn = true;
-    radiatorFanControl("1");
+    updateRadiatorFanTime("on");
   }
   sendSocketData();
   res.json(null);
@@ -51,7 +52,7 @@ app.get("/api/RadiatorFan/On", (req, res) => {
 app.get("/api/RadiatorFan/Off", (req, res) => {
   if (!deviceData.isAutomatic) {
     deviceData.isOn = false;
-    radiatorFanControl("0");
+    updateRadiatorFanTime("off");
   }
   sendSocketData();
   res.json(null);
@@ -72,9 +73,9 @@ client.on("message", (topic, payload) => {
   if (topic == "Radiator Fan") {
     clearTimeout(timer);
 
-    // timer = setTimeout(() => {
-    //   setStore("Radiator Fan", disconnectedState);
-    // }, 10 * 1000);
+    timer = setTimeout(() => {
+      setStore("Radiator Fan", disconnectedState);
+    }, 10 * 1000);
 
     if (payload != "Radiator Fan Disconnected") {
       const mqttData = JSON.parse(payload);
@@ -85,8 +86,7 @@ client.on("message", (topic, payload) => {
         isOn: mqttData.state,
       };
 
-      setStore("Radiator Fan", deviceData);
-      // setRadiatorFan(deviceData);
+      setRadiatorFan(deviceData);
       // console.log(`MQTT: ${mqttData.state}, Storage: ${getStore("Radiator Fan").isOn}`);
     } else {
       console.log("Radiator Fan Disconnected");

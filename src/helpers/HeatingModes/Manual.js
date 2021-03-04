@@ -6,12 +6,12 @@ const { updateHeatingTime, updateRadiatorFanTime } = require("../HeatingModes/Ti
 
 const manualheatingOn = () => {
   updateHeatingTime(9999);
-  updateRadiatorFanTime(9999);
+  updateRadiatorFanTime("on");
 };
 
 const manualheatingOff = () => {
   updateHeatingTime(0);
-  updateRadiatorFanTime(20); // should be 20
+  updateRadiatorFanTime("overrun"); // should be 20
 };
 
 module.exports = {

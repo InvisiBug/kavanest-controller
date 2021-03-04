@@ -20,10 +20,12 @@ const isRadiatorFanOn = () => {
   return data.isOn;
 };
 
-const setRadiatorFan = (state) => {
+const setRadiatorFan = (deviceData) => {
   // ! Not working yet
   // TODO, will need to scale this later when new fans are added
-  const data = getEnvironmentalData().radiatorFans.ourRoom;
+  // const data = getEnvironmentalData().radiatorFans.ourRoom;
+
+  setStore("Radiator Fan", deviceData);
 
   // data
 
@@ -33,8 +35,8 @@ const setRadiatorFan = (state) => {
 
   // setEnvironmentalData(data);
 
-  console.log(data);
-  console.log(state);
+  // console.log(data);
+  // console.log(state);
 };
 
 // setRadiatorFan(true, true, true);
