@@ -1,7 +1,7 @@
 const { isRadiatorFanAuto, isRadiatorFanConnected, isRadiatorFanOn } = require("../../../Helpers/StorageDrivers/Devices/RadiatorFan");
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
 const { getRadiatorFanTime, getBoostTime, getHeatingTime } = require("../../../Helpers/HeatingModes/Timers");
-
+const { now } = require("../../../Helpers/Time");
 /*
   Is our radfan in auto and connected
     Is now before turn off time
@@ -13,7 +13,7 @@ const { getRadiatorFanTime, getBoostTime, getHeatingTime } = require("../../../H
 */
 const radiatorFanController = () => {
   if (isRadiatorFanAuto() && isRadiatorFanConnected()) {
-    if (new Date() < getRadiatorFanTime()) {
+    if (now() < getRadiatorFanTime()) {
       if (!isRadiatorFanOn()) {
         radiatorFanControl("1");
       }

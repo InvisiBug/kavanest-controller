@@ -35,12 +35,12 @@ const getHeatingTime = () => {
 };
 
 module.exports = {
-  updateBoostTime: updateBoostTime,
-  updateRadiatorFanTime: updateRadiatorFanTime,
-  updateHeatingTime: updateHeatingTime,
-  getRadiatorFanTime: getRadiatorFanTime,
-  getBoostTime: getBoostTime,
-  getHeatingTime: getHeatingTime,
+  updateBoostTime,
+  updateRadiatorFanTime,
+  updateHeatingTime,
+  getRadiatorFanTime,
+  getBoostTime,
+  getHeatingTime,
 };
 
 updateRadiatorFanTime();

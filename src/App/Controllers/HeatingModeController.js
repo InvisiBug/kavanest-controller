@@ -16,11 +16,6 @@ setInterval(() => {
 
     case "schedule":
       schedule(rooms);
-
-      setAllZonesDemand(true);
-      rooms.map((room) => {
-        signalValve(room);
-      });
       break;
 
     case "manual":

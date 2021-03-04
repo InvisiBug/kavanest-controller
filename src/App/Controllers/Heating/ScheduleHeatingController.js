@@ -6,7 +6,9 @@ const { signalValve } = require("../DeviceControllers/ValveController");
 
 const schedule = (rooms) => {
   scheduleChecker();
+
   setAllZonesDemand(true);
+
   rooms.map((room) => {
     signalValve(room);
   });
