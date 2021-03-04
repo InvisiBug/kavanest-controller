@@ -6,20 +6,21 @@ const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../.
 const { camelRoomName } = require("../../../Helpers/Functions");
 const { hour, now } = require("../../../Helpers/Time");
 const { getRadiatorFanTime, getHeatingTime, updateHeatingTime, updateRadiatorFanTime } = require("../../../Helpers/HeatingModes/Timers");
-
-const rooms = ["Our Room", "Study", "Living Room", "Liams Room"];
+const { signalValve } = require("../DeviceControllers/ValveController");
 /*
-  1. Check room temperatures and set demands (roomDemandSetter)
+  1. Check room temperatures and set demands, on a per room basis (roomDemandSetter)
   2. Check room demands and set heating & fan timers accordingly
 */
 
-const zones = () => {
-  zoneHeating();
-  zoneRadiatorFan();
+const zones = (rooms) => {
   zoneDemandChecker();
 
   rooms.map((room) => {
     roomDemandSetter(room);
+  });
+
+  rooms.map((room) => {
+    signalValve(room);
   });
 };
 
@@ -68,47 +69,8 @@ const zoneDemandChecker = () => {
   }
 };
 
-// Radiator fan and heating controller below will be moved to their own controller
-/*
-  Is our radfan in auto and connected
-    Is now before turn off time
-      Is radfan off
-        - Turn radfan on
-    else
-      Is radfan on
-        - Turn radFan off
-*/
-const zoneRadiatorFan = () => {
-  if (isRadiatorFanAuto() && isRadiatorFanConnected()) {
-    if (new Date() < getRadiatorFanTime()) {
-      if (!isRadiatorFanOn()) {
-        radiatorFanControl("1");
-      }
-    } else {
-      if (isRadiatorFanOn()) {
-        radiatorFanControl("0");
-      }
-    }
-  }
-};
-
-/*
-  Is heating controller connected and 
-*/
-const zoneHeating = () => {
-  if (now() < getHeatingTime() && isHeatingControllerConnected()) {
-    if (!isHeatingControllerOn()) {
-      heatingControl("1");
-    }
-  } else if (isHeatingControllerOn()) {
-    heatingControl("0");
-  }
-};
-
 module.exports = {
-  zoneDemandChecker: zoneDemandChecker,
-  zoneRadiatorFan: zoneRadiatorFan,
-  roomDemandSetter: roomDemandSetter,
-  zoneHeating: zoneHeating,
+  zoneDemandChecker,
+  roomDemandSetter,
   zones,
 };

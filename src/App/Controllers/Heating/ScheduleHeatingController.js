@@ -7,8 +7,6 @@ const { day, now, time, days } = require("../../../Helpers/Time");
 
 const schedule = () => {
   scheduleChecker();
-  scheduleHeating();
-  scheduleRadiatorFan();
 };
 
 const scheduleChecker = () => {
@@ -20,32 +18,6 @@ const scheduleChecker = () => {
       heatingOn();
     } else {
       heatingOff();
-    }
-  }
-};
-
-const scheduleHeating = () => {
-  if (now() < getHeatingTime()) {
-    if (isHeatingControllerConnected() && !isHeatingControllerOn()) {
-      heatingControl("1");
-    }
-  } else if (isHeatingControllerConnected() && isHeatingControllerOn()) {
-    heatingControl("0");
-  }
-};
-
-// Radiator fan and heating controller below will be moved to their own controller
-
-const scheduleRadiatorFan = () => {
-  if (isRadiatorFanAuto() && isRadiatorFanConnected()) {
-    if (now() < getRadiatorFanTime()) {
-      if (!isRadiatorFanOn()) {
-        radiatorFanControl("1");
-      }
-    } else {
-      if (isRadiatorFanOn()) {
-        radiatorFanControl("0");
-      }
     }
   }
 };

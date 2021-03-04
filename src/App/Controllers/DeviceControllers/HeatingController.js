@@ -1,31 +1,10 @@
 // Radiator fan and heating controller below will be moved to their own controller
-/*
-  Is our radfan in auto and connected
-    Is now before turn off time
-      Is radfan off
-        - Turn radfan on
-    else
-      Is radfan on
-        - Turn radFan off
-*/
-const zoneRadiatorFan = () => {
-  if (isRadiatorFanAuto() && isRadiatorFanConnected()) {
-    if (new Date() < getRadiatorFanTime()) {
-      if (!isRadiatorFanOn()) {
-        radiatorFanControl("1");
-      }
-    } else {
-      if (isRadiatorFanOn()) {
-        radiatorFanControl("0");
-      }
-    }
-  }
-};
+const { isHeatingControllerConnected, isHeatingControllerOn } = require("../../../Helpers/StorageDrivers/Devices/HeatingController");
+const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
+const { getRadiatorFanTime, getBoostTime, getHeatingTime } = require("../../../Helpers/HeatingModes/Timers");
+const { hour, now } = require("../../../Helpers/Time");
 
-/*
-  Is heating controller connected and 
-*/
-const zoneHeating = () => {
+const heatingController = () => {
   if (now() < getHeatingTime() && isHeatingControllerConnected()) {
     if (!isHeatingControllerOn()) {
       heatingControl("1");
@@ -34,3 +13,5 @@ const zoneHeating = () => {
     heatingControl("0");
   }
 };
+
+module.exports = { heatingController };
