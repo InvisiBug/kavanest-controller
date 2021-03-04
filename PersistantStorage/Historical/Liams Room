@@ -3652,3 +3652,6 @@
 {"k":"0000000084","o":"0000000166","v":"001"}
 {"_id":1219,"_uid":1219,"_dt":1614891600584,"_s":"18c9cae3533928e3042ce2bc1799a7cf"}
 {"temperature":15.1,"humidity":10,"timestamp":{"Hour":21,"Minute":0,"Day":4,"Month":3,"Year":2021,"Days":"Thursday","Months":"March"},"_id":{"$wrap":"$oid","v":1219}}
+{"k":"0000000084","o":"0000000166","v":"001"}
+{"_id":1220,"_uid":1220,"_dt":1614895200575,"_s":"83d251c50d7e53456b355c35c04cff1c"}
+{"temperature":15.1,"humidity":10,"timestamp":{"Hour":22,"Minute":0,"Day":4,"Month":3,"Year":2021,"Days":"Thursday","Months":"March"},"_id":{"$wrap":"$oid","v":1220}}

@@ -46,7 +46,8 @@ app.post("/api/ci/offsets", (req, res) => {
 
 // ----------  Zone Setpoints  ----------
 app.post("/api/ci/setpoints", (req, res) => {
-  setZonesSetpoints(req.body.room, req.body.vals);
+  setZonesSetpoints(req.body.room, req.body.vals, req.body.weekday);
+  // console.log(req.body);
   sendEnvironmentalData();
   res.end(null);
 });
