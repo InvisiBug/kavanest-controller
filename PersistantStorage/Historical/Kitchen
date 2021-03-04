@@ -3505,3 +3505,9 @@
 {"k":"0000000084","o":"0000000167","v":"001"}
 {"_id":1170,"_uid":1170,"_dt":1614715204603,"_s":"e329afc7cc402cc6e4a8828caf9cf39e"}
 {"temperature":18.9,"humidity":68.9,"timestamp":{"Hour":20,"Minute":0,"Day":2,"Month":3,"Year":2021,"Days":"Tuesday","Months":"March"},"_id":{"$wrap":"$oid","v":1170}}
+{"k":"0000000084","o":"0000000165","v":"001"}
+{"_id":1171,"_uid":1171,"_dt":1614801600560,"_s":"97ded063589ceaa2142f22aadf7242b7"}
+{"temperature":-1,"humidity":-1,"timestamp":{"Hour":20,"Minute":0,"Day":3,"Month":3,"Year":2021,"Days":"Wednesday","Months":"March"},"_id":{"$wrap":"$oid","v":1171}}
+{"k":"0000000084","o":"0000000164","v":"001"}
+{"_id":1172,"_uid":1172,"_dt":1614855600842,"_s":"c8d04799e2a0f0148ee48c60130a1ff6"}
+{"temperature":16,"humidity":10,"timestamp":{"Hour":11,"Minute":0,"Day":4,"Month":3,"Year":2021,"Days":"Thursday","Months":"March"},"_id":{"$wrap":"$oid","v":1172}}

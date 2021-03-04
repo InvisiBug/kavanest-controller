@@ -5,6 +5,12 @@ const { heatingOn, heatingOff, getScheduleHeating } = require("../../../Helpers/
 const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqttOut");
 const { day, now, time, days } = require("../../../Helpers/Time");
 
+const schedule = () => {
+  scheduleChecker();
+  scheduleHeating();
+  scheduleRadiatorFan();
+};
+
 const scheduleChecker = () => {
   if (getBoostTime() < now()) {
     if (
@@ -28,6 +34,8 @@ const scheduleHeating = () => {
   }
 };
 
+// Radiator fan and heating controller below will be moved to their own controller
+
 const scheduleRadiatorFan = () => {
   if (isRadiatorFanAuto() && isRadiatorFanConnected()) {
     if (now() < getRadiatorFanTime()) {
@@ -43,7 +51,5 @@ const scheduleRadiatorFan = () => {
 };
 
 module.exports = {
-  scheduleChecker: scheduleChecker,
-  scheduleHeating: scheduleHeating,
-  scheduleRadiatorFan: scheduleRadiatorFan,
+  schedule,
 };

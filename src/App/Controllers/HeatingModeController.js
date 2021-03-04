@@ -1,29 +1,24 @@
 const { zoneHeating, zoneRadiatorFan, roomDemandSetter, zoneDemandChecker } = require("./Heating/ZoneHeatingController");
-const { scheduleChecker, scheduleHeating, scheduleRadiatorFan } = require("./Heating/ScheduleHeatingController");
+const { schedule } = require("./Heating/ScheduleHeatingController");
 const { checkFan, checkHeating } = require("./Heating/ManualHeatingController");
 const { setAllZonesDemand } = require("../../Helpers/HeatingModes/Zones");
 const { getHeatingMode } = require("../../Helpers/HeatingModes/Modes");
-const { signalValve } = require("./ValveController");
+const { signalValve } = require("./DeviceControllers/ValveController");
+const { zones } = require("./Heating/ZoneHeatingController");
 
 const rooms = ["Our Room", "Study", "Living Room", "Liams Room"];
 
 setInterval(() => {
   switch (getHeatingMode()) {
     case "zones":
-      zoneHeating();
-      zoneRadiatorFan();
-      zoneDemandChecker();
-
+      zones();
       rooms.map((room) => {
         signalValve(room);
-        roomDemandSetter(room);
       });
       break;
 
     case "schedule":
-      scheduleChecker();
-      scheduleHeating();
-      scheduleRadiatorFan();
+      schedule();
 
       setAllZonesDemand(true);
       rooms.map((room) => {

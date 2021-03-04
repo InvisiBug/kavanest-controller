@@ -1,7 +1,7 @@
-const { isValveOpen, isValveConnected } = require("../../Helpers/StorageDrivers/Devices/Valves");
-const { openValve, closeValve } = require("../Interfaces/Out/Valves");
-const { isZoneDemand, isZonesDemand } = require("../../Helpers/HeatingModes/Zones");
-const { camelRoomName } = require("../../Helpers/Functions");
+const { isValveOpen, isValveConnected } = require("../../../Helpers/StorageDrivers/Devices/Valves");
+const { openValve, closeValve } = require("../../Interfaces/Out/Valves");
+const { isZoneDemand, isZonesDemand } = require("../../../Helpers/HeatingModes/Zones");
+const { camelRoomName } = require("../../../Helpers/Functions");
 
 const newValveController = (room) => {
   setInterval(() => {
@@ -30,6 +30,6 @@ const signalValve = (room) => {
 };
 
 module.exports = {
-  newValveController: newValveController,
-  signalValve: signalValve,
+  newValveController,
+  signalValve,
 };
