@@ -4,6 +4,10 @@ const { radiatorFanControl, heatingControl } = require("../../Interfaces/Out/mqt
 const { getRadiatorFanTime, getBoostTime, getHeatingTime } = require("../../../Helpers/HeatingModes/Timers");
 const { hour, now } = require("../../../Helpers/Time");
 
+/*
+  The heating controller watches the heating time datapoint
+  allong with the connected datapoint
+*/
 const heatingController = () => {
   if (now() < getHeatingTime() && isHeatingControllerConnected()) {
     if (!isHeatingControllerOn()) {

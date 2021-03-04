@@ -19,7 +19,16 @@ const updateRadiatorFanTime = (time = 0) => {
 };
 
 const updateHeatingTime = (time = 0) => {
+  let val = 0;
+  if (time === "on") {
+    val = 9999;
+  } else if (time === "off") {
+    val = 0;
+  } else if (time === "overrun") {
+    val = 20;
+  }
   setHeatingTimers("heating", offsetTimeMins(time));
+  // setHeatingTimers("heating", offsetTimeMins(val));
 };
 
 const getRadiatorFanTime = () => {
