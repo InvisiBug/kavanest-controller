@@ -24,16 +24,10 @@ const isZoneDemand = (zone) => {
   return data;
 };
 
-const setZonesSetpoints = (room, vals) => {
+const setZonesSetpoints = (room, vals, weekday) => {
   let environmentalData = getStore("Environmental Data");
 
-  environmentalData = {
-    ...environmentalData,
-    setpoints: {
-      ...environmentalData.setpoints,
-      [room]: vals,
-    },
-  };
+  environmentalData.setpoints[weekday][room] = vals;
 
   setStore("Environmental Data", environmentalData);
 };

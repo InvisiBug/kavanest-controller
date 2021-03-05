@@ -37,18 +37,20 @@ const db = new Engine.Db(path.join(__dirname, "../../../PersistantStorage/Histor
 //  #     # #       ###
 //
 ////////////////////////////////////////////////////////////////////////
-app.post("/api/heatingSensor/historical", (req, res) => {
+app.post("/api/heatingSensor/historical", async (req, res) => {
+  let data = [];
   let points;
+
   if (req.body.timescale.toUpperCase() == "DAY") points = 24;
   else if (req.body.timescale.toUpperCase() == "WEEK") points = 168;
   else if (req.body.timescale.toUpperCase() == "MONTH") points = 720;
   else if (req.body.timescale.toUpperCase() == "YEAR") points = 8760;
+  let something;
 
-  db.collection(req.body.room)
+  something = db
+    .collection(req.body.room)
     .find()
     .toArray((error, result) => {
-      let data = [];
-
       if (error) console.log(error);
       else {
         if (result.length < points) {
@@ -68,8 +70,8 @@ app.post("/api/heatingSensor/historical", (req, res) => {
             });
           }
         }
-        // console.log(data.reverse());
         res.json(data.reverse());
       }
+      db.close();
     });
 });
