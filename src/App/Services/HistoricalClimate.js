@@ -37,7 +37,7 @@ const db = new Engine.Db(path.join(__dirname, "../../../PersistantStorage/Histor
 //  #     # #       ###
 //
 ////////////////////////////////////////////////////////////////////////
-app.post("/api/heatingSensor/historical", (req, res) => {
+app.post("/api/heatingSensor/historical", async (req, res) => {
   let data = [];
   let points;
 
@@ -45,8 +45,10 @@ app.post("/api/heatingSensor/historical", (req, res) => {
   else if (req.body.timescale.toUpperCase() == "WEEK") points = 168;
   else if (req.body.timescale.toUpperCase() == "MONTH") points = 720;
   else if (req.body.timescale.toUpperCase() == "YEAR") points = 8760;
+  let something;
 
-  db.collection(req.body.room)
+  something = db
+    .collection(req.body.room)
     .find()
     .toArray((error, result) => {
       if (error) console.log(error);
