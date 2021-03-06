@@ -10,7 +10,7 @@ const getRoomTemperature = (room) => {
 };
 
 const getRoomSetpoints = (room) => {
-  let weekday = new Date() === 1 || 2 || 3 || 4 || 5 ? "weekday" : "weekend";
+  let weekday = new Date().getDay() === 6 || new Date().getDay() === 0 ? "weekend" : "weekday";
   return getStore("Environmental Data").setpoints[weekday][room];
 };
 
