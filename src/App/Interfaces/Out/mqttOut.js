@@ -7,17 +7,16 @@ const radiatorFanControl = (message) => {
 };
 
 const computerAudioControl = (message) => {
-  let data = message;
+  let data = { ...message };
   delete data.isConnected;
 
-  client.publish(
-    "Computer Audio Control",
-    JSON.stringify(data, function (prop, value) {
-      let lower = prop.charAt(0).toUpperCase() + prop.substring(1);
-      if (prop === lower) return value;
-      else this[lower] = value;
-    })
-  );
+  //? This bit is used to capitalize the property names in the json
+  const send = Object.keys(data).reduce((accumulator, val) => {
+    accumulator[val.charAt(0).toUpperCase() + val.substring(1)] = data[val];
+    return accumulator;
+  }, {});
+
+  client.publish("Computer Audio Control", JSON.stringify(send));
 };
 
 const computerPowerControl = (message) => {

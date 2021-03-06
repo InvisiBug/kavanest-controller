@@ -115,5 +115,6 @@ const sensorUpdate = setInterval(() => {
 }, 1 * 1000);
 
 const sendSocketData = () => {
+  // console.log(deviceData);
   io.emit("Computer Audio", deviceData);
 };
