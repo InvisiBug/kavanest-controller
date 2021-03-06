@@ -22,6 +22,6 @@ setInterval(() => {
       // Manual control
       break;
   }
-  heatingController();
   radiatorFanController();
+  heatingController();
 }, 1 * 1000);
