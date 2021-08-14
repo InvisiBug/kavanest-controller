@@ -29,6 +29,7 @@ const checkTempAndSetRoomDemand = (room) => {
 
   if (isValveConnected(camelRoomName(room))) {
     //? A rooms demand will be set to false if that rooms valve disconnects
+    //? A rooms demand will also be set to false if the sensor drops off the network
     if (currentTemp < setpoint[hour()] - hysteresis && currentTemp > 0) {
       setZonesDemand(room, true);
     } else if (currentTemp > setpoint[hour()]) {

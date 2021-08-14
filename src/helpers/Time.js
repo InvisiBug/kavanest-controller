@@ -22,9 +22,12 @@ const hour = () => {
   return date.getHours();
 };
 
-const offsetTimeMins = (time = 0) => {
+/*
+  Returns the time now + addedTime
+*/
+const offsetTimeMins = (addedTime = 0) => {
   let now = new Date();
-  return now.setMinutes(now.getMinutes() + time);
+  return now.setMinutes(now.getMinutes() + addedTime);
 };
 
 const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];

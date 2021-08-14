@@ -48,7 +48,15 @@ const broadcastOffsets = () => {
       Study: getRoomOffset(camelRoomName("Study")),
       "Our Room": getRoomOffset(camelRoomName("Our Room")),
     };
+    var data2 = {
+      livingRoom: getRoomOffset(camelRoomName("Living Room")),
+      kitchen: getRoomOffset(camelRoomName("Kitchen")),
+      liamsRoom: getRoomOffset(camelRoomName("Liams Room")),
+      study: getRoomOffset(camelRoomName("Study")),
+      ourRoom: getRoomOffset(camelRoomName("Our Room")),
+    };
     client.publish(`Room Offsets`, JSON.stringify(data));
+    client.publish(`roomOffsets`, JSON.stringify(data2));
   }, 60 * 1000);
 };
 
