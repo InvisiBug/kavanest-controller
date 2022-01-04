@@ -1,0 +1,36 @@
+{
+  "name": "kavanest-controller",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/InvisiBug/kavanest-controller.git",
+  "author": "InvisiBug <matthewjkavanagh@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --exec \"ts-node \" ./src/index.ts",
+    "run": "yarn build && node ./dist/index.js",
+    "build": "tsc && cp ./src/devices.yaml ./dist",
+    "push": "./bin/push.sh",
+    "deploy": "yarn push && ./bin/deploy.sh",
+    "deploy--live": "./bin/deploy--live.sh",
+    "deploy--test": "./bin/deploy--test.sh",
+    "up": "clear && ./bin/start-container.sh",
+    "down": "docker compose down",
+    "logs": "docker logs kavanest-skippy -f"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "dotenv-expand": "^5.1.0",
+    "js-yaml": "^4.1.0",
+    "mongodb": "^4.2.0",
+    "mqtt": "^4.2.8"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.4",
+    "@types/node": "^16.11.6",
+    "@types/ws": "^8.2.0",
+    "prettier": "^2.4.1",
+    "ts-node": "^10.4.0",
+    "tslint": "^6.1.3",
+    "typescript": "^4.4.4"
+  }
+}
