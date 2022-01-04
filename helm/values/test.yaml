@@ -11,8 +11,8 @@ deployment:
     - name: MONGO
       value: mongodb://kavanest-test-mongo:27017
 
-    - name: MQTT
-      value: mqtt://kavanest-simulator
+    - name: API
+      value: http://test.api.kavanet.io
 
 service:
   clusterIP:
