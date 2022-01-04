@@ -1,0 +1,22 @@
+name: kavanest-test-skippy
+
+namespace: kavanest-test
+
+deployment:
+  - name: kavanest-test-skippy
+    image: 192.168.1.61:5000/kavanest-skippy
+    ports:
+    - port: 27017
+    env:
+    - name: MONGO
+      value: mongodb://kavanest-test-mongo:27017
+
+    - name: MQTT
+      value: mqtt://kavanest-simulator
+
+service:
+  clusterIP:
+    - name: kavanest-test-skippy
+      selector: kavanest-test-skippy
+      ports:
+        - port: 3100

@@ -2,16 +2,18 @@
 
 # dependencies
 /node_modules
-# /PersistantStorage
-/src/Databases
 /.pnp
 .pnp.js
+
 
 # testing
 /coverage
 
 # production
 /build
+
+/dist
+/data
 
 # misc
 .DS_Store
