@@ -4,26 +4,31 @@ import { apiUrl, mongoUrl } from "../helpers";
 export default class Room {
   roomName: string;
 
-  constructor(roomName: string) {
+  constructor(roomName: string = "") {
     this.roomName = roomName;
   }
 
   async anyDemand() {
-    const sensor = await request(
+    const gqlResponse = await request(
       apiUrl,
       gql`
-        query GetSensor($room: String) {
-          response: getSensor(room: $room) {
-            temperature
-            connected
+        query {
+          response: getRooms {
+            demand
           }
         }
       `,
-      {
-        room: this.roomName,
-      },
     );
-    return sensor.response;
+
+    let anyDemand = false;
+
+    gqlResponse.response.forEach((room: any) => {
+      if (room.demand === true) {
+        anyDemand = true;
+      }
+    });
+
+    return anyDemand;
   }
 
   async getDemand() {
@@ -40,7 +45,6 @@ export default class Room {
         room: this.roomName,
       },
     );
-    console.log(gqlResponse);
     return gqlResponse.response;
   }
 
@@ -59,7 +63,6 @@ export default class Room {
         input: { name: this.roomName, state },
       },
     );
-    console.log(gqlResponse);
     return gqlResponse.response;
   }
 }

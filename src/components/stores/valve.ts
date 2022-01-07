@@ -26,6 +26,24 @@ export default class valve {
     return valve.response;
   }
 
+  async setState(state: boolean) {
+    const gqlResponse = await request(
+      apiUrl,
+      gql`
+        mutation ($input: ValveInput) {
+          updateValve(input: $input) {
+            room
+            state
+          }
+        }
+      `,
+      {
+        input: { name: this.roomName, state },
+      },
+    );
+    return gqlResponse.response;
+  }
+
   // async setDemand(state:boolean) {
   //   const valve = await request(
   //     apiUrl,

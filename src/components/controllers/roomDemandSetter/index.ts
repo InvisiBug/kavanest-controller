@@ -1,9 +1,9 @@
-import Sensor from "../../devices/sensors";
-import Valve from "../../devices/valve";
-import Setpoint from "../../devices/setpoint";
-import Room from "../../devices/rooms";
+import Sensor from "../../stores/sensors";
+import Valve from "../../stores/valve";
+import Setpoint from "../../stores/setpoint";
+import Room from "../../stores/rooms";
 
-export default class RoomController {
+export default class RoomDemandSetter {
   sensor: Sensor;
   valve: Valve;
   setpoint: Setpoint;
@@ -33,9 +33,7 @@ export default class RoomController {
 
     if (sensor.connected && valve.connected) {
       if (sensor.temperature < target - deadzone) {
-        if (sensor.temperature > -1) {
-          this.room.setDemand(true);
-        }
+        this.room.setDemand(true);
       } else if (sensor.temperature > target) {
         this.room.setDemand(false);
       }

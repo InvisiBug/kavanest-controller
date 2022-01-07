@@ -41,3 +41,13 @@ export const now = () => {
     minute: "2-digit",
   });
 };
+
+export const offsetTimeMins = (addedTime = 0) => {
+  let now = new Date();
+  return now.setMinutes(now.getMinutes() + addedTime);
+};
+
+export const nowTimer = () => {
+  const date = new Date();
+  return date.getTime();
+};

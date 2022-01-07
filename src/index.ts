@@ -1,6 +1,6 @@
 import { apiUrl, mongoUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
-import RoomDemandSetter from "./components/controllers/roomDemandSetter";
+import { RoomDemandSetter, ValveController, TimeSetter, Heating } from "./components/controllers";
 
 const query = gql`
   query {
@@ -24,3 +24,8 @@ const query = gql`
 // });
 
 new RoomDemandSetter("frontStudy");
+new ValveController("frontStudy");
+
+new TimeSetter();
+
+new Heating();
