@@ -5,18 +5,6 @@ namespace: kavanest
 deployment:
   - name: kavanest-skippy
     image: 192.168.1.61:5000/kavanest-skippy
-    ports:
-    - port: 27017
     env:
-    - name: MONGO
-      value: mongodb://kavanest-mongo:27017
-
-    - name: MQTT
-      value: mqtt://192.168.1.46
-
-service:
-  clusterIP:
-    - name: kavanest-skippy
-      selector: kavanest-skippy
-      ports:
-        - port: 3100
+    - name: API
+      value: https://api.kavanet.io

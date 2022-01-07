@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "nodemon --exec \"ts-node \" ./src/index.ts",
     "run": "yarn build && node ./dist/index.js",
-    "build": "tsc && cp ./src/devices.yaml ./dist",
+    "build": "tsc",
     "push": "./bin/push.sh",
     "deploy": "yarn push && ./bin/deploy.sh",
     "deploy--live": "./bin/deploy--live.sh",
@@ -20,14 +20,12 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
-    "js-yaml": "^4.1.0",
-    "mongodb": "^4.2.0",
-    "mqtt": "^4.2.8"
+    "graphql": "^16.2.0",
+    "graphql-request": "^3.7.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.4",
     "@types/node": "^16.11.6",
-    "@types/ws": "^8.2.0",
     "prettier": "^2.4.1",
     "ts-node": "^10.4.0",
     "tslint": "^6.1.3",
