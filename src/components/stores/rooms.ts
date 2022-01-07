@@ -45,7 +45,7 @@ export default class Room {
         room: this.roomName,
       },
     );
-    return gqlResponse.response;
+    return gqlResponse.response.demand;
   }
 
   async setDemand(state: boolean) {

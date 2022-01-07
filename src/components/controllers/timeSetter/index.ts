@@ -10,8 +10,6 @@ export default class Timer {
   constructor() {
     this.rooms = new Room();
     this.timers = new Timers();
-
-    this.tick();
   }
 
   async tick() {

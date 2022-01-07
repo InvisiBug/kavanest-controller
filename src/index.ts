@@ -1,28 +1,27 @@
 import { apiUrl, mongoUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
-import { RoomDemandSetter, ValveController, TimeSetter, Heating } from "./components/controllers";
-
-const query = gql`
-  query {
-    response: getValves {
-      room
-      state
-      demand
-      connected
-      _id
-    }
-  }
-`;
-
-// new TimeSetter();
-// new Heating();
+import { RoomDemandSetter, Valve, TimeSetter, Heating } from "./components/controllers";
 
 let devices: Array<any> = [];
-request(apiUrl, query).then((data) => {
+
+request(
+  apiUrl,
+  gql`
+    query {
+      response: getValves {
+        room
+        state
+        demand
+        connected
+        _id
+      }
+    }
+  `,
+).then((data) => {
   data.response.forEach((valve: any) => {
-    console.log(valve.room);
+    // console.log(valve.room);
     devices.push(new RoomDemandSetter(valve.room));
-    devices.push(new ValveController(valve.room));
+    devices.push(new Valve(valve.room));
   });
 });
 
@@ -37,4 +36,6 @@ setInterval(() => {
   } catch (error: unknown) {
     console.log(error);
   }
-}, 5);
+}, 2 * 1000);
+
+console.log("Hello from Skippy");
