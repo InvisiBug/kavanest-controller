@@ -42,7 +42,7 @@ export default class HeatingController {
         if (heating.state === on) {
           if (log) console.log("Heating relay is on...");
 
-          console.log("So turn off the heating relay");
+          if (log) console.log("So turn off the heating relay");
           this.heating.setState(off);
         } else {
           if (log) console.log("And it is");

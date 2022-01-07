@@ -25,6 +25,9 @@ request(
   });
 });
 
+// devices.push(new RoomDemandSetter("frontStudy"));
+// devices.push(new Valve("frontStudy"));
+
 devices.push(new TimeSetter());
 devices.push(new Heating());
 
@@ -38,4 +41,4 @@ setInterval(() => {
   }
 }, 2 * 1000);
 
-console.log("Hello from Skippy");
+console.log("Hello from new Skippy");
