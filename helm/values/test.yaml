@@ -6,5 +6,8 @@ deployment:
   - name: kavanest-test-skippy
     image: 192.168.1.61:5000/kavanest-skippy
     env:
-    - name: API
-      value: http://test.api.kavanet.io
+      - name: API
+        value: http://test.api.kavanet.io
+    resources:
+      memory: 100Mi
+      cpu: 100m
