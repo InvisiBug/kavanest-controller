@@ -19,9 +19,8 @@ export default class HeatingController {
     const heating = await this.heating.getState();
     const heatingOffTime = await this.timers.getTimer("heating");
 
-    console.log(nowTimer(), heatingOffTime);
-
-    const log = true;
+    const log = false;
+    if (log) console.log(`\n* Heating *`);
 
     if (heating.connected) {
       if (log) console.log("Heating connected");
@@ -32,7 +31,7 @@ export default class HeatingController {
         if (heating.state !== on) {
           if (log) console.log("Heating relay is off...");
 
-          console.log("So turn on the heating relay");
+          if (log) console.log("So turn on the heating relay");
           this.heating.setState(on);
         } else {
           if (log) console.log("And it is");

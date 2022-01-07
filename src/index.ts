@@ -4,7 +4,7 @@ import { RoomDemandSetter, ValveController, TimeSetter, Heating } from "./compon
 
 const query = gql`
   query {
-    getValves {
+    response: getValves {
       room
       state
       demand
@@ -14,18 +14,27 @@ const query = gql`
   }
 `;
 
-// request(apiUrl, query).then((data) => {
-//   const valves = data.getValves;
+// new TimeSetter();
+// new Heating();
 
-//   valves.forEach((valve: any) => {
-//     new RoomController(valve.room);
-//   });
-//   // console.log(valves);
-// });
+let devices: Array<any> = [];
+request(apiUrl, query).then((data) => {
+  data.response.forEach((valve: any) => {
+    console.log(valve.room);
+    devices.push(new RoomDemandSetter(valve.room));
+    devices.push(new ValveController(valve.room));
+  });
+});
 
-new RoomDemandSetter("frontStudy");
-new ValveController("frontStudy");
+devices.push(new TimeSetter());
+devices.push(new Heating());
 
-new TimeSetter();
-
-new Heating();
+setInterval(() => {
+  try {
+    for (let i = 0; i < devices.length; i++) {
+      devices[i].tick();
+    }
+  } catch (error: unknown) {
+    console.log(error);
+  }
+}, 5);

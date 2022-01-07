@@ -16,7 +16,6 @@ export default class Timer {
 
   async tick() {
     const anyDemand = await this.rooms.anyDemand();
-    console.log(anyDemand);
 
     if (anyDemand) {
       this.timers.setTimer(this.name, offsetTimeMins(9999));

@@ -18,8 +18,6 @@ export default class ValveController {
 
     this.valve = new Valve(roomName);
     this.room = new Room(roomName);
-
-    this.tick();
   }
 
   async tick() {
@@ -28,6 +26,8 @@ export default class ValveController {
     const thisRoomDemand = await this.room.getDemand();
 
     const log = false;
+
+    if (log) console.log(`\n* ${this.roomName} Valve *`);
 
     if (valve.connected) {
       if (log) console.log("Valve connected");
