@@ -38,7 +38,12 @@ export default class Setpoint {
     `;
 
     const gqlData = await request(apiUrl, query, { room: this.roomName });
-    return getCurrentSetpoint(gqlData.response.setpoints);
+    // handle no data present
+    if (!gqlData.response) {
+      return;
+    } else {
+      return getCurrentSetpoint(gqlData.response.setpoints);
+    }
   }
 
   async getDeadzone() {
@@ -51,6 +56,11 @@ export default class Setpoint {
     `;
 
     const gqlData = await request(apiUrl, query, { room: this.roomName });
-    return gqlData.response.deadzone;
+    // Handle no deadzone present
+    if (!gqlData.response) {
+      return 0;
+    } else {
+      return gqlData.response.deadzone;
+    }
   }
 }

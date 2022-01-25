@@ -12,6 +12,7 @@ export default class HeatingController {
   constructor() {
     this.heating = new Heating();
     this.timers = new Timers();
+
     this.tick();
   }
 
@@ -26,7 +27,7 @@ export default class HeatingController {
       if (log) console.log("Heating connected");
 
       if (nowTimer() < heatingOffTime) {
-        if (log) console.log("Heating should be on");
+        if (log) console.log("Heating should be on!");
 
         if (heating.state !== on) {
           if (log) console.log("Heating relay is off...");
@@ -34,20 +35,22 @@ export default class HeatingController {
           if (log) console.log("So turn on the heating relay");
           this.heating.setState(on);
         } else {
-          if (log) console.log("And it is");
+          if (log) console.log("And it is :)");
         }
       } else {
-        if (log) console.log("Heating should be off");
+        if (log) console.log("Heating should be off!");
 
         if (heating.state === on) {
           if (log) console.log("Heating relay is on...");
 
-          console.log("So turn off the heating relay");
+          if (log) console.log("So turn off the heating relay");
           this.heating.setState(off);
         } else {
-          if (log) console.log("And it is");
+          if (log) console.log("And it is :)");
         }
       }
+    } else {
+      if (log) console.log("Heating not connected");
     }
   }
 }

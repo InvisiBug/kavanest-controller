@@ -15,7 +15,6 @@ export default class valve {
         query GetSensor($room: String) {
           response: getValve(room: $room) {
             state
-            demand
             connected
             _id
           }
@@ -41,6 +40,7 @@ export default class valve {
         input: { name: this.roomName, state },
       },
     );
+    // console.log(gqlResponse);
     return gqlResponse.response;
   }
 

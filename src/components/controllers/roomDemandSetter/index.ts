@@ -36,9 +36,12 @@ export default class RoomDemandSetter {
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
-    if (!target || target === "n/a") return;
+    if (!target || target === "n/a") {
+      if (log) console.log("No target temp set");
+      return;
+    }
 
-    if (sensor.connected && valve.connected) {
+    if (sensor?.connected && valve?.connected) {
       if (log) console.log(`${decamelize(this.roomName)} sensor and valve connected`);
 
       if (sensor.temperature < target - deadzone) {
@@ -47,7 +50,7 @@ export default class RoomDemandSetter {
         this.room.setDemand(true);
         if (log) console.log(`So ${decamelize(this.roomName)} demand set to on`);
       } else if (sensor.temperature > target) {
-        if (log) console.log(`${decamelize(this.roomName)} is not wanting heat...`);
+        if (log) console.log(`${decamelize(this.roomName)} is not wanting heat \nCurrent: ${sensor.temperature} \t Target: ${target}`);
 
         this.room.setDemand(false);
         if (log) console.log(`So ${decamelize(this.roomName)} demand set to off`);

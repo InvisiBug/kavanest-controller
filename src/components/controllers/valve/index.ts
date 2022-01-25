@@ -29,37 +29,51 @@ export default class ValveController {
 
     if (log) console.log(`\n* ${this.roomName} Valve *`);
 
-    if (valve.connected) {
+    if (valve?.connected) {
       if (log) console.log("Valve connected");
 
       if (anyDemand) {
-        if (log) console.log("Any room in demand");
+        if (log) console.log("Some rooms are in demand");
 
         if (thisRoomDemand) {
-          if (log) console.log(this.roomName, "in demand");
+          if (log) console.log("This room is in demand");
 
-          if (valve.state === close) {
+          if (log) console.log("Valve should be open!");
+
+          if (valve?.state === close) {
             if (log) console.log("Valve is closed...");
 
-            this.valve.setState(open);
             if (log) console.log("So open Valve");
+            this.valve.setState(open);
           } else {
-            if (log) console.log(this.roomName, "Valve already open");
+            if (log) console.log("And it is :)");
           }
-        } else if (valve.state === open) {
-          if (log) console.log("Valve is open...");
+        } else {
+          if (log) console.log("This room is not in demand");
 
-          this.valve.setState(close);
-          if (log) console.log("So close valve");
+          if (log) console.log("Valve should be closed!");
+
+          if (valve.state === open) {
+            if (log) console.log("Valve is open...");
+
+            if (log) console.log("So close valve");
+            this.valve.setState(close);
+          } else {
+            if (log) console.log("And it is :)");
+          }
         }
       } else {
         if (log) console.log("No rooms in demand");
 
+        if (log) console.log("So valve should be open!");
+
         if (valve.state === close) {
           if (log) console.log("Valve is closed...");
 
-          this.valve.setState(open);
           if (log) console.log("So open Valve");
+          this.valve.setState(open);
+        } else {
+          if (log) console.log("And it is :)");
         }
       }
     }

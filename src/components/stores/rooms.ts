@@ -32,20 +32,20 @@ export default class Room {
   }
 
   async getDemand() {
-    const gqlResponse = await request(
-      apiUrl,
-      gql`
-        query ($room: String) {
-          response: getRoom(room: $room) {
-            demand
-          }
+    const query = gql`
+      query ($room: String) {
+        response: getRoom(room: $room) {
+          demand
         }
-      `,
-      {
-        room: this.roomName,
-      },
-    );
-    return gqlResponse.response.demand;
+      }
+    `;
+    const gqlData = await request(apiUrl, query, { room: this.roomName });
+
+    if (!gqlData.response) {
+      return;
+    } else {
+      return gqlData.response.demand;
+    }
   }
 
   async setDemand(state: boolean) {

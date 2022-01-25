@@ -10,10 +10,6 @@ request(
     query {
       response: getValves {
         room
-        state
-        demand
-        connected
-        _id
       }
     }
   `,
@@ -28,14 +24,27 @@ request(
 devices.push(new TimeSetter());
 devices.push(new Heating());
 
-setInterval(() => {
+// setInterval(async () => {
+//   try {
+//     for (let i = 0; i < devices.length; i++) {
+//       await devices[i].tick();
+//     }
+//   } catch (error: unknown) {
+//     console.log(error);
+//   }
+// }, 2 * 1000);
+
+// https://stackoverflow.com/a/54635436/7489419
+async function execute1(delay: number) {
   try {
     for (let i = 0; i < devices.length; i++) {
-      devices[i].tick();
+      await devices[i].tick();
     }
   } catch (error: unknown) {
     console.log(error);
   }
-}, 2 * 1000);
+  setTimeout(() => execute1(delay), delay);
+}
+execute1(2 * 1000);
 
 console.log("Hello from Skippy");
