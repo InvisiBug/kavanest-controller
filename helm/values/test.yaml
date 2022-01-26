@@ -10,4 +10,4 @@ deployment:
         value: http://test.api.kavanet.io
     # resources:
     #   memory: 100Mi
-    #   cpu: 100m
+    #   cpu: 1000m
