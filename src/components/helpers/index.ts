@@ -13,7 +13,7 @@ export const decamelize = (text: string) => {
 };
 
 export const weekOrWeekend = () => {
-  var today = new Date();
+  const today = new Date();
   if (!(today.getDay() % 6)) return "weekend";
   else return "weekday";
 };
@@ -21,12 +21,15 @@ export const weekOrWeekend = () => {
 // Takes in setpoints object and returns current target
 export const getCurrentSetpoint = (setpoints: any) => {
   let setpoint;
+  console.log(now());
+
   try {
     Object.keys(setpoints[weekOrWeekend()]).forEach((entry) => {
-      if (now() > entry) {
+      if (now() >= entry) {
         setpoint = setpoints[weekOrWeekend()][entry];
       }
     });
+
     return setpoint;
   } catch {
     return "n/a";

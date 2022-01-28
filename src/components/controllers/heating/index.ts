@@ -23,7 +23,7 @@ export default class HeatingController {
     const log = false;
     if (log) console.log(`\n* Heating *`);
 
-    if (heating.connected) {
+    if (heating?.connected) {
       if (log) console.log("Heating connected");
 
       if (nowTimer() < heatingOffTime) {
@@ -50,7 +50,7 @@ export default class HeatingController {
         }
       }
     } else {
-      if (log) console.log("Heating not connected");
+      if (log) console.log("Heating not connected, oh dear");
     }
   }
 }

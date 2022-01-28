@@ -30,11 +30,11 @@ export default class RoomDemandSetter {
     const deadzone = await this.setpoint.getDeadzone();
     const target = await this.setpoint.getCurrentTarget();
 
-    // console.log(sensor.temperature, target);
-
     const log = false;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
+
+    if (log) console.log(target, sensor.temperature, deadzone);
 
     if (!target || target === "n/a") {
       if (log) console.log("No target temp set");
@@ -42,21 +42,22 @@ export default class RoomDemandSetter {
     }
 
     if (sensor?.connected && valve?.connected) {
-      if (log) console.log(`${decamelize(this.roomName)} sensor and valve connected`);
+      if (log) console.log(`Sensor and valve connected`);
 
       if (sensor.temperature < target - deadzone) {
-        if (log) console.log(`${decamelize(this.roomName)} is wanting heat...`);
+        if (log) console.log(`Wanting heat...`);
 
         this.room.setDemand(true);
-        if (log) console.log(`So ${decamelize(this.roomName)} demand set to on`);
-      } else if (sensor.temperature > target) {
-        if (log) console.log(`${decamelize(this.roomName)} is not wanting heat \nCurrent: ${sensor.temperature} \t Target: ${target}`);
+        if (log) console.log(`So demand set to on`);
+      } else {
+        if (log) console.log(`Not wanting heat \nCurrent: ${sensor.temperature} \t Target: ${target}`);
 
         this.room.setDemand(false);
-        if (log) console.log(`So ${decamelize(this.roomName)} demand set to off`);
+        if (log) console.log(`So demand set to off`);
       }
     } else {
-      if (log) console.log(`${decamelize(this.roomName)} sensor or valve disconnected`);
+      if (log) console.log(`Sensor or valve disconnected`);
+      //! May want to set the demand off herre
     }
   }
 }

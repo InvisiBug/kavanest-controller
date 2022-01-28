@@ -9,35 +9,41 @@ export default class Setpoint {
   }
 
   async getCurrentSetpoints() {
-    const query = gql`
-      query GetSetpoint($room: String) {
-        response: getSetpoint(room: $room) {
-          setpoints {
-            weekend
-            weekday
+    const gqlData = await request(
+      apiUrl,
+      gql`
+        query GetSetpoint($room: String) {
+          response: getSetpoint(room: $room) {
+            setpoints {
+              weekend
+              weekday
+            }
+            deadzone
           }
-          deadzone
         }
-      }
-    `;
+      `,
+      { room: this.roomName },
+    );
 
-    const gqlData = await request(apiUrl, query, { room: this.roomName });
     return gqlData.response;
   }
 
   async getCurrentTarget() {
-    const query = gql`
-      query GetSetpoint($room: String) {
-        response: getSetpoint(room: $room) {
-          setpoints {
-            weekend
-            weekday
+    const gqlData = await request(
+      apiUrl,
+      gql`
+        query GetSetpoint($room: String) {
+          response: getSetpoint(room: $room) {
+            setpoints {
+              weekend
+              weekday
+            }
           }
         }
-      }
-    `;
+      `,
+      { room: this.roomName },
+    );
 
-    const gqlData = await request(apiUrl, query, { room: this.roomName });
     // handle no data present
     if (!gqlData.response) {
       return;
@@ -47,15 +53,18 @@ export default class Setpoint {
   }
 
   async getDeadzone() {
-    const query = gql`
-      query GetSetpoint($room: String) {
-        response: getSetpoint(room: $room) {
-          deadzone
+    const gqlData = await request(
+      apiUrl,
+      gql`
+        query GetSetpoint($room: String) {
+          response: getSetpoint(room: $room) {
+            deadzone
+          }
         }
-      }
-    `;
+      `,
+      { room: this.roomName },
+    );
 
-    const gqlData = await request(apiUrl, query, { room: this.roomName });
     // Handle no deadzone present
     if (!gqlData.response) {
       return 0;
