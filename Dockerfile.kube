@@ -1,5 +1,5 @@
 # Use Node version 14
-FROM node:14
+FROM arm64v8/node:14
 
 # Create app directory within container
 WORKDIR /usr/src/app
@@ -9,13 +9,14 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Copy across source folder
-COPY ./dist ./
-
 # Prevents unnecessary packages from being installed
-# ENV NODE_ENV=production
 ENV NODE_ENV production
 RUN npm install
 
+# Copy across source folder
+COPY ./dist ./
+
+EXPOSE 1883
+EXPOSE 9001
 # CMD ["npm", "start"]
 CMD ["node","index.js"]

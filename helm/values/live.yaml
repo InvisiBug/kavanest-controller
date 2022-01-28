@@ -1,0 +1,13 @@
+name: kavanest-skippy
+
+namespace: kavanest
+
+deployment:
+  - name: kavanest-skippy
+    image: 192.168.1.61:5000/kavanest-skippy
+    env:
+    - name: API
+      value: https://api.kavanet.io
+    # resources:
+    #   memory: 100Mi
+    #   cpu: 1000m

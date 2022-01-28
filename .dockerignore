@@ -1,8 +1,0 @@
-node_modules/
-.github
-.gitignore
-.tool-versions
-.git
-.prettierrc
-.docker-compose.yaml
-.README.md
