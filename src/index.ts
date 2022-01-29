@@ -21,8 +21,8 @@ request(
   });
 });
 
-// devices.push(new RoomDemandSetter("frontStudy"));
-// devices.push(new Valve("frontStudy"));
+// devices.push(new RoomDemandSetter("diningRoom"));
+// devices.push(new Valve("diningRoom"));
 
 devices.push(new TimeSetter());
 devices.push(new Heating());
