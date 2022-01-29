@@ -1,6 +1,6 @@
-import Room from "../../stores/rooms";
-import { offsetTimeMins } from "../../helpers";
-import Timers from "../../stores/timers";
+import Room from "../stores/rooms";
+import { offsetTimeMins } from "../helpers";
+import Timers from "../stores/timers";
 
 export default class Timer {
   rooms: Room;

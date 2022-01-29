@@ -1,8 +1,8 @@
-import { decamelize } from "../../helpers";
-import Sensor from "../../stores/sensors";
-import Valve from "../../stores/valve";
-import Setpoint from "../../stores/setpoint";
-import Room from "../../stores/rooms";
+import { decamelize } from "../helpers";
+import Sensor from "../stores/sensors";
+import Valve from "../stores/valve";
+import Setpoint from "../stores/setpoint";
+import Room from "../stores/rooms";
 
 export default class RoomDemandSetter {
   sensor: Sensor;
@@ -25,38 +25,41 @@ export default class RoomDemandSetter {
   }
 
   async tick() {
-    const sensor = await this.sensor.getState();
-    const valve = await this.valve.getState();
-    const deadzone = await this.setpoint.getDeadzone();
-    const target = await this.setpoint.getCurrentTarget();
-
     const log = false;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
-    if (log) console.log(target, sensor.temperature, deadzone);
-
+    const target = await this.setpoint.getCurrentTarget();
     if (!target || target === "n/a") {
       if (log) console.log("No target temp set");
       return;
     }
 
-    if (sensor?.connected && valve?.connected) {
-      if (log) console.log(`Sensor and valve connected`);
+    const sensor = await this.sensor.getState();
 
-      if (sensor.temperature < target - deadzone) {
-        if (log) console.log(`Wanting heat...`);
+    if (sensor?.connected) {
+      const valve = await this.valve.getState();
 
-        this.room.setDemand(true);
-        if (log) console.log(`So demand set to on`);
-      } else if (sensor.temperature > target) {
-        if (log) console.log(`Not wanting heat \nCurrent: ${sensor.temperature} \t Target: ${target}`);
+      if (valve?.connected) {
+        if (log) console.log(`Sensor and valve connected`);
 
-        this.room.setDemand(false);
-        if (log) console.log(`So demand set to off`);
+        const deadzone = await this.setpoint.getDeadzone();
+        if (sensor.temperature < target - deadzone) {
+          if (log) console.log(`Wanting heat...`);
+
+          this.room.setDemand(true);
+          if (log) console.log(`So demand set to on`);
+        } else if (sensor.temperature > target) {
+          if (log) console.log(`Not wanting heat \nCurrent: ${sensor.temperature} \t Target: ${target}`);
+
+          this.room.setDemand(false);
+          if (log) console.log(`So demand set to off`);
+        }
+      } else {
+        if (log) console.log(`Valve disconnected`);
       }
     } else {
-      if (log) console.log(`Sensor or valve disconnected`);
+      if (log) console.log(`Sensor disconnected`);
       //! May want to set the demand off herre
     }
   }

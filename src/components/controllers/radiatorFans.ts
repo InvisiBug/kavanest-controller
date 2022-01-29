@@ -1,12 +1,10 @@
-import Sensor from "../../stores/sensors";
-import Valve from "../../stores/valve";
-import Setpoint from "../../stores/setpoint";
-import Room from "../../stores/rooms";
+import Valve from "../stores/valve";
+import Room from "../stores/rooms";
 
 const open = false;
 const close = true;
 
-export default class ValveController {
+export default class RadiatorFanController {
   valve: Valve;
   room: Room;
 

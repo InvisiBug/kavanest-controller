@@ -1,10 +1,12 @@
-import Valve from "../../stores/valve";
-import Room from "../../stores/rooms";
+import Sensor from "../stores/sensors";
+import Valve from "../stores/valve";
+import Setpoint from "../stores/setpoint";
+import Room from "../stores/rooms";
 
 const open = false;
 const close = true;
 
-export default class RadiatorFanController {
+export default class ValveController {
   valve: Valve;
   room: Room;
 
@@ -19,20 +21,19 @@ export default class RadiatorFanController {
   }
 
   async tick() {
-    const valve = await this.valve.getState();
-    const anyDemand = await this.room.anyDemand();
-    const thisRoomDemand = await this.room.getDemand();
-
     const log = false;
 
     if (log) console.log(`\n* ${this.roomName} Valve *`);
 
+    const valve = await this.valve.getState();
     if (valve?.connected) {
       if (log) console.log("Valve connected");
 
+      const anyDemand = await this.room.anyDemand();
       if (anyDemand) {
         if (log) console.log("Some rooms are in demand");
 
+        const thisRoomDemand = await this.room.getDemand();
         if (thisRoomDemand) {
           if (log) console.log("This room is in demand");
 
