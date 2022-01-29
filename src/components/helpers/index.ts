@@ -19,22 +19,38 @@ export const weekOrWeekend = () => {
 };
 
 // Takes in setpoints object and returns current target
-export const getCurrentSetpoint = (setpoints: any) => {
+export const getCurrentSetpoint = (setpoints: Setpoints) => {
   let setpoint;
-  console.log(now());
+  let count: number = 0;
 
   try {
     Object.keys(setpoints[weekOrWeekend()]).forEach((entry) => {
       if (now() >= entry) {
         setpoint = setpoints[weekOrWeekend()][entry];
       }
+      count++;
     });
+
+    const obj = setpoints[weekOrWeekend()];
+
+    if (!setpoint) return parseInt(obj[Object.keys(obj)[count - 1]]);
 
     return setpoint;
   } catch {
     return "n/a";
   }
 };
+
+interface Setpoints {
+  weekend: entry;
+  weekday: entry;
+}
+interface entry {
+  [x: key]: value;
+}
+
+type key = string;
+type value = string;
 
 export const now = () => {
   const date = new Date();
