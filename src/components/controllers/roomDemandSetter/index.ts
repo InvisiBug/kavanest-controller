@@ -49,7 +49,7 @@ export default class RoomDemandSetter {
 
         this.room.setDemand(true);
         if (log) console.log(`So demand set to on`);
-      } else {
+      } else if (sensor.temperature > target) {
         if (log) console.log(`Not wanting heat \nCurrent: ${sensor.temperature} \t Target: ${target}`);
 
         this.room.setDemand(false);
@@ -61,3 +61,21 @@ export default class RoomDemandSetter {
     }
   }
 }
+
+// const checkTempAndSetRoomDemand = (room) => {
+//   let setpoint = getRoomSetpoints(camelRoomName(room));
+//   let currentTemp = getRoomTemperature(camelRoomName(room));
+//   const hysteresis = 0.5;
+
+//   if (isValveConnected(camelRoomName(room))) {
+//     //? A rooms demand will be set to false if that rooms valve disconnects
+//     //? A rooms demand will also be set to false if the sensor drops off the network
+//     if (currentTemp < setpoint[hour()] - hysteresis && currentTemp > 0) {
+//       setZonesDemand(room, true);
+//     } else if (currentTemp > setpoint[hour()]) {
+//       setZonesDemand(room, false);
+//     }
+//   } else {
+//     setZonesDemand(room, false);
+//   }
+// };
