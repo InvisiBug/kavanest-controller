@@ -1,7 +1,7 @@
 import { request, gql } from "graphql-request";
 import { apiUrl, mongoUrl } from "../helpers";
 
-export default class Room {
+export default class Demand {
   roomName: string;
 
   constructor(roomName: string = "") {

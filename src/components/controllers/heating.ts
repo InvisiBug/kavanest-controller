@@ -1,30 +1,30 @@
-import Heating from "../../stores/heating";
-import Timers from "../../stores/timers";
-import { nowTimer } from "../../helpers";
+import { Plug } from "../stores";
+import Timers from "../stores/timers";
+import { nowTimer } from "../helpers";
 
 const on = true;
 const off = false;
 
 export default class HeatingController {
-  heating: Heating;
+  heating: Plug;
   timers: Timers;
 
   constructor() {
-    this.heating = new Heating();
+    this.heating = new Plug("heating");
     this.timers = new Timers();
 
     this.tick();
   }
 
   async tick() {
-    const heating = await this.heating.getState();
-    const heatingOffTime = await this.timers.getTimer("heating");
-
     const log = false;
     if (log) console.log(`\n* Heating *`);
 
+    const heating = await this.heating.getState();
     if (heating?.connected) {
       if (log) console.log("Heating connected");
+
+      const heatingOffTime = await this.timers.getTimer("heating");
 
       if (nowTimer() < heatingOffTime) {
         if (log) console.log("Heating should be on!");
