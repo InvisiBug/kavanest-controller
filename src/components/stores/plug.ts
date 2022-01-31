@@ -47,8 +47,4 @@ export default class Plug {
 
     return gqlResponse.response;
   }
-
-  async tick() {
-    console.log(await this.getState());
-  }
 }

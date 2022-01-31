@@ -6,11 +6,9 @@ const open = false;
 const close = true;
 
 export default class ValveController {
+  roomName: string;
   valve: Valve;
   demand: Room;
-
-  // heating: any;
-  roomName: string;
 
   constructor(roomName: string) {
     this.roomName = roomName;

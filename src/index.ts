@@ -1,7 +1,6 @@
 import { apiUrl, mongoUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
 import { RoomDemandSetter, Valve, TimeSetter, Heating } from "./components/controllers";
-import Plug from "./components/stores/plug";
 
 let devices: Array<any> = [];
 
@@ -26,7 +25,6 @@ request(
 
 devices.push(new TimeSetter());
 devices.push(new Heating());
-devices.push(new Plug("radiatorFan"));
 
 // setInterval(async () => {
 //   try {
