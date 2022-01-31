@@ -1,4 +1,4 @@
-import Heating from "../stores/heating";
+import { Plug } from "../stores";
 import Timers from "../stores/timers";
 import { nowTimer } from "../helpers";
 
@@ -6,11 +6,11 @@ const on = true;
 const off = false;
 
 export default class HeatingController {
-  heating: Heating;
+  heating: Plug;
   timers: Timers;
 
   constructor() {
-    this.heating = new Heating();
+    this.heating = new Plug("heating");
     this.timers = new Timers();
 
     this.tick();

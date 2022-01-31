@@ -1,4 +1,4 @@
-import Room from "../stores/rooms";
+import Room from "../stores/demand";
 import { offsetTimeMins } from "../helpers";
 import Timers from "../stores/timers";
 

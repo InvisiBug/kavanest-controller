@@ -1,14 +1,13 @@
-import Sensor from "../stores/sensors";
-import Valve from "../stores/valve";
-import Setpoint from "../stores/setpoint";
-import Room from "../stores/rooms";
+// import Valve from "../stores/valve";
+import Room from "../stores/demand";
+import { Valve, Demand } from "../stores";
 
 const open = false;
 const close = true;
 
 export default class ValveController {
   valve: Valve;
-  room: Room;
+  demand: Room;
 
   // heating: any;
   roomName: string;
@@ -17,7 +16,7 @@ export default class ValveController {
     this.roomName = roomName;
 
     this.valve = new Valve(roomName);
-    this.room = new Room(roomName);
+    this.demand = new Demand(roomName);
   }
 
   async tick() {
@@ -29,11 +28,11 @@ export default class ValveController {
     if (valve?.connected) {
       if (log) console.log("Valve connected");
 
-      const anyDemand = await this.room.anyDemand();
+      const anyDemand = await this.demand.anyDemand();
       if (anyDemand) {
         if (log) console.log("Some rooms are in demand");
 
-        const thisRoomDemand = await this.room.getDemand();
+        const thisRoomDemand = await this.demand.getDemand();
         if (thisRoomDemand) {
           if (log) console.log("This room is in demand");
 

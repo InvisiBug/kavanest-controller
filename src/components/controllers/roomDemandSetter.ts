@@ -1,14 +1,11 @@
 import { decamelize } from "../helpers";
-import Sensor from "../stores/sensors";
-import Valve from "../stores/valve";
-import Setpoint from "../stores/setpoint";
-import Room from "../stores/rooms";
+import { Sensor, Valve, Setpoint, Demand } from "../stores/";
 
 export default class RoomDemandSetter {
   sensor: Sensor;
   valve: Valve;
   setpoint: Setpoint;
-  room: Room;
+  demand: Demand;
 
   heating: any;
   roomName: string;
@@ -19,7 +16,7 @@ export default class RoomDemandSetter {
     this.sensor = new Sensor(roomName);
     this.valve = new Valve(roomName);
     this.setpoint = new Setpoint(roomName);
-    this.room = new Room(roomName);
+    this.demand = new Demand(roomName);
 
     this.tick();
   }
@@ -45,14 +42,14 @@ export default class RoomDemandSetter {
 
         const deadzone = await this.setpoint.getDeadzone();
         if (sensor.temperature < target - deadzone) {
-          if (log) console.log(`Wanting heat...`);
+          if (log) console.log(`Wanting heat...\nCurrent: ${sensor.temperature} \t Target: ${target}`);
 
-          this.room.setDemand(true);
+          this.demand.setDemand(true);
           if (log) console.log(`So demand set to on`);
         } else if (sensor.temperature > target) {
           if (log) console.log(`Not wanting heat \nCurrent: ${sensor.temperature} \t Target: ${target}`);
 
-          this.room.setDemand(false);
+          this.demand.setDemand(false);
           if (log) console.log(`So demand set to off`);
         }
       } else {
