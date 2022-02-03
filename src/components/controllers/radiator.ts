@@ -16,7 +16,7 @@ export default class RadiatorController {
     const log = true;
 
     const fan = await this.fan.getState();
-    const threshold: number = 35;
+    const threshold: number = 21;
 
     if (log) console.log("\nRadiator fan controller");
 
