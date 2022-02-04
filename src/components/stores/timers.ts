@@ -2,9 +2,12 @@ import { request, gql } from "graphql-request";
 import { apiUrl } from "../helpers";
 
 export default class Timers {
-  constructor() {}
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
 
-  async getTimer(timer: string) {
+  async getTimer() {
     try {
       const gqlResponse = await request(
         apiUrl,
@@ -16,7 +19,7 @@ export default class Timers {
             }
           }
         `,
-        { timer },
+        { timer: this.name },
       );
       return gqlResponse.response.value;
     } catch (error) {
@@ -25,25 +28,7 @@ export default class Timers {
     }
   }
 
-  // !not working yet
-  // async getAllTimers(timer: string) {
-  //   const gqlResponse = await request(
-  //     apiUrl,
-  //     gql`
-  //       query {
-  //         getTimers {
-  //           timer
-  //           value
-  //         }
-  //       }
-  //     `,
-  //     { timer },
-  //   );
-  //   console.log(gqlResponse);
-  //   // return gqlResponse.response.value;
-  // }
-
-  async setTimer(timer: string, value: number) {
+  async setTimer(value: number) {
     try {
       const gqlResponse = await request(
         apiUrl,
@@ -56,7 +41,7 @@ export default class Timers {
           }
         `,
         {
-          input: { timer, value },
+          input: { timer: this.name, value },
         },
       );
       return gqlResponse.response;

@@ -9,16 +9,16 @@ export default class Timer {
 
   constructor() {
     this.rooms = new Room();
-    this.timers = new Timers();
+    this.timers = new Timers("heating");
   }
 
   async tick() {
     const anyDemand = await this.rooms.anyDemand();
 
     if (anyDemand) {
-      this.timers.setTimer(this.name, offsetTimeMins(9999));
+      this.timers.setTimer(offsetTimeMins(9999));
     } else {
-      this.timers.setTimer(this.name, offsetTimeMins(0));
+      this.timers.setTimer(offsetTimeMins(0));
     }
   }
 }
