@@ -16,9 +16,9 @@ export default class Timer {
     const anyDemand = await this.rooms.anyDemand();
 
     if (anyDemand) {
-      this.timers.setTimer(offsetTimeMins(9999));
+      this.timers.setTimer(9999);
     } else {
-      this.timers.setTimer(offsetTimeMins(0));
+      this.timers.setTimer(0);
     }
   }
 }

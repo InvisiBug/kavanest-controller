@@ -23,7 +23,7 @@ export default class Timers {
       );
       return gqlResponse.response.value;
     } catch (error) {
-      console.log(error);
+      console.log(`${this.name} timer:\n`, error);
       return null;
     }
   }
