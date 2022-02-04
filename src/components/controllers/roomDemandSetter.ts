@@ -51,6 +51,8 @@ export default class RoomDemandSetter {
 
           this.demand.setDemand(false);
           if (log) console.log(`So demand set to off`);
+        } else {
+          if (log) console.log(`Within deadzone... do nothing`);
         }
       } else {
         if (log) console.log(`Valve disconnected`);

@@ -20,11 +20,8 @@ request(
   });
 });
 
-// devices.push(new RoomDemandSetter("diningRoom"));
-// devices.push(new Valve("diningRoom"));
-
-// devices.push(new HeatingTimer());
-// devices.push(new Heating());
+devices.push(new HeatingTimer());
+devices.push(new Heating());
 devices.push(new Mattress());
 
 devices.push(new Radiator("frontStudy"));
