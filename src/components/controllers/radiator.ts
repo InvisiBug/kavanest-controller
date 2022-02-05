@@ -29,7 +29,7 @@ export default class RadiatorController {
 
       if (log) console.log("Radiator inlet temp:", radiator.inlet, "Setpoint:", setpoint, "Deadzone", deadzone);
 
-      if (setpoint < radiator.inlet) {
+      if (radiator.inlet > setpoint) {
         if (log) console.log("Fan should be on!");
         if (!fan.state) {
           if (log) console.log("Fan is off...");
