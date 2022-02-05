@@ -23,6 +23,8 @@ export default class ValveController {
     if (log) console.log(`\n* ${this.roomName} Valve *`);
 
     const valve = await this.valve.getState();
+    if (!valve) return;
+
     if (valve?.connected) {
       if (log) console.log("Valve connected");
 

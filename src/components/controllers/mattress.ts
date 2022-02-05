@@ -18,7 +18,7 @@ export default class HeatingController {
   }
 
   async tick() {
-    const log: boolean = false;
+    const log: boolean = true;
 
     if (log) console.log(`\n* Mattress *`);
 
@@ -27,9 +27,11 @@ export default class HeatingController {
       if (log) console.log(`${this.deviceName} connected`);
 
       const plugOffTime = await this.timer.getTimer();
+      if (!plugOffTime) return;
+
       if (log) console.log(`${(plugOffTime - nowTimer()) / 1000} Seconds remaining`);
 
-      if (nowTimer() < plugOffTime) {
+      if (plugOffTime && nowTimer() < plugOffTime) {
         if (log) console.log("Plug should be on!");
 
         if (plug.state !== on) {

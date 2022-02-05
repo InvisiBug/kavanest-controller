@@ -7,7 +7,7 @@ export default class Radiator {
     this.room = room;
   }
 
-  async getTemp() {
+  async getTemp(): Promise<{ inlet: number; outlet: number }> {
     const gqlResponse = await request(
       apiUrl,
       gql`

@@ -9,7 +9,7 @@ export default class Plug {
     this.getState();
   }
 
-  async getState() {
+  async getState(): Promise<{ name: string; state: boolean; connected: boolean }> {
     const gqlResponse = await request(
       apiUrl,
       gql`
@@ -27,12 +27,12 @@ export default class Plug {
     return gqlResponse.response;
   }
 
-  async setState(state: boolean) {
+  async setState(state: boolean): Promise<{ mane: string; state: boolean; connected: boolean; _id: number }> {
     const gqlResponse = await request(
       apiUrl,
       gql`
         mutation ($input: PlugInput) {
-          updatePlug(input: $input) {
+          response: updatePlug(input: $input) {
             name
             state
             connected

@@ -33,6 +33,7 @@ export default class RoomDemandSetter {
     }
 
     const sensor = await this.sensor.getState();
+    if (!sensor) return;
 
     if (sensor?.connected) {
       const valve = await this.valve.getState();

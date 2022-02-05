@@ -46,7 +46,7 @@ export default class Setpoint {
 
     // handle no data present
     if (!gqlData.response) {
-      return;
+      return null;
     } else {
       return getCurrentSetpoint(gqlData.response.setpoints);
     }

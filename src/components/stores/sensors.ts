@@ -8,7 +8,7 @@ export default class Sensor {
     this.roomName = roomName;
   }
 
-  async getState() {
+  async getState(): Promise<{ temperature: number; connected: boolean }> {
     const sensor = await request(
       apiUrl,
       gql`
