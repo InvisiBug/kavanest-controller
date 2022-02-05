@@ -1,15 +1,13 @@
-import Room from "../stores/demand";
-import { offsetTimeMins } from "../helpers";
-import Timers from "../stores/timers";
+import { Room, Timer } from "../stores";
 
-export default class Timer {
+export default class HeatingTimeSetter {
   rooms: Room;
-  timers: Timers;
+  timers: Timer;
   name: string = "heating";
 
   constructor() {
     this.rooms = new Room();
-    this.timers = new Timers("heating");
+    this.timers = new Timer("heating");
   }
 
   async tick() {

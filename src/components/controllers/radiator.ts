@@ -13,7 +13,7 @@ export default class RadiatorController {
   }
 
   async tick() {
-    const log = false;
+    const log = true;
 
     const fan = await this.fan.getState();
     const setpoint: number = 21;
@@ -27,9 +27,9 @@ export default class RadiatorController {
       const radiator = await this.radiator.getTemp();
       if (!radiator) return;
 
-      if (log) console.log("Radiator inlet temp:", radiator.inlet, "Threshold:", setpoint);
+      if (log) console.log("Radiator inlet temp:", radiator.inlet, "Setpoint:", setpoint, "Deadzone", deadzone);
 
-      if (setpoint < radiator.inlet + setpoint) {
+      if (setpoint < radiator.inlet) {
         if (log) console.log("Fan should be on!");
         if (!fan.state) {
           if (log) console.log("Fan is off...");
@@ -39,7 +39,7 @@ export default class RadiatorController {
         } else {
           if (log) console.log("And it is :)");
         }
-      } else {
+      } else if (radiator.inlet < setpoint - deadzone) {
         if (log) console.log("Fan should be off!");
 
         if (fan.state) {
@@ -50,6 +50,8 @@ export default class RadiatorController {
         } else {
           if (log) console.log("And it is :)");
         }
+      } else {
+        if (log) console.log("Within deadzone, do nothing!");
       }
     }
   }
