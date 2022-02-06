@@ -8,7 +8,7 @@ export default class Demand {
     this.roomName = roomName;
   }
 
-  async anyDemand() {
+  async anyDemand(): Promise<boolean> {
     const gqlResponse = await request(
       apiUrl,
       gql`

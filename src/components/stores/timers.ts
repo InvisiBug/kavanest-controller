@@ -7,14 +7,13 @@ export default class Timers {
     this.name = name;
   }
 
-  async getTimer() {
+  async getTimer(): Promise<number | null> {
     try {
       const gqlResponse = await request(
         apiUrl,
         gql`
           query ($timer: String) {
             response: getTimer(timer: $timer) {
-              timer
               value
             }
           }
@@ -24,6 +23,7 @@ export default class Timers {
       return gqlResponse.response.value;
     } catch (error) {
       console.log(`${this.name} timer:\n`, error);
+      // return null;
       return null;
     }
   }

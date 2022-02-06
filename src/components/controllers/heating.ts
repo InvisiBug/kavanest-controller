@@ -26,6 +26,7 @@ export default class HeatingController {
       if (log) console.log("Heating connected");
 
       const heatingOffTime = await this.heatingTimer.getTimer();
+      if (!heatingOffTime) return;
 
       if (nowTimer() < heatingOffTime) {
         if (log) console.log("Heating should be on!");

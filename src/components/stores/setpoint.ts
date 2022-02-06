@@ -28,7 +28,7 @@ export default class Setpoint {
     return gqlData.response;
   }
 
-  async getCurrentTarget() {
+  async getCurrentTarget(): Promise<number> {
     const gqlData = await request(
       apiUrl,
       gql`
@@ -46,13 +46,13 @@ export default class Setpoint {
 
     // handle no data present
     if (!gqlData.response) {
-      return;
+      return 0;
     } else {
       return getCurrentSetpoint(gqlData.response.setpoints);
     }
   }
 
-  async getDeadzone() {
+  async getDeadzone(): Promise<number> {
     const gqlData = await request(
       apiUrl,
       gql`
