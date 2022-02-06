@@ -22,14 +22,14 @@ export default class RoomDemandSetter {
   }
 
   async tick() {
-    const log = false;
+    const log = true;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
-    const target = await this.setpoint.getCurrentTarget();
+    let target = await this.setpoint.getCurrentTarget();
     if (!target) {
       if (log) console.log("No target temp set");
-      return;
+      target = 0;
     }
 
     const sensor = await this.sensor.getState();

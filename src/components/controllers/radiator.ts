@@ -13,7 +13,7 @@ export default class RadiatorController {
   }
 
   async tick() {
-    const log = true;
+    const log = false;
 
     const fan = await this.fan.getState();
     const setpoint: number = 21;
