@@ -1,5 +1,6 @@
 import Heating from "../../stores/heating";
 import Timers from "../../stores/timers";
+import { Plug } from "../../stores";
 import { nowTimer } from "../../helpers";
 
 const on = true;
@@ -10,14 +11,14 @@ export default class HeatingController {
   timers: Timers;
 
   constructor() {
-    this.heating = new Heating();
-    this.timers = new Timers();
+    this.heating = new Plug("heating");
+    this.timers = new Timers("heating");
     this.tick();
   }
 
   async tick() {
     const heating = await this.heating.getState();
-    const heatingOffTime = await this.timers.getTimer("heating");
+    const heatingOffTime = await this.timers.getTimer();
 
     const log = false;
     if (log) console.log(`\n* Heating *`);

@@ -1,6 +1,6 @@
 import { decamelize } from "../../helpers";
 import Valve from "../../stores/valve";
-import Room from "../../stores/rooms";
+import { Room } from "../../stores/";
 
 const open = false;
 const close = true;

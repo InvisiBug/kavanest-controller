@@ -1,6 +1,4 @@
-// import Valve from "../stores/valve";
-import Room from "../stores/demand";
-import { Valve, Demand } from "../stores";
+import { Valve, Room } from "../stores";
 
 const open = false;
 const close = true;
@@ -8,13 +6,13 @@ const close = true;
 export default class ValveController {
   roomName: string;
   valve: Valve;
-  demand: Room;
+  room: Room;
 
   constructor(roomName: string) {
     this.roomName = roomName;
 
     this.valve = new Valve(roomName);
-    this.demand = new Demand(roomName);
+    this.room = new Room(roomName);
   }
 
   async tick() {
@@ -28,11 +26,11 @@ export default class ValveController {
     if (valve?.connected) {
       if (log) console.log("Valve connected");
 
-      const anyDemand = await this.demand.anyDemand();
+      const anyDemand = await this.room.anyDemand();
       if (anyDemand) {
         if (log) console.log("Some rooms are in demand");
 
-        const thisRoomDemand = await this.demand.getDemand();
+        const thisRoomDemand = await this.room.getDemand();
         if (thisRoomDemand) {
           if (log) console.log("This room is in demand");
 

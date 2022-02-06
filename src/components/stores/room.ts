@@ -48,7 +48,7 @@ export default class Demand {
     }
   }
 
-  async setDemand(state: boolean) {
+  async setDemand(demand: boolean) {
     const gqlResponse = await request(
       apiUrl,
       gql`
@@ -60,7 +60,7 @@ export default class Demand {
         }
       `,
       {
-        input: { name: this.roomName, state },
+        input: { name: this.roomName, demand },
       },
     );
     return gqlResponse.response;
