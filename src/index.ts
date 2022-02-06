@@ -20,7 +20,15 @@ request(
   });
 });
 
+<<<<<<< HEAD
 devices.push(new HeatingTimer());
+=======
+// devices.push(new RoomDemandSetter("frontStudy"));
+// devices.push(new Valve("frontStudy"));
+
+devices.push(new TimeSetter());
+devices.push(new Heating());
+>>>>>>> test
 
 devices.push(new PlugTimer("mattress"));
 devices.push(new PlugTimer("heating"));
@@ -41,4 +49,4 @@ const systemTick = async (delay: number) => {
 
 systemTick(2 * 1000);
 
-console.log("Hello from Skippy");
+console.log("Hello from new Skippy");
