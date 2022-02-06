@@ -54,7 +54,7 @@ export default class Demand {
       gql`
         mutation ($input: RoomInput) {
           updateRoom(input: $input) {
-            room
+            name
             demand
           }
         }

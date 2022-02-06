@@ -18,7 +18,7 @@ export default class Timers {
             }
           }
         `,
-        { timer: this.name },
+        { name: this.name },
       );
       return gqlResponse.response.value;
     } catch (error) {
@@ -35,13 +35,13 @@ export default class Timers {
         gql`
           mutation ($input: TimerInput) {
             updateTimer(input: $input) {
-              timer
+              name
               value
             }
           }
         `,
         {
-          input: { timer: this.name, value },
+          input: { name: this.name, value },
         },
       );
       return gqlResponse.response;
