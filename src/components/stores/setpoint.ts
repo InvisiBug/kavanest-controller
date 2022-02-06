@@ -9,48 +9,67 @@ export default class Setpoint {
   }
 
   async getCurrentSetpoints() {
-    const query = gql`
-      query GetSetpoint($room: String) {
-        response: getSetpoint(room: $room) {
-          setpoints {
-            weekend
-            weekday
+    const gqlData = await request(
+      apiUrl,
+      gql`
+        query GetSetpoint($room: String) {
+          response: getSetpoint(room: $room) {
+            setpoints {
+              weekend
+              weekday
+            }
+            deadzone
           }
-          deadzone
         }
-      }
-    `;
+      `,
+      { room: this.roomName },
+    );
 
-    const gqlData = await request(apiUrl, query, { room: this.roomName });
     return gqlData.response;
   }
 
-  async getCurrentTarget() {
-    const query = gql`
-      query GetSetpoint($room: String) {
-        response: getSetpoint(room: $room) {
-          setpoints {
-            weekend
-            weekday
+  async getCurrentTarget(): Promise<number> {
+    const gqlData = await request(
+      apiUrl,
+      gql`
+        query GetSetpoint($room: String) {
+          response: getSetpoint(room: $room) {
+            setpoints {
+              weekend
+              weekday
+            }
           }
         }
-      }
-    `;
+      `,
+      { room: this.roomName },
+    );
 
-    const gqlData = await request(apiUrl, query, { room: this.roomName });
-    return getCurrentSetpoint(gqlData.response.setpoints);
+    // handle no data present
+    if (!gqlData.response) {
+      return 0;
+    } else {
+      return getCurrentSetpoint(gqlData.response.setpoints);
+    }
   }
 
-  async getDeadzone() {
-    const query = gql`
-      query GetSetpoint($room: String) {
-        response: getSetpoint(room: $room) {
-          deadzone
+  async getDeadzone(): Promise<number> {
+    const gqlData = await request(
+      apiUrl,
+      gql`
+        query GetSetpoint($room: String) {
+          response: getSetpoint(room: $room) {
+            deadzone
+          }
         }
-      }
-    `;
+      `,
+      { room: this.roomName },
+    );
 
-    const gqlData = await request(apiUrl, query, { room: this.roomName });
-    return gqlData.response.deadzone;
+    // Handle no deadzone present
+    if (!gqlData.response) {
+      return 0;
+    } else {
+      return gqlData.response.deadzone;
+    }
   }
 }

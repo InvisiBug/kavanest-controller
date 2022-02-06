@@ -1,14 +1,14 @@
 import { request, gql } from "graphql-request";
 import { apiUrl, mongoUrl } from "../helpers";
 
-export default class Room {
+export default class Demand {
   roomName: string;
 
   constructor(roomName: string = "") {
     this.roomName = roomName;
   }
 
-  async anyDemand() {
+  async anyDemand(): Promise<boolean> {
     const gqlResponse = await request(
       apiUrl,
       gql`
@@ -32,20 +32,20 @@ export default class Room {
   }
 
   async getDemand() {
-    const gqlResponse = await request(
-      apiUrl,
-      gql`
-        query ($room: String) {
-          response: getRoom(room: $room) {
-            demand
-          }
+    const query = gql`
+      query ($room: String) {
+        response: getRoom(room: $room) {
+          demand
         }
-      `,
-      {
-        room: this.roomName,
-      },
-    );
-    return gqlResponse.response.demand;
+      }
+    `;
+    const gqlData = await request(apiUrl, query, { room: this.roomName });
+
+    if (!gqlData.response) {
+      return;
+    } else {
+      return gqlData.response.demand;
+    }
   }
 
   async setDemand(state: boolean) {

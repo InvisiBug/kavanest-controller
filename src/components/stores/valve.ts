@@ -8,16 +8,14 @@ export default class valve {
     this.roomName = roomName;
   }
 
-  async getState() {
+  async getState(): Promise<{ state: boolean; connected: boolean }> {
     const valve = await request(
       apiUrl,
       gql`
         query GetSensor($room: String) {
           response: getValve(room: $room) {
             state
-            demand
             connected
-            _id
           }
         }
       `,
@@ -26,7 +24,7 @@ export default class valve {
     return valve.response;
   }
 
-  async setState(state: boolean) {
+  async setState(state: boolean): Promise<{ room: string; state: boolean }> {
     const gqlResponse = await request(
       apiUrl,
       gql`
@@ -41,6 +39,7 @@ export default class valve {
         input: { name: this.roomName, state },
       },
     );
+    // console.log(gqlResponse);
     return gqlResponse.response;
   }
 
