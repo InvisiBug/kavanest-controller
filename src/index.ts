@@ -20,15 +20,7 @@ request(
   });
 });
 
-<<<<<<< HEAD
 devices.push(new HeatingTimer());
-=======
-// devices.push(new RoomDemandSetter("frontStudy"));
-// devices.push(new Valve("frontStudy"));
-
-devices.push(new TimeSetter());
-devices.push(new Heating());
->>>>>>> test
 
 devices.push(new PlugTimer("mattress"));
 devices.push(new PlugTimer("heating"));
