@@ -4,7 +4,6 @@ import { Sensor, Valve, Setpoint, Room } from "../stores/";
 export default class RoomDemandSetter {
   sensor: Sensor;
   valve: Valve;
-  setpoint: Setpoint;
   room: Room;
 
   heating: any;
@@ -15,21 +14,20 @@ export default class RoomDemandSetter {
 
     this.sensor = new Sensor(roomName);
     this.valve = new Valve(roomName);
-    this.setpoint = new Setpoint(roomName);
     this.room = new Room(roomName);
 
     this.tick();
   }
 
   async tick() {
-    const log = false;
+    const log = true;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
-    let target = await this.setpoint.getCurrentTarget();
+    let target = await this.room.getCurrentTarget();
+    console.log(target);
     if (!target) {
       if (log) console.log("No target temp set");
-      target = 0;
     }
 
     const sensor = await this.sensor.getState();
@@ -48,7 +46,8 @@ export default class RoomDemandSetter {
       if (valve?.connected) {
         if (log) console.log(`Sensor and valve connected`);
 
-        const deadzone = await this.setpoint.getDeadzone();
+        const roomData = await this.room.getRoomData();
+        const deadzone = roomData?.deadzone || 0;
 
         if (sensor.temperature < target - deadzone) {
           if (log) console.log(`Wanting heat...\nCurrent: ${sensor.temperature} \t Target: ${target}`);

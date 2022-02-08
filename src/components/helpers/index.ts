@@ -23,6 +23,7 @@ export const getCurrentSetpoint = (setpoints: Setpoints) => {
   let setpoint: any;
   let count: number = 0;
 
+  // Look for a setpoint
   try {
     Object.keys(setpoints[weekOrWeekend()]).forEach((entry) => {
       if (now() >= entry) {
@@ -33,11 +34,21 @@ export const getCurrentSetpoint = (setpoints: Setpoints) => {
 
     const obj = setpoints[weekOrWeekend()];
 
-    if (!setpoint) return parseInt(obj[Object.keys(obj)[count - 1]]);
+    // If setpoint isnt found, use the last entry
+    if (!setpoint) {
+      const lastSetpoint = parseInt(obj[Object.keys(obj)[count - 1]]);
+      // If there arent any setpoints return 0
+      if (!lastSetpoint) {
+        return 0;
+      }
+
+      // Otherwise return the last setpoint
+      return lastSetpoint;
+    }
 
     return setpoint;
   } catch {
-    return "n/a";
+    return 0;
   }
 };
 
