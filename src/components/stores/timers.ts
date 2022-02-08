@@ -12,18 +12,18 @@ export default class Timers {
       const gqlResponse = await request(
         apiUrl,
         gql`
-          query ($timer: String) {
-            response: getTimer(timer: $timer) {
+          query ($name: String) {
+            response: getTimer(name: $name) {
               value
             }
           }
         `,
-        { timer: this.name },
+        { name: this.name },
       );
+
       return gqlResponse.response.value;
     } catch (error) {
-      console.log(`${this.name} timer:\n`, error);
-      // return null;
+      // console.log(`${this.name} timer:\n`, error);
       return null;
     }
   }
@@ -35,13 +35,13 @@ export default class Timers {
         gql`
           mutation ($input: TimerInput) {
             updateTimer(input: $input) {
-              timer
+              name
               value
             }
           }
         `,
         {
-          input: { timer: this.name, value },
+          input: { name: this.name, value },
         },
       );
       return gqlResponse.response;

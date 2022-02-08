@@ -1,11 +1,10 @@
 import { decamelize } from "../helpers";
-import { Sensor, Valve, Setpoint, Demand } from "../stores/";
+import { Sensor, Valve, Setpoint, Room } from "../stores/";
 
 export default class RoomDemandSetter {
   sensor: Sensor;
   valve: Valve;
-  setpoint: Setpoint;
-  demand: Demand;
+  room: Room;
 
   heating: any;
   roomName: string;
@@ -15,22 +14,15 @@ export default class RoomDemandSetter {
 
     this.sensor = new Sensor(roomName);
     this.valve = new Valve(roomName);
-    this.setpoint = new Setpoint(roomName);
-    this.demand = new Demand(roomName);
+    this.room = new Room(roomName);
 
     this.tick();
   }
 
   async tick() {
-    const log = true;
+    const log = false;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
-
-    let target = await this.setpoint.getCurrentTarget();
-    if (!target) {
-      if (log) console.log("No target temp set");
-      target = 0;
-    }
 
     const sensor = await this.sensor.getState();
     if (!sensor) {
@@ -48,17 +40,19 @@ export default class RoomDemandSetter {
       if (valve?.connected) {
         if (log) console.log(`Sensor and valve connected`);
 
-        const deadzone = await this.setpoint.getDeadzone();
+        const roomData = await this.room.getRoomData();
+        const deadzone = roomData?.deadzone || 0;
+        const target = await this.room.getCurrentTarget();
 
         if (sensor.temperature < target - deadzone) {
           if (log) console.log(`Wanting heat...\nCurrent: ${sensor.temperature} \t Target: ${target}`);
 
-          this.demand.setDemand(true);
+          this.room.setDemand(true);
           if (log) console.log(`So demand set to on`);
         } else if (sensor.temperature > target) {
           if (log) console.log(`Not wanting heat \nCurrent: ${sensor.temperature} \t Target: ${target}`);
 
-          this.demand.setDemand(false);
+          this.room.setDemand(false);
           if (log) console.log(`So demand set to off`);
         } else {
           if (log) console.log(`Within deadzone... do nothing`);

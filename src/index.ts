@@ -1,6 +1,6 @@
-import { apiUrl, mongoUrl } from "./components/helpers";
+import { apiUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
-import { RoomDemandSetter, Valve, HeatingTimer, Heating, Radiator, PlugTimer } from "./components/controllers";
+import { RoomDemandSetter, Valve, HeatingTimeSetter, Radiator, PlugTimer } from "./components/controllers";
 
 let devices: Array<any> = [];
 
@@ -15,15 +15,15 @@ request(
   `,
 ).then((data) => {
   data.response.forEach((valve: any) => {
-    // devices.push(new RoomDemandSetter(valve.room));
-    // devices.push(new Valve(valve.room));
+    devices.push(new RoomDemandSetter(valve.room));
+    devices.push(new Valve(valve.room));
   });
 });
 
-devices.push(new RoomDemandSetter("rearBedroom"));
-devices.push(new Valve("rearBedroom"));
+// devices.push(new RoomDemandSetter("frontBedroom"));
+// devices.push(new Valve("frontBedroom"));
 
-devices.push(new HeatingTimer());
+devices.push(new HeatingTimeSetter());
 
 devices.push(new PlugTimer("mattress"));
 devices.push(new PlugTimer("heating"));
@@ -44,4 +44,4 @@ const systemTick = async (delay: number) => {
 
 systemTick(2 * 1000);
 
-console.log("Hello from Skippy");
+console.log("Hello from new Skippy");
