@@ -1,5 +1,5 @@
 import { request, gql } from "graphql-request";
-import { apiUrl, mongoUrl } from "../helpers";
+import { apiUrl } from "../helpers";
 
 export default class Sensor {
   roomName: string;

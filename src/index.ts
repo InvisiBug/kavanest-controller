@@ -1,6 +1,6 @@
-import { apiUrl, mongoUrl } from "./components/helpers";
+import { apiUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
-import { RoomDemandSetter, Valve, HeatingTimer, Heating, Radiator, PlugTimer } from "./components/controllers";
+import { RoomDemandSetter, Valve, HeatingTimeSetter, Radiator, PlugTimer } from "./components/controllers";
 
 let devices: Array<any> = [];
 
@@ -20,15 +20,10 @@ request(
   });
 });
 
-<<<<<<< HEAD
-devices.push(new HeatingTimer());
-=======
-// devices.push(new RoomDemandSetter("frontStudy"));
-// devices.push(new Valve("frontStudy"));
+// devices.push(new RoomDemandSetter("frontBedroom"));
+// devices.push(new Valve("frontBedroom"));
 
-devices.push(new TimeSetter());
-devices.push(new Heating());
->>>>>>> test
+devices.push(new HeatingTimeSetter());
 
 devices.push(new PlugTimer("mattress"));
 devices.push(new PlugTimer("heating"));
