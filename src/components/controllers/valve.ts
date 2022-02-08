@@ -31,7 +31,6 @@ export default class ValveController {
         if (log) console.log("Some rooms are in demand");
 
         const thisRoomDemand = await this.room.getDemand();
-        console.log(thisRoomDemand);
         if (thisRoomDemand) {
           if (log) console.log("This room is in demand");
 

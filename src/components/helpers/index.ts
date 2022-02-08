@@ -1,4 +1,4 @@
-export { apiUrl, mongoUrl } from "./urlGenerators";
+export { apiUrl } from "./urlGenerators";
 
 export const camelRoomName = (text: string) => {
   text = text.replace(/[-_\s.]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ""));

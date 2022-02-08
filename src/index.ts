@@ -1,4 +1,4 @@
-import { apiUrl, mongoUrl } from "./components/helpers";
+import { apiUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
 import { RoomDemandSetter, Valve, HeatingTimeSetter, Radiator, PlugTimer } from "./components/controllers";
 
