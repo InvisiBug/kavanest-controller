@@ -20,12 +20,11 @@ export default class RoomDemandSetter {
   }
 
   async tick() {
-    const log = true;
+    const log = false;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
     let target = await this.room.getCurrentTarget();
-    console.log(target);
     if (!target) {
       if (log) console.log("No target temp set");
     }
