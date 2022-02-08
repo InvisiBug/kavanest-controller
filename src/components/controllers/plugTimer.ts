@@ -28,6 +28,7 @@ export default class HeatingController {
       if (log) console.log(`${this.deviceName} connected`);
 
       const deviceOffTime = await this.timer.getTimer();
+
       if (!deviceOffTime) return;
 
       if (log) console.log(`${(deviceOffTime - nowTimer()) / 1000} Seconds remaining`);

@@ -12,18 +12,18 @@ export default class Timers {
       const gqlResponse = await request(
         apiUrl,
         gql`
-          query ($timer: String) {
-            response: getTimer(timer: $timer) {
+          query ($name: String) {
+            response: getTimer(name: $name) {
               value
             }
           }
         `,
         { name: this.name },
       );
+
       return gqlResponse.response.value;
     } catch (error) {
-      console.log(`${this.name} timer:\n`, error);
-      // return null;
+      // console.log(`${this.name} timer:\n`, error);
       return null;
     }
   }
