@@ -24,11 +24,6 @@ export default class RoomDemandSetter {
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
-    let target = await this.room.getCurrentTarget();
-    if (!target) {
-      if (log) console.log("No target temp set");
-    }
-
     const sensor = await this.sensor.getState();
     if (!sensor) {
       if (log) console.log(`No sensor found`);
@@ -47,6 +42,7 @@ export default class RoomDemandSetter {
 
         const roomData = await this.room.getRoomData();
         const deadzone = roomData?.deadzone || 0;
+        const target = await this.room.getCurrentTarget();
 
         if (sensor.temperature < target - deadzone) {
           if (log) console.log(`Wanting heat...\nCurrent: ${sensor.temperature} \t Target: ${target}`);
