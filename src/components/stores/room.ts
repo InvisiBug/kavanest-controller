@@ -104,7 +104,7 @@ export default class Demand {
     if (!gqlData.response) {
       return;
     } else {
-      return gqlData.response;
+      return gqlData.response.demand;
     }
   }
 

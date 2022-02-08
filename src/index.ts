@@ -15,10 +15,13 @@ request(
   `,
 ).then((data) => {
   data.response.forEach((valve: any) => {
-    devices.push(new RoomDemandSetter(valve.room));
+    // devices.push(new RoomDemandSetter(valve.room));
     devices.push(new Valve(valve.room));
   });
 });
+
+devices.push(new RoomDemandSetter("frontBedroom"));
+// devices.push(new Valve("frontBedroom"));
 
 devices.push(new HeatingTimeSetter());
 
