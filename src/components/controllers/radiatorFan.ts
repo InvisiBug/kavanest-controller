@@ -16,8 +16,8 @@ export default class RadiatorController {
     const log = false;
 
     const fan = await this.fan.getState();
-    const setpoint: number = 21;
-    const deadzone: number = 2;
+    const setpoint: number = 30;
+    const deadzone: number = 0.5;
 
     if (log) console.log("\nRadiator fan controller");
 
