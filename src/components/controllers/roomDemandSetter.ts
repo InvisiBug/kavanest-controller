@@ -20,7 +20,7 @@ export default class RoomDemandSetter {
   }
 
   async tick() {
-    const log = false;
+    const log = true;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
@@ -62,6 +62,22 @@ export default class RoomDemandSetter {
       }
     } else {
       if (log) console.log(`Sensor disconnected`);
+      const target = await this.room.getCurrentTarget();
+      const valve = await this.valve.getState();
+
+      if (valve?.connected) {
+        if (log) console.log(`Valve Connected`);
+
+        if (target === 0) {
+          if (log) console.log(`Target is 0`);
+
+          if (log) console.log(`Set demand to false`);
+          this.room.setDemand(false);
+        } else {
+          if (log) console.log(`Target exists... `);
+          if (log) console.log(`Continue as you are`);
+        }
+      }
       //! May want to set the demand off here
     }
   }
