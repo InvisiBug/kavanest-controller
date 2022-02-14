@@ -20,9 +20,6 @@ request(
   });
 });
 
-// devices.push(new RoomDemandSetter("frontBedroom"));
-// devices.push(new Valve("frontBedroom"));
-
 devices.push(new HeatingTimeSetter());
 
 devices.push(new PlugTimer("mattress"));
