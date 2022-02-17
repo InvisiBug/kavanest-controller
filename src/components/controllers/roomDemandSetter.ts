@@ -62,12 +62,12 @@ export default class RoomDemandSetter {
       }
     } else {
       if (log) console.log(`Sensor disconnected`);
-      const target = await this.room.getCurrentTarget();
       const valve = await this.valve.getState();
 
       if (valve?.connected) {
         if (log) console.log(`Valve Connected`);
 
+        const target = await this.room.getCurrentTarget();
         if (target === 0) {
           if (log) console.log(`Target is 0`);
 
