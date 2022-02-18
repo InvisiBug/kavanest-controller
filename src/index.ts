@@ -20,8 +20,8 @@ request(
   });
 });
 
-// devices.push(new RoomDemandSetter("frontBedroom"));
-// devices.push(new Valve("frontBedroom"));
+// devices.push(new RoomDemandSetter("frontStudy"));
+// devices.push(new Valve("frontStudy"));
 
 devices.push(new HeatingTimeSetter());
 
