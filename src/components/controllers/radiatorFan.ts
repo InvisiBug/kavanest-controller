@@ -21,7 +21,7 @@ export default class RadiatorController {
 
     if (log) console.log("\nRadiator fan controller");
 
-    if (fan.connected) {
+    if (fan?.connected) {
       if (log) console.log("Fan connected");
 
       const radiator = await this.radiator.getTemp();
@@ -31,6 +31,7 @@ export default class RadiatorController {
 
       if (radiator.inlet > setpoint) {
         if (log) console.log("Fan should be on!");
+
         if (!fan.state) {
           if (log) console.log("Fan is off...");
 

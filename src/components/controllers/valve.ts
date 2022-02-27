@@ -3,6 +3,9 @@ import { Valve, Room } from "../stores";
 const open = false;
 const close = true;
 
+const opened = false;
+const closed = true;
+
 export default class ValveController {
   roomName: string;
   valve: Valve;
@@ -21,9 +24,14 @@ export default class ValveController {
     if (log) console.log(`\n* ${this.roomName} Valve *`);
 
     const valve = await this.valve.getState();
-    if (!valve) return;
+    if (!valve) {
+      if (log) console.log("Valve not found");
+      return;
+    }
 
-    if (valve?.connected) {
+    const { state, connected } = valve;
+
+    if (connected) {
       if (log) console.log("Valve connected");
 
       const anyDemand = await this.room.anyDemand();
@@ -36,7 +44,7 @@ export default class ValveController {
 
           if (log) console.log("Valve should be open!");
 
-          if (valve?.state === close) {
+          if (state === closed) {
             if (log) console.log("Valve is closed...");
 
             if (log) console.log("So open Valve");
@@ -49,7 +57,7 @@ export default class ValveController {
 
           if (log) console.log("Valve should be closed!");
 
-          if (valve.state === open) {
+          if (state === opened) {
             if (log) console.log("Valve is open...");
 
             if (log) console.log("So close valve");
@@ -63,7 +71,7 @@ export default class ValveController {
 
         if (log) console.log("So valve should be open!");
 
-        if (valve.state === close) {
+        if (state === closed) {
           if (log) console.log("Valve is closed...");
 
           if (log) console.log("So open Valve");
@@ -72,6 +80,8 @@ export default class ValveController {
           if (log) console.log("And it is :)");
         }
       }
+    } else {
+      if (log) console.log("Valve not connected");
     }
   }
 }

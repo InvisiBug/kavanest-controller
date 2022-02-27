@@ -54,15 +54,22 @@ export default class RoomDemandSetter {
 
           this.room.setDemand(false);
           if (log) console.log(`So demand set to off`);
+          return;
         } else {
           if (log) console.log(`Within deadzone... do nothing`);
+          return;
         }
       } else {
         if (log) console.log(`Valve disconnected`);
+        return;
       }
     } else {
       if (log) console.log(`Sensor disconnected`);
       const valve = await this.valve.getState();
+      if (!valve) {
+        if (log) console.log(`No valve found`);
+        return;
+      }
 
       if (valve?.connected) {
         if (log) console.log(`Valve Connected`);
@@ -77,8 +84,10 @@ export default class RoomDemandSetter {
           if (log) console.log(`Target exists... `);
           if (log) console.log(`Continue as you are`);
         }
+      } else {
+        if (log) console.log("Valve disconnected");
+        return;
       }
-      //! May want to set the demand off here
     }
   }
 }
