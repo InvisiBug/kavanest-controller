@@ -1,5 +1,7 @@
 import { Radiator, Plug } from "../stores";
 
+const on = true;
+const off = false;
 export default class RadiatorController {
   roomName: string;
   radiator: Radiator;
@@ -34,9 +36,9 @@ export default class RadiatorController {
 
         if (!fan.state) {
           if (log) console.log("Fan is off...");
-
           if (log) console.log("So turn fan on");
-          this.fan.setState(true);
+
+          this.fan.setState(on);
         } else {
           if (log) console.log("And it is :)");
         }
@@ -45,9 +47,9 @@ export default class RadiatorController {
 
         if (fan.state) {
           if (log) console.log("Fan is on...");
-
           if (log) console.log("So turn fan off");
-          this.fan.setState(false);
+
+          this.fan.setState(off);
         } else {
           if (log) console.log("And it is :)");
         }

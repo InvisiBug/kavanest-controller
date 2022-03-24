@@ -45,8 +45,8 @@ export default class HeatingController {
 
         if (state === off) {
           if (log) console.log("Plug is off...");
-
           if (log) console.log("So turn on the plug");
+
           this.plug.setState(on);
         } else {
           if (log) console.log("And it is :)");
@@ -56,8 +56,8 @@ export default class HeatingController {
 
         if (state === on) {
           if (log) console.log("Plug is on...");
-
           if (log) console.log("So turn off the plug");
+
           this.plug.setState(off);
         } else {
           if (log) console.log("And it is :)");

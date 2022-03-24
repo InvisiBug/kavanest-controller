@@ -1,6 +1,8 @@
 import { decamelize } from "../helpers";
 import { Sensor, Valve, Setpoint, Room } from "../stores/";
 
+const on = true;
+const off = false;
 export default class RoomDemandSetter {
   sensor: Sensor;
   valve: Valve;
@@ -46,29 +48,25 @@ export default class RoomDemandSetter {
 
         if (sensor.temperature < target - deadzone) {
           if (log) console.log(`Wanting heat...\nCurrent: ${sensor.temperature} \t Target: ${target}`);
+          if (log) console.log(`So set demand to on`);
 
-          this.room.setDemand(true);
-          if (log) console.log(`So demand set to on`);
+          this.room.setDemand(on);
         } else if (sensor.temperature > target) {
           if (log) console.log(`Not wanting heat \nCurrent: ${sensor.temperature} \t Target: ${target}`);
+          if (log) console.log(`So set demand to off`);
 
-          this.room.setDemand(false);
-          if (log) console.log(`So demand set to off`);
-          return;
+          this.room.setDemand(off);
         } else {
           if (log) console.log(`Within deadzone... do nothing`);
-          return;
         }
       } else {
         if (log) console.log(`Valve disconnected`);
-        return;
       }
     } else {
       if (log) console.log(`Sensor disconnected`);
       const valve = await this.valve.getState();
       if (!valve) {
         if (log) console.log(`No valve found`);
-        return;
       }
 
       if (valve?.connected) {
@@ -77,16 +75,15 @@ export default class RoomDemandSetter {
         const target = await this.room.getCurrentTarget();
         if (target === 0) {
           if (log) console.log(`Target is 0`);
+          if (log) console.log(`Set demand to off`);
 
-          if (log) console.log(`Set demand to false`);
-          this.room.setDemand(false);
+          this.room.setDemand(off);
         } else {
           if (log) console.log(`Target exists... `);
           if (log) console.log(`Continue as you are`);
         }
       } else {
         if (log) console.log("Valve disconnected");
-        return;
       }
     }
   }
