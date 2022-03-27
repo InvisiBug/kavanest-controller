@@ -46,13 +46,14 @@ export default class RoomDemandSetter {
         const deadzone = roomData?.deadzone || 0;
         const target = await this.room.getCurrentTarget();
 
+        if (log) console.log(`Current: ${sensor.temperature} \t Target: ${target}`);
         if (sensor.temperature < target - deadzone) {
-          if (log) console.log(`Wanting heat...\nCurrent: ${sensor.temperature} \t Target: ${target}`);
+          if (log) console.log("Wanting heat...");
           if (log) console.log(`So set demand to on`);
 
           this.room.setDemand(on);
         } else if (sensor.temperature > target) {
-          if (log) console.log(`Not wanting heat \nCurrent: ${sensor.temperature} \t Target: ${target}`);
+          if (log) console.log(`Not wanting heat`);
           if (log) console.log(`So set demand to off`);
 
           this.room.setDemand(off);
