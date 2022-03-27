@@ -22,24 +22,31 @@ export default class HeatingController {
     if (log) console.log(`\n* ${this.deviceName} *`);
 
     const plug = await this.plug.getState();
-    if (!plug) return;
+    if (!plug) {
+      if (log) console.log("No plug found");
+      return;
+    }
 
-    if (plug?.connected) {
+    const { state, connected } = plug;
+
+    if (connected) {
       if (log) console.log(`${this.deviceName} connected`);
 
-      const deviceOffTime = await this.timer.getTimer();
+      const offTime = await this.timer.getTimer();
+      if (!offTime) {
+        if (log) console.log("No device off time found");
+        return;
+      }
 
-      if (!deviceOffTime) return;
+      if (log) console.log(`${(offTime - nowTimer()) / 1000} Seconds remaining`);
 
-      if (log) console.log(`${(deviceOffTime - nowTimer()) / 1000} Seconds remaining`);
-
-      if (deviceOffTime && nowTimer() < deviceOffTime) {
+      if (nowTimer() < offTime) {
         if (log) console.log("Plug should be on!");
 
-        if (plug.state !== on) {
+        if (state === off) {
           if (log) console.log("Plug is off...");
-
           if (log) console.log("So turn on the plug");
+
           this.plug.setState(on);
         } else {
           if (log) console.log("And it is :)");
@@ -47,10 +54,10 @@ export default class HeatingController {
       } else {
         if (log) console.log("Plug should be off!");
 
-        if (plug.state === on) {
+        if (state === on) {
           if (log) console.log("Plug is on...");
-
           if (log) console.log("So turn off the plug");
+
           this.plug.setState(off);
         } else {
           if (log) console.log("And it is :)");

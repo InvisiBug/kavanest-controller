@@ -22,6 +22,7 @@ export const weekOrWeekend = () => {
 export const getCurrentSetpoint = (setpoints: Setpoints) => {
   let setpoint: any;
   let count: number = 0;
+  console.log(now());
 
   // Look for a setpoint
   try {
@@ -52,24 +53,19 @@ export const getCurrentSetpoint = (setpoints: Setpoints) => {
   }
 };
 
-interface Setpoints {
-  weekend: entry;
-  weekday: entry;
-}
-interface entry {
-  [x: key]: value;
-}
-
-type key = string;
-type value = string;
-
 export const now = () => {
   const date = new Date();
-  return date.toLocaleTimeString([], {
-    hourCycle: "h23",
+  const dateString = date.toLocaleTimeString([], {
+    hourCycle: "h23", // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/hourCycle
     hour: "2-digit",
     minute: "2-digit",
   });
+
+  //! Daylight savings hack
+  const time = dateString.split(":");
+  const dst = `${parseInt(time[0]) + 1}:${time[1]}`;
+
+  return dst;
 };
 
 export const offsetTimeMins = (addedTime = 0) => {
@@ -81,3 +77,14 @@ export const nowTimer = () => {
   const date = new Date();
   return date.getTime();
 };
+
+interface Setpoints {
+  weekend: entry;
+  weekday: entry;
+}
+interface entry {
+  [x: key]: value;
+}
+
+type key = string;
+type value = string;

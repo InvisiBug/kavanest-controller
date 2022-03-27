@@ -2,21 +2,25 @@ import { Room, Timer } from "../stores";
 
 export default class HeatingTimeSetter {
   rooms: Room;
-  timers: Timer;
+  heating: Timer;
   name: string = "heating";
 
   constructor() {
     this.rooms = new Room();
-    this.timers = new Timer("heating");
+    this.heating = new Timer("heating");
   }
+  // need to get the `valveDelay` and `heating` timers
+  // if `valveDelay` is over 10 mins ago <- maybe change this val later
+  // and the heating timer is in the past
+  // set heating timer to future
 
   async tick() {
     const anyDemand = await this.rooms.anyDemand();
 
     if (anyDemand) {
-      this.timers.setTimer(9999);
+      this.heating.setTimer(9999);
     } else {
-      this.timers.setTimer(0);
+      this.heating.setTimer(0);
     }
   }
 }
