@@ -34,6 +34,7 @@ export const getCurrentSetpoint = (setpoints: Setpoints) => {
     });
 
     const obj = setpoints[weekOrWeekend()];
+    // console.log("obj", obj);
 
     // If setpoint isnt found, use the last entry
     if (!setpoint) {
@@ -63,7 +64,11 @@ export const now = () => {
 
   //! Daylight savings hack
   const time = dateString.split(":");
-  const dst = `${parseInt(time[0]) + 1}:${time[1]}`;
+
+  const hour = parseInt(time[0]);
+  const min = time[1];
+
+  const dst = `${("0" + (hour + 1)).slice(-2)}:${min}`;
 
   return dst;
 };
