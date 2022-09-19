@@ -20,6 +20,7 @@ request(
   });
 });
 
+//* Used for testing a single room
 // devices.push(new RoomDemandSetter("frontStudy"));
 // devices.push(new Valve("frontStudy"));
 
@@ -40,8 +41,27 @@ const systemTick = async (delay: number) => {
     console.log(error);
   }
   setTimeout(() => systemTick(delay), delay);
+  watchdog();
 };
 
 systemTick(2 * 1000);
 
 console.log("Hello from new Skippy");
+
+// Watchdog request
+// Terminate app if request fails, kubernetes will restart it for us
+const watchdog = () => {
+  request(
+    apiUrl,
+    gql`
+      query {
+        response: getValves {
+          room
+        }
+      }
+    `,
+  ).catch((error) => {
+    console.log("Something went wrong");
+    process.exit();
+  });
+};
