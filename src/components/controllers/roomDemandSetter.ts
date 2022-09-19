@@ -1,5 +1,5 @@
 import { decamelize } from "../helpers";
-import { Sensor, Valve, Setpoint, Room } from "../stores/";
+import { Sensor, Valve, Room } from "../stores/";
 
 const on = true;
 const off = false;
@@ -42,9 +42,9 @@ export default class RoomDemandSetter {
       if (valve?.connected) {
         if (log) console.log(`Sensor and valve connected`);
 
+        const target = await this.room.getCurrentTarget();
         const roomData = await this.room.getRoomData();
         const deadzone = roomData?.deadzone || 0;
-        const target = await this.room.getCurrentTarget();
 
         if (log) console.log(`Current: ${sensor.temperature} \t Target: ${target}`);
         if (sensor.temperature < target - deadzone) {
@@ -65,6 +65,7 @@ export default class RoomDemandSetter {
       }
     } else {
       if (log) console.log(`Sensor disconnected`);
+
       const valve = await this.valve.getState();
       if (!valve) {
         if (log) console.log(`No valve found`);

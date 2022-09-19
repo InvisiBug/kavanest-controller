@@ -61,7 +61,7 @@ const watchdog = () => {
       }
     `,
   ).catch((error) => {
-    console.log("Something went wrong");
+    console.log(error);
     process.exit();
   });
 };

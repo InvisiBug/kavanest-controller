@@ -9,6 +9,7 @@ export default class HeatingTimeSetter {
     this.rooms = new Room();
     this.heating = new Timer("heating");
   }
+
   // need to get the `valveDelay` and `heating` timers
   // if `valveDelay` is over 10 mins ago <- maybe change this val later
   // and the heating timer is in the past
