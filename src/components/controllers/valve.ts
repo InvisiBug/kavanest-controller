@@ -3,6 +3,9 @@ import { Valve, Room } from "../stores";
 const open = false;
 const close = true;
 
+const opened = false;
+const closed = true;
+
 export default class ValveController {
   roomName: string;
   valve: Valve;
@@ -21,9 +24,14 @@ export default class ValveController {
     if (log) console.log(`\n* ${this.roomName} Valve *`);
 
     const valve = await this.valve.getState();
-    if (!valve) return;
+    if (!valve) {
+      if (log) console.log("Valve not found");
+      return;
+    }
 
-    if (valve?.connected) {
+    const { state, connected } = valve;
+
+    if (connected) {
       if (log) console.log("Valve connected");
 
       const anyDemand = await this.room.anyDemand();
@@ -33,26 +41,24 @@ export default class ValveController {
         const thisRoomDemand = await this.room.getDemand();
         if (thisRoomDemand) {
           if (log) console.log("This room is in demand");
-
           if (log) console.log("Valve should be open!");
 
-          if (valve?.state === close) {
+          if (state === closed) {
             if (log) console.log("Valve is closed...");
-
             if (log) console.log("So open Valve");
+
             this.valve.setState(open);
           } else {
             if (log) console.log("And it is :)");
           }
         } else {
           if (log) console.log("This room is not in demand");
-
           if (log) console.log("Valve should be closed!");
 
-          if (valve.state === open) {
+          if (state === opened) {
             if (log) console.log("Valve is open...");
-
             if (log) console.log("So close valve");
+
             this.valve.setState(close);
           } else {
             if (log) console.log("And it is :)");
@@ -60,18 +66,19 @@ export default class ValveController {
         }
       } else {
         if (log) console.log("No rooms in demand");
-
         if (log) console.log("So valve should be open!");
 
-        if (valve.state === close) {
+        if (state === closed) {
           if (log) console.log("Valve is closed...");
-
           if (log) console.log("So open Valve");
+
           this.valve.setState(open);
         } else {
           if (log) console.log("And it is :)");
         }
       }
+    } else {
+      if (log) console.log("Valve not connected");
     }
   }
 }

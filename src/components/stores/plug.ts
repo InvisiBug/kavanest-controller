@@ -27,7 +27,7 @@ export default class Plug {
     return gqlResponse.response;
   }
 
-  async setState(state: boolean): Promise<{ mane: string; state: boolean; connected: boolean; _id: number }> {
+  async setState(state: boolean): Promise<{ name: string; state: boolean; connected: boolean; _id: number }> {
     const gqlResponse = await request(
       apiUrl,
       gql`
