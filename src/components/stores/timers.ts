@@ -13,6 +13,7 @@ export default class Timers {
         value: number | null;
       };
     };
+
     const query = gql`
       query ($name: String) {
         response: getTimer(name: $name) {
@@ -41,6 +42,7 @@ export default class Timers {
         value: number;
       };
     };
+
     const mutation = gql`
       mutation ($input: TimerInput) {
         response: updateTimer(input: $input) {
