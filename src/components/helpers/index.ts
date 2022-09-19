@@ -22,7 +22,7 @@ export const weekOrWeekend = () => {
 export const getCurrentSetpoint = (setpoints: Setpoints) => {
   let setpoint: any;
   let count: number = 0;
-  console.log(now());
+  // console.log(now());
 
   // Look for a setpoint
   try {
