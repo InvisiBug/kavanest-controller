@@ -8,18 +8,20 @@ export default class Timers {
   }
 
   async getTimer(): Promise<number | null> {
+    const query = gql`
+      query ($name: String) {
+        response: getTimer(name: $name) {
+          value
+        }
+      }
+    `;
+
+    const variables = {
+      name: this.name,
+    };
+
     try {
-      const gqlResponse = await request(
-        apiUrl,
-        gql`
-          query ($name: String) {
-            response: getTimer(name: $name) {
-              value
-            }
-          }
-        `,
-        { name: this.name },
-      );
+      const gqlResponse = await request(apiUrl, query, variables);
 
       return gqlResponse.response.value;
     } catch (error) {
@@ -29,21 +31,27 @@ export default class Timers {
   }
 
   async setTimer(value: number) {
+    const mutation = gql`
+      mutation ($input: TimerInput) {
+        response: updateTimer(input: $input) {
+          name
+          value
+        }
+      }
+    `;
+
+    const variables = {
+      input: {
+        name: this.name,
+        value,
+      },
+    };
+
     try {
-      const gqlResponse = await request(
-        apiUrl,
-        gql`
-          mutation ($input: TimerInput) {
-            updateTimer(input: $input) {
-              name
-              value
-            }
-          }
-        `,
-        {
-          input: { name: this.name, value },
-        },
-      );
+      const gqlResponse = await request(apiUrl, mutation, variables);
+
+      console.log(gqlResponse);
+
       return gqlResponse.response;
     } catch (error) {
       console.log(error);
