@@ -9,41 +9,63 @@ export default class Plug {
     this.getState();
   }
 
-  async getState(): Promise<{ name: string; state: boolean; connected: boolean }> {
-    const gqlResponse = await request(
-      apiUrl,
-      gql`
-        query ($name: String) {
-          response: getPlug(name: $name) {
-            name
-            state
-            connected
-          }
+  async getState() {
+    type Data = {
+      response: {
+        name: string;
+        state: boolean;
+        connected: boolean;
+      };
+    };
+
+    const query = gql`
+      query ($name: String) {
+        response: getPlug(name: $name) {
+          name
+          state
+          connected
         }
-      `,
-      { name: this.name },
-    );
+      }
+    `;
+
+    const variables = {
+      name: this.name,
+    };
+
+    const gqlResponse: Data = await request(apiUrl, query, variables);
 
     return gqlResponse.response;
   }
 
-  async setState(state: boolean): Promise<{ name: string; state: boolean; connected: boolean; _id: number }> {
-    const gqlResponse = await request(
-      apiUrl,
-      gql`
-        mutation ($input: PlugInput) {
-          response: updatePlug(input: $input) {
-            name
-            state
-            connected
-            _id
-          }
+  async setState(state: boolean) {
+    type Data = {
+      response: {
+        name: string;
+        state: boolean;
+        connected: boolean;
+        _id: number;
+      };
+    };
+
+    const mutation = gql`
+      mutation ($input: PlugInput) {
+        response: updatePlug(input: $input) {
+          name
+          state
+          connected
+          _id
         }
-      `,
-      {
-        input: { name: this.name, state },
+      }
+    `;
+
+    const variables = {
+      input: {
+        name: this.name,
+        state,
       },
-    );
+    };
+
+    const gqlResponse: Data = await request(apiUrl, mutation, variables);
 
     return gqlResponse.response;
   }

@@ -7,55 +7,61 @@ export default class Heating {
   }
 
   async getState() {
-    const gqlResponse = await request(
-      apiUrl,
-      gql`
-        query ($name: String) {
-          response: getPlug(name: $name) {
-            state
-            connected
-          }
+    type Data = {
+      response: {
+        state: boolean;
+        connected: boolean;
+      };
+    };
+
+    const query = gql`
+      query ($name: String) {
+        response: getPlug(name: $name) {
+          state
+          connected
         }
-      `,
-      { name: "heating" },
-    );
+      }
+    `;
+
+    const variables = {
+      name: "heating",
+    };
+
+    const gqlResponse: Data = await request(apiUrl, query, variables);
+
     return gqlResponse.response;
   }
 
   async setState(state: boolean) {
-    const gqlResponse = await request(
-      apiUrl,
-      gql`
-        mutation ($input: PlugInput) {
-          updatePlug(input: $input) {
-            name
-            state
-            connected
-            _id
-          }
+    type Data = {
+      response: {
+        name: string;
+        state: boolean;
+        connected: boolean;
+        _id: string;
+      };
+    };
+
+    const mutation = gql`
+      mutation ($input: PlugInput) {
+        updatePlug(input: $input) {
+          name
+          state
+          connected
+          _id
         }
-      `,
-      {
-        input: { name: "heating", state },
+      }
+    `;
+
+    const variables = {
+      input: {
+        name: "heating",
+        state,
       },
-    );
+    };
+
+    const gqlResponse: Data = await request(apiUrl, mutation, variables);
+
     return gqlResponse.response;
   }
-
-  // async setDemand(state:boolean) {
-  //   const valve = await request(
-  //     apiUrl,
-  //     gql`
-  //       query GetSensor($room: String) {
-  //         response: getValve(room: $room) {
-  //           state
-  //           demand
-  //           connected
-  //           _id
-  //         }
-  //       }
-  //     `,
-  //     { room: this.roomName },
-  //   );
-  // }
 }

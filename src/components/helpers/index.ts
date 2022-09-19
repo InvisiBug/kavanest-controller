@@ -20,7 +20,7 @@ export const weekOrWeekend = () => {
 
 // Takes in setpoints object and returns current target
 export const getCurrentSetpoint = (setpoints: Setpoints) => {
-  let setpoint: any;
+  let setpoint: string | undefined | null;
   let count: number = 0;
   // console.log(now());
 
@@ -48,7 +48,7 @@ export const getCurrentSetpoint = (setpoints: Setpoints) => {
       return lastSetpoint;
     }
 
-    return setpoint;
+    return parseInt(setpoint);
   } catch {
     return 0;
   }

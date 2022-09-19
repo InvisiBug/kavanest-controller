@@ -7,43 +7,61 @@ export default class Timers {
     this.name = name;
   }
 
-  async getTimer(): Promise<number | null> {
+  async getTimer() {
+    type Data = {
+      response: {
+        value: number | null;
+      };
+    };
+
+    const query = gql`
+      query ($name: String) {
+        response: getTimer(name: $name) {
+          value
+        }
+      }
+    `;
+
+    const variables = {
+      name: this.name,
+    };
+
     try {
-      const gqlResponse = await request(
-        apiUrl,
-        gql`
-          query ($name: String) {
-            response: getTimer(name: $name) {
-              value
-            }
-          }
-        `,
-        { name: this.name },
-      );
+      const gqlResponse: Data = await request(apiUrl, query, variables);
 
       return gqlResponse.response.value;
     } catch (error) {
-      // console.log(`${this.name} timer:\n`, error);
       return null;
     }
   }
 
   async setTimer(value: number) {
+    type Data = {
+      response: {
+        name: string;
+        value: number;
+      };
+    };
+
+    const mutation = gql`
+      mutation ($input: TimerInput) {
+        response: updateTimer(input: $input) {
+          name
+          value
+        }
+      }
+    `;
+
+    const variables = {
+      input: {
+        name: this.name,
+        value,
+      },
+    };
+
     try {
-      const gqlResponse = await request(
-        apiUrl,
-        gql`
-          mutation ($input: TimerInput) {
-            updateTimer(input: $input) {
-              name
-              value
-            }
-          }
-        `,
-        {
-          input: { name: this.name, value },
-        },
-      );
+      const gqlResponse: Data = await request(apiUrl, mutation, variables);
+
       return gqlResponse.response;
     } catch (error) {
       console.log(error);
