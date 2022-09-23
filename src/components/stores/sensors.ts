@@ -8,21 +8,29 @@ export default class Sensor {
     this.roomName = roomName;
   }
 
-  async getState(): Promise<{ temperature: number; connected: boolean }> {
-    const sensor = await request(
-      apiUrl,
-      gql`
-        query GetSensor($room: String) {
-          response: getSensor(room: $room) {
-            temperature
-            connected
-          }
+  async getState() {
+    type Data = {
+      response: {
+        temperature: number;
+        connected: boolean;
+      };
+    };
+
+    const query = gql`
+      query GetSensor($room: String) {
+        response: getSensor(room: $room) {
+          temperature
+          connected
         }
-      `,
-      {
-        room: this.roomName,
-      },
-    );
+      }
+    `;
+
+    const variables = {
+      room: this.roomName,
+    };
+
+    const sensor: Data = await request(apiUrl, query, variables);
+
     return sensor.response;
   }
 }

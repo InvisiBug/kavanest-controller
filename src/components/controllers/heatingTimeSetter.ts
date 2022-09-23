@@ -9,6 +9,7 @@ export default class HeatingTimeSetter {
     this.rooms = new Room();
     this.heating = new Timer("heating");
   }
+
   // need to get the `valveDelay` and `heating` timers
   // if `valveDelay` is over 10 mins ago <- maybe change this val later
   // and the heating timer is in the past
@@ -16,11 +17,12 @@ export default class HeatingTimeSetter {
 
   async tick() {
     const anyDemand = await this.rooms.anyDemand();
+    // console.log("Any Demand", anyDemand);
 
     if (anyDemand) {
       this.heating.setTimer(9999);
     } else {
-      this.heating.setTimer(0);
+      this.heating.setTimer(-1);
     }
   }
 }

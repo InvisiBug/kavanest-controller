@@ -1,6 +1,16 @@
+import { graphql } from "graphql";
 import { request, gql } from "graphql-request";
 import { apiUrl, getCurrentSetpoint } from "../helpers";
 
+/*
+  Available functions
+  getRoomData()
+  getDisabled();
+  gerCurrentTarget();
+  anyDemand();
+  getDemand();
+  setDemand();
+*/
 export default class Demand {
   roomName: string;
 
@@ -9,6 +19,19 @@ export default class Demand {
   }
 
   async getRoomData() {
+    type Data = {
+      response: {
+        setpoints: {
+          weekend: Record<string, string>;
+          weekday: Record<string, string>;
+        };
+        demand: number | null;
+        overrideTime: string | null;
+        disabled: boolean | null;
+        deadzone: number | null;
+      };
+    };
+
     const query = gql`
       query ($name: String) {
         response: getRoom(name: $name) {
@@ -23,7 +46,12 @@ export default class Demand {
         }
       }
     `;
-    const gqlData = await request(apiUrl, query, { name: this.roomName });
+
+    const variables = {
+      name: this.roomName,
+    };
+
+    const gqlData: Data = await request(apiUrl, query, variables);
 
     if (!gqlData.response) {
       return;
@@ -33,6 +61,12 @@ export default class Demand {
   }
 
   async getDisabled() {
+    type Data = {
+      response: {
+        disabled: boolean | null;
+      };
+    };
+
     const query = gql`
       query ($name: String) {
         response: getRoom(name: $name) {
@@ -40,7 +74,12 @@ export default class Demand {
         }
       }
     `;
-    const gqlData = await request(apiUrl, query, { name: this.roomName });
+
+    const variables = {
+      name: this.roomName,
+    };
+
+    const gqlData: Data = await request(apiUrl, query, variables);
 
     if (!gqlData.response) {
       return;
@@ -50,6 +89,15 @@ export default class Demand {
   }
 
   async getCurrentTarget() {
+    type Data = {
+      response: {
+        setpoints: {
+          weekend: Record<string, string>;
+          weekday: Record<string, string>;
+        };
+      };
+    };
+
     const query = gql`
       query ($name: String) {
         response: getRoom(name: $name) {
@@ -60,7 +108,8 @@ export default class Demand {
         }
       }
     `;
-    const gqlData = await request(apiUrl, query, { name: this.roomName });
+
+    const gqlData: Data = await request(apiUrl, query, { name: this.roomName });
 
     if (!gqlData.response) {
       return 0;
@@ -69,22 +118,29 @@ export default class Demand {
     }
   }
 
-  async anyDemand(): Promise<boolean> {
-    const gqlResponse = await request(
-      apiUrl,
-      gql`
-        query {
-          response: getRooms {
-            demand
-          }
+  async anyDemand() {
+    type Data = {
+      response: [
+        {
+          demand: number;
+        },
+      ];
+    };
+
+    const query = gql`
+      query {
+        response: getRooms {
+          demand
         }
-      `,
-    );
+      }
+    `;
+
+    const gqlResponse: Data = await request(apiUrl, query);
 
     let anyDemand = false;
 
     gqlResponse.response.forEach((room: any) => {
-      if (room.demand === true) {
+      if (room.demand == 1) {
         anyDemand = true;
       }
     });
@@ -93,6 +149,12 @@ export default class Demand {
   }
 
   async getDemand() {
+    type Data = {
+      response: {
+        demand: number | null;
+      };
+    };
+
     const query = gql`
       query ($name: String) {
         response: getRoom(name: $name) {
@@ -100,7 +162,10 @@ export default class Demand {
         }
       }
     `;
-    const gqlData = await request(apiUrl, query, { name: this.roomName });
+
+    const variables = { name: this.roomName };
+
+    const gqlData: Data = await request(apiUrl, query, variables);
 
     if (!gqlData.response) {
       return;
@@ -109,21 +174,29 @@ export default class Demand {
     }
   }
 
-  async setDemand(demand: boolean) {
-    const gqlResponse = await request(
-      apiUrl,
-      gql`
-        mutation ($input: RoomInput) {
-          updateRoom(input: $input) {
-            name
-            demand
-          }
+  async setDemand(demand: number) {
+    type Data = {
+      response: {
+        name: string;
+        demand: number;
+      };
+    };
+
+    const mutation = gql`
+      mutation ($input: RoomInput) {
+        response: updateRoom(input: $input) {
+          name
+          demand
         }
-      `,
-      {
-        input: { name: this.roomName, demand },
-      },
-    );
+      }
+    `;
+
+    const variables = {
+      input: { name: this.roomName, demand },
+    };
+
+    const gqlResponse: Data = await request(apiUrl, mutation, variables);
+
     return gqlResponse.response;
   }
 }

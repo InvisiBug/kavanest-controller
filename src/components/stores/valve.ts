@@ -8,55 +8,58 @@ export default class valve {
     this.roomName = roomName;
   }
 
-  async getState(): Promise<{ state: boolean; connected: boolean }> {
-    const valve = await request(
-      apiUrl,
-      gql`
-        query GetSensor($room: String) {
-          response: getValve(room: $room) {
-            state
-            connected
-          }
+  async getState() {
+    type Data = {
+      response: {
+        state: boolean;
+        connected: boolean;
+      };
+    };
+
+    const query = gql`
+      query GetSensor($room: String) {
+        response: getValve(room: $room) {
+          state
+          connected
         }
-      `,
-      { room: this.roomName },
-    );
+      }
+    `;
+
+    const variables = {
+      room: this.roomName,
+    };
+
+    const valve: Data = await request(apiUrl, query, variables);
+
     return valve.response;
   }
 
-  async setState(state: boolean): Promise<{ room: string; state: boolean }> {
-    const gqlResponse = await request(
-      apiUrl,
-      gql`
-        mutation ($input: ValveInput) {
-          updateValve(input: $input) {
-            room
-            state
-          }
+  async setState(state: boolean) {
+    type Data = {
+      response: {
+        room: string;
+        state: boolean;
+      };
+    };
+
+    const query = gql`
+      mutation ($input: ValveInput) {
+        updateValve(input: $input) {
+          room
+          state
         }
-      `,
-      {
-        input: { name: this.roomName, state },
+      }
+    `;
+
+    const variables = {
+      input: {
+        name: this.roomName,
+        state,
       },
-    );
-    // console.log(gqlResponse);
+    };
+
+    const gqlResponse: Data = await request(apiUrl, query, variables);
+
     return gqlResponse.response;
   }
-
-  // async setDemand(state:boolean) {
-  //   const valve = await request(
-  //     apiUrl,
-  //     gql`
-  //       query GetSensor($room: String) {
-  //         response: getValve(room: $room) {
-  //           state
-  //           demand
-  //           connected
-  //           _id
-  //         }
-  //       }
-  //     `,
-  //     { room: this.roomName },
-  //   );
-  // }
 }

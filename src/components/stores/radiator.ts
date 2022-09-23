@@ -7,19 +7,29 @@ export default class Radiator {
     this.room = room;
   }
 
-  async getTemp(): Promise<{ inlet: number; outlet: number }> {
-    const gqlResponse = await request(
-      apiUrl,
-      gql`
-        query GetRadiator($room: String) {
-          response: getRadiator(room: $room) {
-            inlet
-            outlet
-          }
+  async getTemp() {
+    type Data = {
+      response: {
+        inlet: number;
+        outlet: number;
+      };
+    };
+
+    const query = gql`
+      query GetRadiator($room: String) {
+        response: getRadiator(room: $room) {
+          inlet
+          outlet
         }
-      `,
-      { room: this.room },
-    );
+      }
+    `;
+
+    const variables = {
+      room: this.room,
+    };
+
+    const gqlResponse: Data = await request(apiUrl, query, variables);
+
     return gqlResponse.response;
   }
 }

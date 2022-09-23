@@ -4,21 +4,33 @@ import { RoomDemandSetter, Valve, HeatingTimeSetter, Radiator, PlugTimer } from 
 
 let devices: Array<any> = [];
 
-request(
-  apiUrl,
-  gql`
-    query {
-      response: getValves {
-        room
-      }
+/////
+// * Create controllers for each room demand
+// by first getting a list of all valves
+type Data = {
+  response: [
+    {
+      room: string;
+    },
+  ];
+};
+
+const query = gql`
+  query {
+    response: getValves {
+      room
     }
-  `,
-).then((data) => {
-  data.response.forEach((valve: any) => {
+  }
+`;
+
+request(apiUrl, query).then((data: Data) => {
+  data.response.forEach((valve) => {
     devices.push(new RoomDemandSetter(valve.room));
     devices.push(new Valve(valve.room));
   });
 });
+
+//////
 
 //* Used for testing a single room
 // devices.push(new RoomDemandSetter("frontStudy"));
@@ -61,7 +73,7 @@ const watchdog = () => {
       }
     `,
   ).catch((error) => {
-    console.log("Something went wrong");
+    console.log(error);
     process.exit();
   });
 };

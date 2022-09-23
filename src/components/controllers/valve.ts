@@ -39,7 +39,20 @@ export default class ValveController {
         if (log) console.log("Some rooms are in demand");
 
         const thisRoomDemand = await this.room.getDemand();
-        if (thisRoomDemand) {
+
+        if (thisRoomDemand == 0) {
+          if (log) console.log("This room is not in demand");
+          if (log) console.log("Valve should be closed!");
+
+          if (state === opened) {
+            if (log) console.log("Valve is open...");
+            if (log) console.log("So close valve");
+
+            this.valve.setState(close);
+          } else {
+            if (log) console.log("And it is :)");
+          }
+        } else if (thisRoomDemand == 1) {
           if (log) console.log("This room is in demand");
           if (log) console.log("Valve should be open!");
 
@@ -51,15 +64,15 @@ export default class ValveController {
           } else {
             if (log) console.log("And it is :)");
           }
-        } else {
-          if (log) console.log("This room is not in demand");
-          if (log) console.log("Valve should be closed!");
+        } else if (thisRoomDemand == 2) {
+          if (log) console.log("This room is in maybe demand");
+          if (log) console.log("Valve should be open!");
 
-          if (state === opened) {
-            if (log) console.log("Valve is open...");
-            if (log) console.log("So close valve");
+          if (state === closed) {
+            if (log) console.log("Valve is closed...");
+            if (log) console.log("So open Valve");
 
-            this.valve.setState(close);
+            this.valve.setState(open);
           } else {
             if (log) console.log("And it is :)");
           }
