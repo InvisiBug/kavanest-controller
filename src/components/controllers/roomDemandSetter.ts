@@ -1,8 +1,9 @@
 import { decamelize } from "../helpers";
 import { Sensor, Valve, Room } from "../stores/";
 
-const on = true;
-const off = false;
+const off = 0;
+const on = 1;
+const maybe = 2;
 export default class RoomDemandSetter {
   sensor: Sensor;
   valve: Valve;
@@ -22,7 +23,8 @@ export default class RoomDemandSetter {
   }
 
   async tick() {
-    const log = false;
+    // const log = this.roomName == "diningRoom" ? true : false;
+    const log = true;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
@@ -44,21 +46,26 @@ export default class RoomDemandSetter {
 
         const target = await this.room.getCurrentTarget();
         const roomData = await this.room.getRoomData();
+
         const deadzone = roomData?.deadzone || 0;
+        if (log) console.log(deadzone);
 
-        if (log) console.log(`Current: ${sensor.temperature} \t Target: ${target}`);
-        if (sensor.temperature < target - deadzone) {
-          if (log) console.log("Wanting heat...");
-          if (log) console.log(`So set demand to on`);
-
-          this.room.setDemand(on);
-        } else if (sensor.temperature > target) {
+        if (log) console.log(`Temperature: ${sensor.temperature} \t Target: ${target}`);
+        if (sensor.temperature > target) {
           if (log) console.log(`Not wanting heat`);
           if (log) console.log(`So set demand to off`);
 
           this.room.setDemand(off);
+        } else if (sensor.temperature < target - deadzone) {
+          if (log) console.log("Wanting heat...");
+          if (log) console.log(`So set demand to on`);
+
+          this.room.setDemand(on);
         } else {
           if (log) console.log(`Within deadzone... do nothing`);
+          if (log) console.log(`So set demand to maybe`);
+          this.room.setDemand(maybe);
+          // Need to make a third demand setting
         }
       } else {
         if (log) console.log(`Valve disconnected`);

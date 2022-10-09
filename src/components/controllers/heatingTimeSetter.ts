@@ -17,6 +17,7 @@ export default class HeatingTimeSetter {
 
   async tick() {
     const anyDemand = await this.rooms.anyDemand();
+    // console.log("Any Demand", anyDemand);
 
     if (anyDemand) {
       this.heating.setTimer(9999);

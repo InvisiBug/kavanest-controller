@@ -2,6 +2,15 @@ import { graphql } from "graphql";
 import { request, gql } from "graphql-request";
 import { apiUrl, getCurrentSetpoint } from "../helpers";
 
+/*
+  Available functions
+  getRoomData()
+  getDisabled();
+  gerCurrentTarget();
+  anyDemand();
+  getDemand();
+  setDemand();
+*/
 export default class Demand {
   roomName: string;
 
@@ -16,7 +25,7 @@ export default class Demand {
           weekend: Record<string, string>;
           weekday: Record<string, string>;
         };
-        demand: boolean | null;
+        demand: number | null;
         overrideTime: string | null;
         disabled: boolean | null;
         deadzone: number | null;
@@ -113,7 +122,7 @@ export default class Demand {
     type Data = {
       response: [
         {
-          demand: boolean;
+          demand: number;
         },
       ];
     };
@@ -131,7 +140,7 @@ export default class Demand {
     let anyDemand = false;
 
     gqlResponse.response.forEach((room: any) => {
-      if (room.demand === true) {
+      if (room.demand == 1) {
         anyDemand = true;
       }
     });
@@ -142,7 +151,7 @@ export default class Demand {
   async getDemand() {
     type Data = {
       response: {
-        demand: boolean | null;
+        demand: number | null;
       };
     };
 
@@ -165,11 +174,11 @@ export default class Demand {
     }
   }
 
-  async setDemand(demand: boolean) {
+  async setDemand(demand: number) {
     type Data = {
       response: {
         name: string;
-        demand: boolean;
+        demand: number;
       };
     };
 
