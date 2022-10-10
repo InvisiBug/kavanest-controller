@@ -62,9 +62,19 @@ export default class RoomDemandSetter {
 
           this.room.setDemand(on);
         } else {
-          if (log) console.log(`Within deadzone... do nothing`);
-          if (log) console.log(`So set demand to maybe`);
-          this.room.setDemand(maybe);
+          if (await this.room.anyDemand()) {
+            if (log) console.log("Another room is wanting heat");
+
+            if (log) console.log(`So set demand to maybe`);
+            this.room.setDemand(maybe);
+          } else {
+            if (log) console.log("No other rooms wanting heat");
+            if (log) console.log(`Within deadzone... do nothing`);
+          }
+          // Is there any demand
+          // If so, set maybe demand
+          // If not, set demand to on
+
           // Need to make a third demand setting
         }
       } else {
