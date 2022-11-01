@@ -10,9 +10,7 @@ services:
     networks:
       - proxynet
     environment:
-      - ENVIRONMENT=docker
-      - MQTT_DOCKER=mqtt://mosquitto
-      - MONGO_DOCKER=mongodb://kavanest-mongo:27017
+      - API=http://kavanest-api:4000
 
 networks:
   proxynet:
