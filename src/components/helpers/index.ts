@@ -70,7 +70,12 @@ export const now = () => {
 
   const dst = `${("0" + (hour + 1)).slice(-2)}:${min}`;
 
-  return dst;
+  const daylightSavings = false;
+  if (daylightSavings) {
+    return dst;
+  } else {
+    return dateString;
+  }
 };
 
 export const offsetTimeMins = (addedTime = 0) => {
