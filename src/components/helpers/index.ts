@@ -48,7 +48,7 @@ export const getCurrentSetpoint = (setpoints: Setpoints) => {
       return lastSetpoint;
     }
 
-    return parseInt(setpoint);
+    return parseFloat(setpoint);
   } catch {
     return 0;
   }

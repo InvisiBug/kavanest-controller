@@ -25,16 +25,16 @@ const query = gql`
 
 request(apiUrl, query).then((data: Data) => {
   data.response.forEach((valve) => {
-    devices.push(new RoomDemandSetter(valve.room));
-    devices.push(new Valve(valve.room));
+    // devices.push(new RoomDemandSetter(valve.room));
+    // devices.push(new Valve(valve.room));
   });
 });
 
 //////
 
 //* Used for testing a single room
-// devices.push(new RoomDemandSetter("frontStudy"));
-// devices.push(new Valve("frontStudy"));
+devices.push(new RoomDemandSetter("frontStudy"));
+devices.push(new Valve("frontStudy"));
 
 devices.push(new HeatingTimeSetter());
 

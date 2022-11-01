@@ -48,7 +48,7 @@ export default class RoomDemandSetter {
         const roomData = await this.room.getRoomData();
 
         const deadzone = roomData?.deadzone || 0;
-        if (log) console.log(deadzone);
+        // if (log) console.log(deadzone);
 
         if (log) console.log(`Temperature: ${sensor.temperature} \t Target: ${target}`);
         if (sensor.temperature > target) {
@@ -62,7 +62,7 @@ export default class RoomDemandSetter {
 
           this.room.setDemand(on);
         } else {
-          if (await this.room.anyDemand()) {
+          if ((await this.room.anyDemand()) && (await this.room.getDemand()) != 1) {
             if (log) console.log("Another room is wanting heat");
 
             if (log) console.log(`So set demand to maybe`);
@@ -71,11 +71,6 @@ export default class RoomDemandSetter {
             if (log) console.log("No other rooms wanting heat");
             if (log) console.log(`Within deadzone... do nothing`);
           }
-          // Is there any demand
-          // If so, set maybe demand
-          // If not, set demand to on
-
-          // Need to make a third demand setting
         }
       } else {
         if (log) console.log(`Valve disconnected`);
