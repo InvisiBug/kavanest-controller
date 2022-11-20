@@ -28,7 +28,7 @@ export default class Demand {
           }
           demand
           overrideTime
-          disabled
+          overrideType
           deadzone
         }
       }
@@ -53,7 +53,8 @@ export default class Demand {
           weekday: Record<string, string>;
         };
         demand: number | null;
-        overrideTime: string | null;
+        overrideTime: number | null;
+        overrideType: string | null;
         disabled: boolean | null;
         deadzone: number | null;
       };

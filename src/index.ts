@@ -24,17 +24,25 @@ const query = gql`
 `;
 
 request(apiUrl, query).then((data: Data) => {
+  const testing = false;
+  const testRoom = "frontStudy";
+
+  if (testing) {
+    devices.push(new RoomDemandSetter(testRoom));
+    devices.push(new Valve(testRoom));
+  }
+
   data.response.forEach((valve) => {
-    // devices.push(new RoomDemandSetter(valve.room));
-    // devices.push(new Valve(valve.room));
+    if (!testing) {
+      devices.push(new RoomDemandSetter(valve.room));
+      devices.push(new Valve(valve.room));
+    }
   });
 });
 
 //////
 
 //* Used for testing a single room
-devices.push(new RoomDemandSetter("frontStudy"));
-devices.push(new Valve("frontStudy"));
 
 devices.push(new HeatingTimeSetter());
 
