@@ -1,5 +1,5 @@
 import { decamelize, nowTimer } from "../helpers";
-import { Sensor, Valve, Room } from "../stores/";
+import { Sensor, Valve, Room, RadiatorV2 as Radiator } from "../stores/";
 
 const off = 0;
 const on = 1;
@@ -8,6 +8,7 @@ export default class RoomDemandSetter {
   sensor: Sensor;
   valve: Valve;
   room: Room;
+  radiator: Radiator;
 
   heating: any;
   roomName: string;
@@ -16,6 +17,7 @@ export default class RoomDemandSetter {
     this.roomName = roomName;
 
     this.sensor = new Sensor(roomName);
+    this.radiator = new Radiator(roomName);
     this.valve = new Valve(roomName);
     this.room = new Room(roomName);
 
@@ -35,13 +37,16 @@ export default class RoomDemandSetter {
     }
 
     if (sensor?.connected) {
-      const valve = await this.valve.getState();
-      if (!valve) {
-        if (log) console.log(`No valve found`);
-        return;
-      }
+      // const valve = await this.valve.getState();
 
-      if (valve?.connected) {
+      // if (!valve) {
+      //   if (log) console.log(`No valve found`);
+      //   return;
+      // }
+
+      const radiator = await this.radiator.getData();
+
+      if (radiator?.connected) {
         if (log) console.log(`Sensor and valve connected`);
 
         const target = await this.room.getCurrentTarget();

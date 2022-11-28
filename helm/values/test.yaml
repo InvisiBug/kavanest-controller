@@ -4,7 +4,7 @@ namespace: kavanest-test
 
 deployment:
   - name: kavanest-test-skippy
-    image: 192.168.1.61:5000/kavanest-skippy
+    image: 192.168.1.61:5000/kavanest-skippy:test
     env:
       - name: API
         value: http://test.api.kavanet.io
