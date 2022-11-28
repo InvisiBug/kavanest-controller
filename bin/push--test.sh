@@ -1,10 +1,11 @@
 #!/bin/sh
 
 REGISTRY_IP=192.168.1.61:5000
+APP_NAME=kavanest-skippy:test
 
 yarn install && \
 yarn build && \
-docker build -f ./Dockerfile.kube -t kavanest-skippy . && \
-docker tag kavanest-skippy:test $REGISTRY_IP/kavanest-skippy:test && \
-docker push $REGISTRY_IP/kavanest-skippy && \
+docker build -f ./Dockerfile.kube -t $APP_NAME . && \
+docker tag $APP_NAME $REGISTRY_IP/$APP_NAME && \
+docker push $REGISTRY_IP/$APP_NAME && \
 rm -r dist
