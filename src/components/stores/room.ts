@@ -19,19 +19,6 @@ export default class Demand {
   }
 
   async getRoomData() {
-    type Data = {
-      response: {
-        setpoints: {
-          weekend: Record<string, string>;
-          weekday: Record<string, string>;
-        };
-        demand: number | null;
-        overrideTime: string | null;
-        disabled: boolean | null;
-        deadzone: number | null;
-      };
-    };
-
     const query = gql`
       query ($name: String) {
         response: getRoom(name: $name) {
@@ -41,7 +28,7 @@ export default class Demand {
           }
           demand
           overrideTime
-          disabled
+          overrideType
           deadzone
         }
       }
@@ -58,15 +45,23 @@ export default class Demand {
     } else {
       return gqlData.response;
     }
+
+    type Data = {
+      response: {
+        setpoints: {
+          weekend: Record<string, string>;
+          weekday: Record<string, string>;
+        };
+        demand: number | null;
+        overrideTime: number | null;
+        overrideType: string | null;
+        disabled: boolean | null;
+        deadzone: number | null;
+      };
+    };
   }
 
   async getDisabled() {
-    type Data = {
-      response: {
-        disabled: boolean | null;
-      };
-    };
-
     const query = gql`
       query ($name: String) {
         response: getRoom(name: $name) {
@@ -86,18 +81,15 @@ export default class Demand {
     } else {
       return gqlData.response;
     }
+
+    type Data = {
+      response: {
+        disabled: boolean | null;
+      };
+    };
   }
 
   async getCurrentTarget() {
-    type Data = {
-      response: {
-        setpoints: {
-          weekend: Record<string, string>;
-          weekday: Record<string, string>;
-        };
-      };
-    };
-
     const query = gql`
       query ($name: String) {
         response: getRoom(name: $name) {
@@ -116,17 +108,18 @@ export default class Demand {
     } else {
       return getCurrentSetpoint(gqlData.response.setpoints);
     }
+
+    type Data = {
+      response: {
+        setpoints: {
+          weekend: Record<string, string>;
+          weekday: Record<string, string>;
+        };
+      };
+    };
   }
 
   async anyDemand() {
-    type Data = {
-      response: [
-        {
-          demand: number;
-        },
-      ];
-    };
-
     const query = gql`
       query {
         response: getRooms {
@@ -146,15 +139,17 @@ export default class Demand {
     });
 
     return anyDemand;
+
+    type Data = {
+      response: [
+        {
+          demand: number;
+        },
+      ];
+    };
   }
 
   async getDemand() {
-    type Data = {
-      response: {
-        demand: number | null;
-      };
-    };
-
     const query = gql`
       query ($name: String) {
         response: getRoom(name: $name) {
@@ -172,16 +167,15 @@ export default class Demand {
     } else {
       return gqlData.response.demand;
     }
+
+    type Data = {
+      response: {
+        demand: number | null;
+      };
+    };
   }
 
   async setDemand(demand: number) {
-    type Data = {
-      response: {
-        name: string;
-        demand: number;
-      };
-    };
-
     const mutation = gql`
       mutation ($input: RoomInput) {
         response: updateRoom(input: $input) {
@@ -198,5 +192,12 @@ export default class Demand {
     const gqlResponse: Data = await request(apiUrl, mutation, variables);
 
     return gqlResponse.response;
+
+    type Data = {
+      response: {
+        name: string;
+        demand: number;
+      };
+    };
   }
 }
