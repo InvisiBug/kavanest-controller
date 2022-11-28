@@ -28,7 +28,6 @@ export default class Demand {
           }
           demand
           overrideTime
-          disabled
           deadzone
         }
       }

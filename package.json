@@ -10,6 +10,7 @@
     "run": "yarn build && node ./dist/index.js",
     "build": "tsc",
     "push": "./bin/push.sh",
+    "push--live": "./bin/push--live.sh",
     "deploy": "yarn push && ./bin/deploy.sh",
     "deploy--live": "./bin/deploy--live.sh",
     "deploy--test": "./bin/deploy--test.sh",
