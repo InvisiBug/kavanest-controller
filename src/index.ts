@@ -1,8 +1,9 @@
 import { apiUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
-import { RoomDemandSetter, Valve, HeatingTimeSetter, Radiator, PlugTimer } from "./components/controllers";
+import { RoomDemandSetter, Valve, HeatingTimeSetter, RadiatorFan, Radiator, PlugTimer } from "./components/controllers";
+import { RadiatorV2 } from "./components/stores";
 
-let devices: Array<any> = [];
+const controllers: Array<any> = [];
 
 /////
 // * Create controllers for each room demand
@@ -10,44 +11,52 @@ let devices: Array<any> = [];
 type Data = {
   response: [
     {
-      room: string;
+      name: string;
     },
   ];
 };
 
 const query = gql`
   query {
-    response: getValves {
-      room
+    response: getRadiators {
+      name
     }
   }
 `;
 
 request(apiUrl, query).then((data: Data) => {
+  console.log(data);
+  // Set to true when testing
+  const testing = false;
+  const testRoom = "frontStudy";
+
+  if (testing) {
+    controllers.push(new RoomDemandSetter(testRoom));
+    // controllers.push(new Valve(testRoom));
+    controllers.push(new Radiator(testRoom));
+  }
+
   data.response.forEach((valve) => {
-    devices.push(new RoomDemandSetter(valve.room));
-    devices.push(new Valve(valve.room));
+    if (!testing) {
+      controllers.push(new RoomDemandSetter(valve.name));
+      // controllers.push(new Valve(valve.room));
+      controllers.push(new Radiator(valve.name));
+    }
   });
 });
 
 //////
 
-//* Used for testing a single room
-// devices.push(new RoomDemandSetter("frontStudy"));
-// devices.push(new Valve("frontStudy"));
+controllers.push(new HeatingTimeSetter());
 
-devices.push(new HeatingTimeSetter());
-
-devices.push(new PlugTimer("mattress"));
-devices.push(new PlugTimer("heating"));
-
-devices.push(new Radiator("frontStudy"));
+controllers.push(new PlugTimer("mattress"));
+controllers.push(new PlugTimer("heating"));
 
 // https://stackoverflow.com/a/54635436/7489419
 const systemTick = async (delay: number) => {
   try {
-    for (let i = 0; i < devices.length; i++) {
-      await devices[i].tick();
+    for (let i = 0; i < controllers.length; i++) {
+      await controllers[i].tick();
     }
   } catch (error: unknown) {
     console.log(error);
@@ -67,8 +76,8 @@ const watchdog = () => {
     apiUrl,
     gql`
       query {
-        response: getValves {
-          room
+        response: getRadiators {
+          name
         }
       }
     `,
