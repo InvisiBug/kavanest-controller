@@ -37,22 +37,16 @@ export default class RoomDemandSetter {
     }
 
     if (sensor?.connected) {
-      // const valve = await this.valve.getState();
-
-      // if (!valve) {
-      //   if (log) console.log(`No valve found`);
-      //   return;
-      // }
-
       const radiator = await this.radiator.getData();
 
       if (radiator?.connected) {
-        if (log) console.log(`Sensor and valve connected`);
+        if (log) console.log(`Sensor and radiator connected`);
 
         const target = await this.room.getCurrentTarget();
         const roomData = await this.room.getRoomData();
         const overrideTime = roomData?.overrideTime;
         const overrideType = roomData?.overrideType;
+        const deadzone = roomData?.deadzone || 0;
 
         //* Override block
         if (overrideTime && nowTimer() < overrideTime) {
@@ -73,7 +67,6 @@ export default class RoomDemandSetter {
           }
         }
 
-        const deadzone = roomData?.deadzone || 0;
         // if (log) console.log(deadzone);
 
         if (log) console.log(`Temperature: ${sensor.temperature} \t Target: ${target}`);
@@ -103,20 +96,20 @@ export default class RoomDemandSetter {
           }
         }
       } else {
-        if (log) console.log(`Valve disconnected`);
+        if (log) console.log(`Radiator disconnected`);
         return;
       }
     } else {
       if (log) console.log(`Sensor disconnected`);
 
-      const valve = await this.valve.getState();
-      if (!valve) {
-        if (log) console.log(`No valve found`);
+      const radiator = await this.radiator.getData();
+      if (!radiator) {
+        if (log) console.log(`No radiator found`);
         return;
       }
 
-      if (valve?.connected) {
-        if (log) console.log(`Valve Connected`);
+      if (radiator?.connected) {
+        if (log) console.log(`Radiator Connected`);
 
         const target = await this.room.getCurrentTarget();
         if (target === 0) {
@@ -131,7 +124,7 @@ export default class RoomDemandSetter {
           return;
         }
       } else {
-        if (log) console.log("Valve disconnected");
+        if (log) console.log("Radiator disconnected");
         return;
       }
     }
