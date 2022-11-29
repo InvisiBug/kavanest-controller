@@ -1,4 +1,4 @@
-import { Valve, Room, RadiatorV2 as Radiator } from "../stores";
+import { Room, Radiator } from "../stores";
 
 const open = false;
 const close = true;
@@ -19,7 +19,7 @@ export default class ValveController {
   }
 
   async tick() {
-    const log = true;
+    const log = false;
 
     if (log) console.log(`\n* ${this.roomName} Valve *`);
 
