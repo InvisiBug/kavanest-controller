@@ -19,7 +19,7 @@ export default class ValveController {
   }
 
   async tick() {
-    const log = true;
+    const log = false;
 
     if (log) console.log(`\n* ${this.roomName} Valve *`);
 

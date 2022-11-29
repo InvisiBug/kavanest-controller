@@ -25,15 +25,15 @@ const query = gql`
 `;
 
 request(apiUrl, query).then((data: Data) => {
-  console.log(data);
   // Set to true when testing
-  const testing = false;
+  const testing = true;
   const testRoom = "frontStudy";
 
   if (testing) {
     controllers.push(new RoomDemandSetter(testRoom));
     // controllers.push(new Valve(testRoom));
     controllers.push(new Radiator(testRoom));
+    controllers.push(new RadiatorFan(testRoom));
   }
 
   data.response.forEach((valve) => {
