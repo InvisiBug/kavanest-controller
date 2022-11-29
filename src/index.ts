@@ -1,13 +1,12 @@
 import { apiUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
-import { RoomDemandSetter, Valve, HeatingTimeSetter, RadiatorFan, Radiator, PlugTimer } from "./components/controllers";
-import { RadiatorV2 } from "./components/stores";
+import { RoomDemandSetter, HeatingTimeSetter, RadiatorFan, Radiator, PlugTimer } from "./components/controllers";
 
 const controllers: Array<any> = [];
 
 /////
 // * Create controllers for each room demand
-// by first getting a list of all valves
+// by first getting a list of all radiators
 type Data = {
   response: [
     {
@@ -26,7 +25,7 @@ const query = gql`
 
 request(apiUrl, query).then((data: Data) => {
   // Set to true when testing
-  const testing = true;
+  const testing = false;
   const testRoom = "frontStudy";
 
   if (testing) {
@@ -46,7 +45,6 @@ request(apiUrl, query).then((data: Data) => {
 });
 
 //////
-
 controllers.push(new HeatingTimeSetter());
 
 controllers.push(new PlugTimer("mattress"));
@@ -67,7 +65,7 @@ const systemTick = async (delay: number) => {
 
 systemTick(2 * 1000);
 
-console.log("Hello from new Skippy");
+console.log("Hello from Skippy");
 
 // Watchdog request
 // Terminate app if request fails, kubernetes will restart it for us
