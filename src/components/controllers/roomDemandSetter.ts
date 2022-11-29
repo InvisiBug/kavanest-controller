@@ -1,12 +1,11 @@
 import { decamelize, nowTimer } from "../helpers";
-import { Sensor, Valve, Room, RadiatorV2 as Radiator } from "../stores/";
+import { Sensor, Room, Radiator } from "../stores/";
 
 const off = 0;
 const on = 1;
 const maybe = 2;
 export default class RoomDemandSetter {
   sensor: Sensor;
-  valve: Valve;
   room: Room;
   radiator: Radiator;
 
@@ -18,7 +17,6 @@ export default class RoomDemandSetter {
 
     this.sensor = new Sensor(roomName);
     this.radiator = new Radiator(roomName);
-    this.valve = new Valve(roomName);
     this.room = new Room(roomName);
 
     this.tick();
@@ -26,7 +24,7 @@ export default class RoomDemandSetter {
 
   async tick() {
     // const log = this.roomName == "diningRoom" ? true : false;
-    const log = false;
+    const log = true;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 

@@ -1,4 +1,4 @@
-import { RadiatorV2 as Radiator, Plug } from "../stores";
+import { Radiator } from "../stores";
 import { decamelize } from "../helpers/index";
 
 const on = true;

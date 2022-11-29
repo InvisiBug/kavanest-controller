@@ -1,4 +1,4 @@
-import { Valve, Room, RadiatorV2 as Radiator } from "../stores";
+import { Room, Radiator } from "../stores";
 
 const open = false;
 const close = true;
