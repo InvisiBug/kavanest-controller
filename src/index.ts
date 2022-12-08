@@ -30,16 +30,15 @@ request(apiUrl, query).then((data: Data) => {
 
   if (testing) {
     controllers.push(new RoomDemandSetter(testRoom));
-    // controllers.push(new Valve(testRoom));
     controllers.push(new Radiator(testRoom));
     controllers.push(new RadiatorFan(testRoom));
   }
 
-  data.response.forEach((valve) => {
+  data.response.forEach((room) => {
     if (!testing) {
-      controllers.push(new RoomDemandSetter(valve.name));
-      // controllers.push(new Valve(valve.room));
-      controllers.push(new Radiator(valve.name));
+      controllers.push(new RoomDemandSetter(room.name));
+      controllers.push(new Radiator(room.name));
+      controllers.push(new RadiatorFan(room.name));
     }
   });
 });
