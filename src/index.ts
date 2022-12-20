@@ -30,18 +30,27 @@ request(apiUrl, query).then((data: Data) => {
 
   if (testing) {
     controllers.push(new RoomDemandSetter(testRoom));
-    // controllers.push(new Valve(testRoom));
     controllers.push(new Radiator(testRoom));
     controllers.push(new RadiatorFan(testRoom));
+  } else {
+    for (const room of data.response) {
+      controllers.push(new RoomDemandSetter(room.name));
+      controllers.push(new Radiator(room.name));
+      if (room.name === "frontStudy") {
+        //* Patch to remove the living room fan control until the low noise adapter arrives
+        controllers.push(new RadiatorFan(room.name));
+      }
+    }
   }
 
-  data.response.forEach((valve) => {
-    if (!testing) {
-      controllers.push(new RoomDemandSetter(valve.name));
-      // controllers.push(new Valve(valve.room));
-      controllers.push(new Radiator(valve.name));
-    }
-  });
+  // data.response.forEach((room) => {
+  //   if (!testing) {
+  //     controllers.push(new RoomDemandSetter(room.name));
+  //     controllers.push(new Radiator(room.name));
+  //     if()
+  //     controllers.push(new RadiatorFan(room.name));
+  //   }
+  // });
 });
 
 //////

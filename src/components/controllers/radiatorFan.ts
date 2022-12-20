@@ -15,17 +15,16 @@ export default class RadiatorController {
 
   async tick() {
     const log = true;
+    if (log) console.log(`\n* ${decamelize(this.roomName)} Radiator Fan Controller *`);
 
     const radiator = await this.radiator.getData();
     const { temperature, valve, fan } = radiator;
     if (!radiator || !temperature) {
-      if (log) console.log(`No ${decamelize(this.roomName)} temperature probe found`);
+      if (log) console.log(`No temperature probe found`);
       return;
     }
     const setpoint = 30;
     const deadzone = 0.5;
-
-    if (log) console.log("\nRadiator fan controller");
 
     if (radiator?.connected && temperature) {
       if (log) console.log("Fan connected");

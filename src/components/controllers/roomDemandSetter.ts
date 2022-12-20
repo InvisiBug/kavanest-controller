@@ -24,7 +24,7 @@ export default class RoomDemandSetter {
 
   async tick() {
     // const log = this.roomName == "diningRoom" ? true : false;
-    const log = true;
+    const log = false;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
@@ -45,6 +45,7 @@ export default class RoomDemandSetter {
         const overrideTime = roomData?.overrideTime;
         const overrideType = roomData?.overrideType;
         const deadzone = roomData?.deadzone || 0;
+        const maybeDeadzone = 0.2;
 
         //* Override block
         if (overrideTime && nowTimer() < overrideTime) {
@@ -81,7 +82,8 @@ export default class RoomDemandSetter {
           this.room.setDemand(on);
           return;
         } else {
-          if ((await this.room.anyDemand()) && (await this.room.getDemand()) != 1) {
+          // If any room is in demand but its not this room
+          if ((await this.room.anyDemand()) && (await this.room.getDemand()) != 1 && sensor.temperature < target - maybeDeadzone) {
             if (log) console.log("Another room is wanting heat");
 
             if (log) console.log(`So set demand to maybe`);
