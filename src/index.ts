@@ -36,10 +36,7 @@ request(apiUrl, query).then((data: Data) => {
     for (const room of data.response) {
       controllers.push(new RoomDemandSetter(room.name));
       controllers.push(new Radiator(room.name));
-      if (room.name === "frontStudy") {
-        //* Patch to remove the living room fan control until the low noise adapter arrives
-        controllers.push(new RadiatorFan(room.name));
-      }
+      controllers.push(new RadiatorFan(room.name));
     }
   }
 

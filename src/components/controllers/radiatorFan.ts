@@ -14,7 +14,7 @@ export default class RadiatorController {
   }
 
   async tick() {
-    const log = true;
+    const log = false;
     if (log) console.log(`\n* ${decamelize(this.roomName)} Radiator Fan Controller *`);
 
     const radiator = await this.radiator.getData();
