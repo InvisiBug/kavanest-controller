@@ -1,12 +1,11 @@
 import { decamelize, nowTimer } from "../helpers";
-import { Sensor, Valve, Room, RadiatorV2 as Radiator } from "../stores/";
+import { Sensor, Room, Radiator } from "../stores/";
 
 const off = 0;
 const on = 1;
 const maybe = 2;
 export default class RoomDemandSetter {
   sensor: Sensor;
-  valve: Valve;
   room: Room;
   radiator: Radiator;
 
@@ -18,7 +17,6 @@ export default class RoomDemandSetter {
 
     this.sensor = new Sensor(roomName);
     this.radiator = new Radiator(roomName);
-    this.valve = new Valve(roomName);
     this.room = new Room(roomName);
 
     this.tick();
@@ -37,22 +35,17 @@ export default class RoomDemandSetter {
     }
 
     if (sensor?.connected) {
-      // const valve = await this.valve.getState();
-
-      // if (!valve) {
-      //   if (log) console.log(`No valve found`);
-      //   return;
-      // }
-
       const radiator = await this.radiator.getData();
 
       if (radiator?.connected) {
-        if (log) console.log(`Sensor and valve connected`);
+        if (log) console.log(`Sensor and radiator connected`);
 
         const target = await this.room.getCurrentTarget();
         const roomData = await this.room.getRoomData();
         const overrideTime = roomData?.overrideTime;
         const overrideType = roomData?.overrideType;
+        const deadzone = roomData?.deadzone || 0;
+        const maybeDeadzone = 0.2;
 
         //* Override block
         if (overrideTime && nowTimer() < overrideTime) {
@@ -73,7 +66,6 @@ export default class RoomDemandSetter {
           }
         }
 
-        const deadzone = roomData?.deadzone || 0;
         // if (log) console.log(deadzone);
 
         if (log) console.log(`Temperature: ${sensor.temperature} \t Target: ${target}`);
@@ -90,7 +82,8 @@ export default class RoomDemandSetter {
           this.room.setDemand(on);
           return;
         } else {
-          if ((await this.room.anyDemand()) && (await this.room.getDemand()) != 1) {
+          // If any room is in demand but its not this room
+          if ((await this.room.anyDemand()) && (await this.room.getDemand()) != 1 && sensor.temperature < target - maybeDeadzone) {
             if (log) console.log("Another room is wanting heat");
 
             if (log) console.log(`So set demand to maybe`);
@@ -103,20 +96,20 @@ export default class RoomDemandSetter {
           }
         }
       } else {
-        if (log) console.log(`Valve disconnected`);
+        if (log) console.log(`Radiator disconnected`);
         return;
       }
     } else {
       if (log) console.log(`Sensor disconnected`);
 
-      const valve = await this.valve.getState();
-      if (!valve) {
-        if (log) console.log(`No valve found`);
+      const radiator = await this.radiator.getData();
+      if (!radiator) {
+        if (log) console.log(`No radiator found`);
         return;
       }
 
-      if (valve?.connected) {
-        if (log) console.log(`Valve Connected`);
+      if (radiator?.connected) {
+        if (log) console.log(`Radiator Connected`);
 
         const target = await this.room.getCurrentTarget();
         if (target === 0) {
@@ -131,7 +124,7 @@ export default class RoomDemandSetter {
           return;
         }
       } else {
-        if (log) console.log("Valve disconnected");
+        if (log) console.log("Radiator disconnected");
         return;
       }
     }
