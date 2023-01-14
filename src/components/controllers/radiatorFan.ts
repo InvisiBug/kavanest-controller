@@ -23,7 +23,7 @@ export default class RadiatorController {
       if (log) console.log(`No temperature probe found`);
       return;
     }
-    const setpoint = 30;
+    const setpoint = 35;
     const deadzone = 0.5;
 
     if (radiator?.connected && temperature) {
