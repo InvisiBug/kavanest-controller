@@ -1,6 +1,6 @@
 #!/bin/sh
 
-REGISTRY_IP=192.168.1.61:5000
+REGISTRY_IP=kavanet.io:5000
 APP_NAME=kavanest-skippy:live
 
 yarn install && \
