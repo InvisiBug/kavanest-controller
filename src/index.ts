@@ -1,10 +1,11 @@
 import { apiUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
-import { RoomDemandSetter, HeatingTimeSetter, RadiatorFan, Radiator, PlugTimer } from "./components/controllers";
+import { RoomDemandSetter, HeatingTimeSetter, Radiator, PlugTimer } from "./components/controllers";
 
 const controllers: Array<any> = [];
 
-/////
+//////////////////////////////////
+// Demand and radiator controllers
 // * Create controllers for each room demand
 // by first getting a list of all radiators
 type Data = {
@@ -31,12 +32,11 @@ request(apiUrl, query).then((data: Data) => {
   if (testing) {
     controllers.push(new RoomDemandSetter(testRoom));
     controllers.push(new Radiator(testRoom));
-    controllers.push(new RadiatorFan(testRoom));
   } else {
     for (const room of data.response) {
       controllers.push(new RoomDemandSetter(room.name));
       controllers.push(new Radiator(room.name));
-      controllers.push(new RadiatorFan(room.name));
+      // controllers.push(new RadiatorFan(room.name));
     }
   }
 
@@ -50,7 +50,8 @@ request(apiUrl, query).then((data: Data) => {
   // });
 });
 
-//////
+//////////////////////
+// Special Controllers
 controllers.push(new HeatingTimeSetter());
 
 controllers.push(new PlugTimer("mattress"));
