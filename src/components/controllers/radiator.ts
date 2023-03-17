@@ -20,7 +20,7 @@ export default class ValveController {
   }
 
   async tick() {
-    const log = true;
+    const log = false;
 
     const on = true;
     const off = false;
@@ -38,8 +38,8 @@ export default class ValveController {
     if (connected) {
       if (log) console.log("Radiator connected");
 
-      ///////////////
-      // Radiator Fan
+      //* /////////////
+      //* Radiator Fan
       if (temperature) {
         if (log) console.log("Radiator has a fan");
 
@@ -75,8 +75,8 @@ export default class ValveController {
         }
       }
 
-      /////////////////
-      // Radiator Valve
+      //* ///////////////
+      //* Radiator Valve
       const anyDemand = await this.room.anyDemand();
       if (anyDemand) {
         if (log) console.log("Some rooms are in demand");
