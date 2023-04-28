@@ -7,4 +7,7 @@ deployment:
     image: 192.168.1.61:5000/kavanest-skippy:live
     env:
     - name: API
-      value: https://api.kavanet.io
+      value: http://kavanest-api # Alows the controller to run even when the internet is down
+    # resources:
+    #   memory: 100Mi
+    #   cpu: 1000m
