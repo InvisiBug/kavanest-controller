@@ -1,6 +1,11 @@
 import { request, gql } from "graphql-request";
 import { apiUrl } from "../helpers";
 
+/*
+  The Plug store
+  This class is responsible for dealing with the plug data
+
+*/
 export default class Plug {
   name: string;
 

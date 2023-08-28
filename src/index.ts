@@ -27,27 +27,19 @@ const query = gql`
 request(apiUrl, query).then((data: Data) => {
   // Set to true when testing
   const testing = false;
-  const testRoom = "frontStudy";
 
   if (testing) {
+    const testRoom = "livingRoom";
     controllers.push(new RoomDemandSetter(testRoom));
     controllers.push(new Radiator(testRoom));
   } else {
     for (const room of data.response) {
+      console.log(room.name);
       controllers.push(new RoomDemandSetter(room.name));
       controllers.push(new Radiator(room.name));
       // controllers.push(new RadiatorFan(room.name));
     }
   }
-
-  // data.response.forEach((room) => {
-  //   if (!testing) {
-  //     controllers.push(new RoomDemandSetter(room.name));
-  //     controllers.push(new Radiator(room.name));
-  //     if()
-  //     controllers.push(new RadiatorFan(room.name));
-  //   }
-  // });
 });
 
 //////////////////////
