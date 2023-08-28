@@ -5,15 +5,15 @@ import { decamelize, nowTimer } from "../helpers";
 const on = true;
 const off = false;
 
-export default class HeatingController {
+export default class PlugTimer {
   device: Plug;
   timer: Timers;
   deviceName: string;
 
   constructor(device: string) {
     this.deviceName = device;
-    this.device = new Plug(this.deviceName);
-    this.timer = new Timers(this.deviceName);
+    this.device = new Plug(this.deviceName); // The physical device
+    this.timer = new Timers(this.deviceName); // The timer for the device in the mongo store
   }
 
   async tick() {
