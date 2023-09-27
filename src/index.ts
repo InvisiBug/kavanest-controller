@@ -29,7 +29,7 @@ request(apiUrl, query).then((data: Data) => {
   const testing = false;
 
   if (testing) {
-    const testRoom = "livingRoom";
+    const testRoom = "bedroom";
     controllers.push(new RoomDemandSetter(testRoom));
     controllers.push(new Radiator(testRoom));
   } else {
