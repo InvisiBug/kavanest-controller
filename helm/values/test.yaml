@@ -1,6 +1,8 @@
 name: kavanest-test-skippy
 
 namespace: kavanest-test
+env:
+  APP_VERSION: ded07a4950296ca9bd506fb73661e278394b10a2
 
 deployment:
   - name: kavanest-test-skippy
