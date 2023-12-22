@@ -2,7 +2,7 @@ name: kavanest-test-skippy
 
 namespace: kavanest-test
 env:
-  APP_VERSION: 28a1657c6d25bd8c05adb50a92d8b84b1cac5193
+  APP_VERSION: ce9b5143ccc25a464b8e3d6d29c9547466a2fc61
 
 deployment:
   - name: kavanest-test-skippy
@@ -10,6 +10,6 @@ deployment:
     env:
       - name: API
         value: http://test.api.kavanet.io
-    resources:
-      memory: 100Mi
-      cpu: 100m
+    # resources:
+    #   memory: 100Mi
+    #   cpu: 100m
