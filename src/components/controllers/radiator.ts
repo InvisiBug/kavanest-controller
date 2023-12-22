@@ -1,4 +1,5 @@
 import { Room, Radiator } from "../stores";
+import { decamelize } from "../helpers";
 
 const open = false;
 const close = true;
@@ -21,7 +22,10 @@ export default class ValveController {
   async tick() {
     const log = false;
 
-    if (log) console.log(`\n* ${this.roomName} Valve *`);
+    const on = true;
+    const off = false;
+
+    if (log) console.log(`\n* ${decamelize(this.roomName)} Radiator Controller *`);
 
     const radiator = await this.radiator.getData();
     if (!radiator) {
@@ -34,6 +38,45 @@ export default class ValveController {
     if (connected) {
       if (log) console.log("Radiator connected");
 
+      //* /////////////
+      //* Radiator Fan
+      if (temperature) {
+        if (log) console.log("Radiator has a fan");
+
+        const setpoint = 25;
+        const deadzone = 0.5;
+
+        if (log) console.log("Radiator temp:", temperature, "Setpoint:", setpoint, "Deadzone", deadzone);
+
+        if (temperature > setpoint) {
+          if (log) console.log("Fan should be on!");
+
+          if (!fan) {
+            if (log) console.log("Fan is off...");
+            if (log) console.log("So turn fan on");
+
+            this.radiator.setFanState(on);
+          } else {
+            if (log) console.log("And it is :)");
+          }
+        } else if (temperature < setpoint - deadzone) {
+          if (log) console.log("Fan should be off!");
+
+          if (fan) {
+            if (log) console.log("Fan is on...");
+            if (log) console.log("So turn fan off");
+
+            this.radiator.setFanState(off);
+          } else {
+            if (log) console.log("And it is :)");
+          }
+        } else {
+          if (log) console.log("Within deadzone, do nothing!");
+        }
+      }
+
+      //* ///////////////
+      //* Radiator Valve
       const anyDemand = await this.room.anyDemand();
       if (anyDemand) {
         if (log) console.log("Some rooms are in demand");

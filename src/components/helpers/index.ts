@@ -48,6 +48,8 @@ export const getCurrentSetpoint = (setpoints: Setpoints) => {
       return lastSetpoint;
     }
 
+    console.log(setpoint);
+
     return parseFloat(setpoint);
   } catch {
     return 0;
@@ -71,6 +73,7 @@ export const now = () => {
   const dst = `${("0" + (hour + 1)).slice(-2)}:${min}`;
 
   const daylightSavings = false;
+
   if (daylightSavings) {
     return dst;
   } else {
