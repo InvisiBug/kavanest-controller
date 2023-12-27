@@ -1,6 +1,8 @@
 name: kavanest-skippy
 
 namespace: kavanest
+env:
+  APP_VERSION: d4fa0590d99924d4f306884d519c1c5671acd065
 
 deployment:
   - name: kavanest-skippy
