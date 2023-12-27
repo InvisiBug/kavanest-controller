@@ -28,7 +28,10 @@ export default class Demand {
           }
           demand
           overrideTime
+<<<<<<< HEAD
+=======
           overrideType
+>>>>>>> dev
           deadzone
         }
       }
