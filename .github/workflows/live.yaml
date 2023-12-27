@@ -48,7 +48,7 @@ jobs:
         sed -i 's|APP_VERSION:.*|APP_VERSION: '${{ github.sha }}'|' ./values/test.yaml
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
-        git add ./values/test.yaml
+        git add ./values/live.yaml
         git commit -m "update app version.yaml"
         git push
 
