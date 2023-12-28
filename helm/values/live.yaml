@@ -6,7 +6,7 @@ env:
 
 deployment:
   - name: kavanest-skippy
-    image: 192.168.1.61:5000/kavanest-skippy:live
+    image: 192.168.1.61:5000/kavanest-skippy
     env:
     - name: API
       value: http://kavanest-api # Alows the controller to run even when the internet is down
