@@ -1,7 +1,7 @@
 ## Need a build stage to compile the typescript
 
 ## Build stage
-FROM arm64v8/node:14 as build
+FROM arm64v8/node as build
 
 COPY . .
 
@@ -10,7 +10,7 @@ RUN yarn build
 
 
 ## Deploy stage
-FROM arm64v8/node:14
+FROM arm64v8/node
 
 WORKDIR /usr/src/app
 
