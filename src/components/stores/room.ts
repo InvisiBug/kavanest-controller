@@ -3,7 +3,7 @@ import { request, gql } from "graphql-request";
 import { apiUrl, getCurrentSetpoint } from "../helpers";
 
 /*
-  Available functions
+  * Available functions
   getRoomData()
   getDisabled();
   gerCurrentTarget();
