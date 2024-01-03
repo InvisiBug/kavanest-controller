@@ -4,11 +4,15 @@ import { Plug } from "../stores";
 export default class HeatingTimeSetter {
   deviceCongfig: DeviceConfig;
   floodlight: Plug;
+  livingroomLamp: Plug;
+
+  allLightState = true;
 
   constructor(deviceCongfig: DeviceConfig) {
     this.deviceCongfig = deviceCongfig;
 
     this.floodlight = new Plug("floodlight");
+    this.livingroomLamp = new Plug("livingroomLamp");
   }
 
   handleIncoming = async (topic: String, rawPayload: Object) => {
@@ -21,13 +25,14 @@ export default class HeatingTimeSetter {
     }
 
     if (payload.action === "double") {
-      const floodLightState = await this.floodlight.getState();
-      this.floodlight.setState(!floodLightState.state);
+      const livingroomLampstate = await this.livingroomLamp.getState();
+      this.livingroomLamp.setState(!livingroomLampstate.state);
     }
 
     if (payload.action === "long") {
-      const floodLightState = await this.floodlight.getState();
-      this.floodlight.setState(!floodLightState.state);
+      this.floodlight.setState(!this.allLightState);
+      this.livingroomLamp.setState(!this.allLightState);
+      this.allLightState = !this.allLightState;
     }
 
     console.log(payload);
