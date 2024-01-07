@@ -6,7 +6,7 @@ env:
 
 deployment:
   - name: kavanest-test-controller
-    image: invisibug/kavanest-controller
+    image: invisibug/kavanest-test-controller
     env:
       - name: API
         value: http://test.api.kavanet.io
