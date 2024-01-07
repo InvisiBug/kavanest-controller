@@ -2,11 +2,11 @@ name: kavanest-test-controller
 
 namespace: kavanest-test
 env:
-  APP_VERSION: 55401a336e0f60ed7540476b42f4e9e86cc06e7e
+  APP_VERSION: d7bb8d788c504c1981249382a3804d16cb58154f
 
 deployment:
   - name: kavanest-test-controller
-    image: invisibug/kavanest-controller
+    image: invisibug/kavanest-test-controller
     env:
       - name: API
         value: http://test.api.kavanet.io
