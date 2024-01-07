@@ -8,8 +8,6 @@ export default class RoomDemandSetter {
   sensor: Sensor;
   room: Room;
   radiator: Radiator;
-
-  heating: any;
   roomName: string;
 
   constructor(roomName: string) {
@@ -23,7 +21,7 @@ export default class RoomDemandSetter {
   }
 
   async tick() {
-    const log = true;
+    const log = false;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 

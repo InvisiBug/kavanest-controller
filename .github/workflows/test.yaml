@@ -1,4 +1,4 @@
-name: CD
+name: Test pipeline
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-  tag-branch:
+  update-app-version:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
@@ -49,12 +49,12 @@ jobs:
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
         git add ./values/test.yaml
-        git commit -m "Update values.yaml"
+        git commit -m "update app version.yaml"
         git push
 
 
-  sync-test:
-    needs: tag-branch
+  deploy-to-test:
+    needs: update-app-version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -63,13 +63,13 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
-          message: fast-forward test
+          message: New app version created '${{ github.sha }}'
           from_branch: test-release
           target_branch: test
           github_token: ${{ secrets.ACCESS_TOKEN }}
 
   sync-dev:
-    needs: sync-test
+    needs: deploy-to-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master

@@ -12,6 +12,8 @@
 # production
 /build
 
+/helm/charts
+
 /dist
 /data
 

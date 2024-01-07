@@ -1,10 +1,12 @@
-name: kavanest-skippy
+name: kavanest-controller
 
 namespace: kavanest
+env:
+  APP_VERSION: c880df58e6f15674bd6c3eebad81cee78d6cf2f2
 
 deployment:
-  - name: kavanest-skippy
-    image: 192.168.1.61:5000/kavanest-skippy:live
+  - name: kavanest-controller
+    image: invisibug/kavanest-controller
     env:
     - name: API
       value: http://kavanest-api # Alows the controller to run even when the internet is down
