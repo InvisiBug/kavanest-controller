@@ -1,13 +1,15 @@
-name: kavanest-test-skippy
+name: kavanest-test-controller
 
 namespace: kavanest-test
+env:
+  APP_VERSION: 90ef3cfeea58bd7110e4d247217c3bea97356eaf
 
 deployment:
-  - name: kavanest-test-skippy
-    image: 192.168.1.61:5000/kavanest-skippy:test
+  - name: kavanest-test-controller
+    image: invisibug/kavanest-test-controller
     env:
       - name: API
         value: http://test.api.kavanet.io
     # resources:
     #   memory: 100Mi
-    #   cpu: 1000m
+    #   cpu: 100m

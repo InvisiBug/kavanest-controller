@@ -1,0 +1,28 @@
+## Need a build stage to compile the typescript
+
+## Build stage
+FROM arm64v8/node as build
+
+COPY . .
+
+RUN yarn install
+RUN yarn build
+
+
+## Deploy stage
+FROM arm64v8/node
+
+WORKDIR /usr/src/app
+
+COPY --from=build ./dist ./
+
+COPY package*.json ./
+COPY tsconfig.json ./
+
+ENV NODE_ENV production
+RUN yarn install
+
+EXPOSE 1883
+EXPOSE 9001
+
+CMD ["node","index.js"]
