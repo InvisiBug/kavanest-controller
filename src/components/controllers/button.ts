@@ -12,7 +12,7 @@ export default class HeatingTimeSetter {
     this.deviceCongfig = deviceCongfig;
 
     this.floodlight = new Plug("floodlight");
-    this.livingroomLamp = new Plug("livingroomLamp");
+    this.livingroomLamp = new Plug("livingRoomLamp");
   }
 
   handleIncoming = async (topic: String, rawPayload: Object) => {
