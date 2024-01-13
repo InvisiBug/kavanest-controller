@@ -10,6 +10,7 @@ export { default as Radiator } from "./radiator";
   Zigbee controllers
 */
 export { default as Button } from "./button";
+export { default as TrainingRoomMotion } from "./trainingRoomMotion";
 
 export interface DeviceConfig {
   topic: string;

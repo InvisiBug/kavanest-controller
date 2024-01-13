@@ -1,11 +1,11 @@
 import { apiUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
-import { RoomDemandSetter, HeatingTimeSetter, Radiator, PlugTimer, Button, DeviceConfig } from "./components/controllers";
+import { RoomDemandSetter, HeatingTimeSetter, Radiator, PlugTimer, Button, DeviceConfig, TrainingRoomMotion } from "./components/controllers";
 
 import { connectToMQTT } from "./components/mqtt/mqttService";
 
 const controllers: Array<any> = [];
-const zigbeeDevices: Array<Button> = [];
+const zigbeeDevices: Array<Button | TrainingRoomMotion> = [];
 
 const client = connectToMQTT();
 
@@ -39,7 +39,6 @@ request(apiUrl, query).then((data: Data) => {
     controllers.push(new Radiator(testRoom));
   } else {
     for (const room of data.response) {
-      console.log(room);
       controllers.push(new RoomDemandSetter(room.name));
       controllers.push(new Radiator(room.name));
       // controllers.push(new RadiatorFan(room.name));
@@ -77,6 +76,9 @@ console.log("Hello from Skippy");
 zigbeeDevices.push(
   new Button({
     topic: "zigbee2mqtt/mySwitch",
+  }),
+  new TrainingRoomMotion({
+    topic: "zigbee2mqtt/trainingRoomMotion",
   }),
 );
 
