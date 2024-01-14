@@ -10,6 +10,8 @@ deployment:
     env:
       - name: API
         value: http://test.api.kavanet.io
+      - name: MQTT
+        value: mqtt://kavanet.io
     # resources:
     #   memory: 100Mi
     #   cpu: 100m

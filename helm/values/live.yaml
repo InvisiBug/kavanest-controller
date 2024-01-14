@@ -8,10 +8,10 @@ deployment:
   - name: kavanest-controller
     image: invisibug/kavanest-controller
     env:
-    - name: API
-      value: http://kavanest-api # Alows the controller to run even when the internet is down
-    - name: MQTT
-      value: mqtt://kavanet.io
+      - name: API
+        value: http://kavanest-api # Alows the controller to run even when the internet is down
+      - name: MQTT
+        value: mqtt://kavanet.io
     # resources:
     #   memory: 100Mi
     #   cpu: 1000m
