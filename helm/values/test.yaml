@@ -2,7 +2,7 @@ name: kavanest-test-controller
 
 namespace: kavanest-test
 env:
-  APP_VERSION: 90ef3cfeea58bd7110e4d247217c3bea97356eaf
+  APP_VERSION: c000adead9f9ad11160ee3f7fd4adb15f8c6fd82
 
 deployment:
   - name: kavanest-test-controller
