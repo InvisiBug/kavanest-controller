@@ -1,7 +1,9 @@
+// Cant get the build to work on rootdir thing
 {
   "compilerOptions": {
     // "target": "ES2021",
     // "module": "ES6",
+
     "moduleResolution": "node",
     "esModuleInterop": true,
     "noEmitOnError": true,
@@ -10,8 +12,21 @@
     "resolveJsonModule": true,
     "strict": true,
     "declaration": true,
-    "outDir": "dist/"
+    "outDir": "dist/",
+    "baseUrl": ".",
+    "paths": {
+      "src*": ["./src/*"]
+    },
+    "plugins": [
+      {
+        "transform": "@zerollup/ts-transform-paths"
+      }
+    ]
+  },
+  "ts-node": {
+    // Do not forget to `yarn add tsconfig-paths`
+    "require": ["tsconfig-paths/register"]
   },
   "include": [
-    "src/*", "src/components/helpers", "src/components/database", "src/components/devices"  ]
+    "src/*",    ]
 }

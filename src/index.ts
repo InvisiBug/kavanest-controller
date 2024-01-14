@@ -1,13 +1,15 @@
 import { apiUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
-import { RoomDemandSetter, HeatingTimeSetter, Radiator, PlugTimer, Button, DeviceConfig } from "./components/controllers";
+import { RoomDemandSetter, HeatingTimeSetter, Radiator, PlugTimer } from "./components/controllers";
 
 import { connectToMQTT } from "./components/mqtt/mqttService";
+const client = connectToMQTT();
 
 const controllers: Array<any> = [];
-const zigbeeDevices: Array<Button> = [];
 
-const client = connectToMQTT();
+import { zigbeeControllers } from "./components/controllers";
+
+zigbeeControllers(client);
 
 //////////////////////////////////
 // Demand and radiator controllers
@@ -39,7 +41,6 @@ request(apiUrl, query).then((data: Data) => {
     controllers.push(new Radiator(testRoom));
   } else {
     for (const room of data.response) {
-      console.log(room);
       controllers.push(new RoomDemandSetter(room.name));
       controllers.push(new Radiator(room.name));
       // controllers.push(new RadiatorFan(room.name));
@@ -70,25 +71,6 @@ const systemTick = async (delay: number) => {
 systemTick(2 * 1000);
 
 console.log("Hello from Skippy");
-
-/*
- * Zigbee Devices
- */
-zigbeeDevices.push(
-  new Button({
-    topic: "zigbee2mqtt/mySwitch",
-  }),
-);
-
-client.on("message", (topic: String, payload: Object) => {
-  try {
-    for (let i = 0; i < zigbeeDevices.length; i++) {
-      zigbeeDevices[i].handleIncoming(topic, payload);
-    }
-  } catch (error: unknown) {
-    console.log("an error", error);
-  }
-});
 
 // Watchdog request
 // Terminate app if request fails, kubernetes will restart it for us

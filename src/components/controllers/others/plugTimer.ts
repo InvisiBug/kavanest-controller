@@ -1,6 +1,6 @@
-import { Plug } from "../stores";
-import Timers from "../stores/timers";
-import { decamelize, nowTimer } from "../helpers";
+import { Plug } from "../../stores";
+import Timers from "../../stores/timers";
+import { decamelize, nowTimer } from "../../helpers";
 
 const on = true;
 const off = false;

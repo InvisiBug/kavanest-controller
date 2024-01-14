@@ -1,11 +1,11 @@
-// import { mqttUrl } from "../helpers";
+import { mqttUrl } from "../helpers/urlGenerators";
 import mqtt from "mqtt";
 
 const options = {
   connectTimeout: 2 * 1000,
 };
 
-const mqttUrl = "mqtt://kavanet.io";
+// const mqttUrl = "mqtt://kavanet.io";
 
 export const connectToMQTT = () => {
   const client: mqtt.MqttClient = mqtt.connect(mqttUrl, options);

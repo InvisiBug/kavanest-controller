@@ -1,11 +1,7 @@
 import { request, gql } from "graphql-request";
 import { apiUrl } from "../helpers";
 
-/*
-  The Plug store
-  This class is responsible for dealing with the plug data
-*/
-export default class Plug {
+export default class RGBLight {
   name: string;
 
   constructor(name: string) {
@@ -16,7 +12,6 @@ export default class Plug {
   async getState() {
     type Data = {
       response: {
-        name: string;
         state: boolean;
         connected: boolean;
       };
@@ -25,7 +20,6 @@ export default class Plug {
     const query = gql`
       query ($name: String) {
         response: getPlug(name: $name) {
-          name
           state
           connected
         }
@@ -47,13 +41,13 @@ export default class Plug {
         name: string;
         state: boolean;
         connected: boolean;
-        _id: number;
+        _id: string;
       };
     };
 
     const mutation = gql`
-      mutation ($input: PlugInput) {
-        response: updatePlug(input: $input) {
+      mutation ($input: RGBLightInput) {
+        updateRGBLights(input: $input) {
           name
           state
           connected

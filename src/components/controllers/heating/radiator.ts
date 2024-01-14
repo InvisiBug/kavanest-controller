@@ -1,5 +1,5 @@
-import { Room, Radiator } from "../stores";
-import { decamelize } from "../helpers";
+import { Room, Radiator } from "../../stores";
+import { decamelize } from "../../helpers";
 
 const open = false;
 const close = true;

@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "nodemon --exec \"ts-node \" ./src/index.ts",
     "run": "yarn build && node ./dist/index.js",
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "push--live": "./bin/push--live.sh",
     "push--test": "./bin/push--test.sh",
     "deploy--live": "./bin/deploy--live.sh",
@@ -18,16 +18,20 @@
     "logs": "docker logs kavanest-skippy -f"
   },
   "dependencies": {
+    "@zerollup/ts-transform-paths": "^1.7.18",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
     "graphql": "^16.2.0",
     "graphql-request": "^3.7.0",
     "mqtt": "^5.3.4",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "tsc-alias": "^1.8.8",
+    "tsconfig-paths": "^4.2.0",
+    "ttsc": "^0.3.1"
   },
   "devDependencies": {
-    "@types/mqtt": "^2.5.0",
     "@types/js-yaml": "^4.0.4",
+    "@types/mqtt": "^2.5.0",
     "@types/node": "^20.10.6",
     "@types/ws": "^8.5.4",
     "prettier": "^2.4.1",

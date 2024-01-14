@@ -1,4 +1,4 @@
-import { Room, Timer } from "../stores";
+import { Room, Timer } from "../../stores";
 
 export default class HeatingTimeSetter {
   rooms: Room;

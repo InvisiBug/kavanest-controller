@@ -1,5 +1,5 @@
-import { decamelize, nowTimer } from "../helpers";
-import { Sensor, Room, Radiator } from "../stores/";
+import { decamelize, nowTimer } from "../../helpers";
+import { Sensor, Room, Radiator } from "../../stores";
 
 const off = 0;
 const on = 1;
@@ -21,7 +21,7 @@ export default class RoomDemandSetter {
   }
 
   async tick() {
-    const log = true;
+    const log = false;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
