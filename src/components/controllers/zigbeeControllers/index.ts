@@ -1,24 +1,11 @@
-import {
-  RoomDemandSetter,
-  HeatingTimeSetter,
-  Radiator,
-  PlugTimer,
-  Button,
-  DeviceConfig,
-  TrainingRoomMotion,
-  StudyButton,
-} from "./components/controllers";
-import { connectToMQTT } from "./components/mqtt/mqttService";
-import { ButtonPayload } from "./types";
+import { Button, TrainingRoomMotion, StudyButton } from "..";
+import { ButtonPayload } from "../../../types";
 
 import mqtt from "mqtt";
 
 const zigbeeDevices: Array<Button | TrainingRoomMotion | StudyButton> = [];
 
-export const handleZigbeeDevices = (client: mqtt.MqttClient) => {
-  /*
-   * Zigbee Devices
-   */
+export const zigbeeControllers = (client: mqtt.MqttClient) => {
   zigbeeDevices.push(
     new Button({ topic: "zigbee2mqtt/livingRoomButton" }),
     new StudyButton({ topic: "zigbee2mqtt/studyButton" }),

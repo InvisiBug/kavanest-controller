@@ -23,11 +23,12 @@
     "graphql": "^16.2.0",
     "graphql-request": "^3.7.0",
     "mqtt": "^5.3.4",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
-    "@types/mqtt": "^2.5.0",
     "@types/js-yaml": "^4.0.4",
+    "@types/mqtt": "^2.5.0",
     "@types/node": "^20.10.6",
     "@types/ws": "^8.5.4",
     "prettier": "^2.4.1",

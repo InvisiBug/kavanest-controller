@@ -1,5 +1,5 @@
-import { decamelize, nowTimer } from "../helpers";
-import { Sensor, Room, Radiator } from "../stores/";
+import { decamelize, nowTimer } from "../../helpers";
+import { Sensor, Room, Radiator } from "../../stores";
 
 const off = 0;
 const on = 1;

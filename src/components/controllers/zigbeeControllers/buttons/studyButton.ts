@@ -1,6 +1,5 @@
-import { DeviceConfig } from "..";
-import { ButtonPayload } from "../../../types";
-import { Plug } from "../../stores";
+import { ButtonPayload, DeviceConfig } from "src/types";
+import { Plug } from "src/components/stores";
 
 export default class HeatingTimeSetter {
   deviceCongfig: DeviceConfig;
