@@ -4,17 +4,19 @@ import { Plug, RGBLight } from "../stores";
 export default class TrainingRoomMotion {
   deviceCongfig: DeviceConfig;
   rgbStrip: RGBLight;
+  topic: string;
 
   allLightState = true;
 
   constructor(deviceCongfig: DeviceConfig) {
     this.deviceCongfig = deviceCongfig;
+    this.topic = deviceCongfig.topic;
 
     this.rgbStrip = new RGBLight("kitchenStrip");
   }
 
   handleIncoming = async (topic: String, rawPayload: Object) => {
-    if (topic !== this.deviceCongfig.topic) return;
+    if (topic !== this.topic) return;
 
     const payload = JSON.parse(rawPayload.toString());
 
