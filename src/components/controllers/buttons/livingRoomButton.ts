@@ -1,24 +1,26 @@
-import { DeviceConfig } from "./";
-import { Plug } from "../stores";
+import { DeviceConfig } from "..";
+import { ButtonPayload } from "../../../types";
+import { Plug } from "../../stores";
 
 export default class HeatingTimeSetter {
   deviceCongfig: DeviceConfig;
   floodlight: Plug;
   livingroomLamp: Plug;
+  topic: string;
 
   allLightState = true;
 
   constructor(deviceCongfig: DeviceConfig) {
     this.deviceCongfig = deviceCongfig;
+    this.topic = deviceCongfig.topic;
 
     this.floodlight = new Plug("floodlight");
     this.livingroomLamp = new Plug("livingRoomLamp");
   }
 
-  handleIncoming = async (topic: String, rawPayload: Object) => {
-    if (topic !== this.deviceCongfig.topic) return;
+  handleIncoming = async (topic: String, payload: ButtonPayload) => {
+    if (topic !== this.topic) return;
 
-    const payload = JSON.parse(rawPayload.toString());
     if (payload.action === "single") {
       const floodLightState = await this.floodlight.getState();
       this.floodlight.setState(!floodLightState.state);

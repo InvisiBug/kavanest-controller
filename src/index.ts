@@ -1,13 +1,15 @@
 import { apiUrl } from "./components/helpers";
 import { request, gql } from "graphql-request";
-import { RoomDemandSetter, HeatingTimeSetter, Radiator, PlugTimer, Button, DeviceConfig, TrainingRoomMotion } from "./components/controllers";
+import { RoomDemandSetter, HeatingTimeSetter, Radiator, PlugTimer } from "./components/controllers";
 
 import { connectToMQTT } from "./components/mqtt/mqttService";
+const client = connectToMQTT();
 
 const controllers: Array<any> = [];
-const zigbeeDevices: Array<Button | TrainingRoomMotion> = [];
 
-const client = connectToMQTT();
+import { handleZigbeeDevices } from "./zigbeeDevices";
+
+handleZigbeeDevices(client);
 
 //////////////////////////////////
 // Demand and radiator controllers
@@ -69,28 +71,6 @@ const systemTick = async (delay: number) => {
 systemTick(2 * 1000);
 
 console.log("Hello from Skippy");
-
-/*
- * Zigbee Devices
- */
-zigbeeDevices.push(
-  new Button({
-    topic: "zigbee2mqtt/mySwitch",
-  }),
-  new TrainingRoomMotion({
-    topic: "zigbee2mqtt/trainingRoomMotion",
-  }),
-);
-
-client.on("message", (topic: String, payload: Object) => {
-  try {
-    for (let i = 0; i < zigbeeDevices.length; i++) {
-      zigbeeDevices[i].handleIncoming(topic, payload);
-    }
-  } catch (error: unknown) {
-    console.log("an error", error);
-  }
-});
 
 // Watchdog request
 // Terminate app if request fails, kubernetes will restart it for us
