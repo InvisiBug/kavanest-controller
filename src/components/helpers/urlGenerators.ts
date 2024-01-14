@@ -6,3 +6,5 @@ dotenvExpand(myEnv);
 
 export const apiUrl = String(process.env.API);
 export const mqttUrl = String(process.env.MQTT);
+
+console.log("Connected to API:", apiUrl);

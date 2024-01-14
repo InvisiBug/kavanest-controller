@@ -2,16 +2,16 @@ name: kavanest-controller
 
 namespace: kavanest
 env:
-  APP_VERSION: fee5e7c9512c393132146815efb6e41cd96072cb
+  APP_VERSION: 8f5af09db03d7ea0b64a9eff9e156fd65bb28580
 
 deployment:
   - name: kavanest-controller
     image: invisibug/kavanest-controller
     env:
-    - name: API
-      value: http://kavanest-api # Alows the controller to run even when the internet is down
-    - name: MQTT
-      value: mqtt://kavanet.io
+      - name: API
+        value: http://kavanest-api # Alows the controller to run even when the internet is down
+      - name: MQTT
+        value: mqtt://kavanet.io
     # resources:
     #   memory: 100Mi
     #   cpu: 1000m

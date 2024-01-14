@@ -7,9 +7,9 @@ const client = connectToMQTT();
 
 const controllers: Array<any> = [];
 
-import { handleZigbeeDevices } from "./zigbeeDevices";
+import { zigbeeControllers } from "./components/controllers";
 
-handleZigbeeDevices(client);
+zigbeeControllers(client);
 
 //////////////////////////////////
 // Demand and radiator controllers
