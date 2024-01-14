@@ -1,4 +1,4 @@
-import { apiUrl } from "../helpers/urlGenerators";
+import { mqttUrl } from "../helpers/urlGenerators";
 import mqtt from "mqtt";
 
 const options = {
@@ -8,7 +8,7 @@ const options = {
 // const mqttUrl = "mqtt://kavanet.io";
 
 export const connectToMQTT = () => {
-  const client: mqtt.MqttClient = mqtt.connect(apiUrl, options);
+  const client: mqtt.MqttClient = mqtt.connect(mqttUrl, options);
 
   client.subscribe("#", (error) => {
     if (error) {
@@ -16,7 +16,7 @@ export const connectToMQTT = () => {
       console.log("⚠️  MQTT connect error... Restarting");
       process.exit();
     } else {
-      console.log(`📡  Listening to ${apiUrl}`);
+      console.log(`📡  Listening to ${mqttUrl}`);
     }
   });
 
