@@ -1,5 +1,5 @@
 import { ButtonPayload, DeviceConfig } from "../../../../types";
-import { Plug } from "../../../stores";
+import { Plug } from "src/components/stores";
 
 export default class LivingRoomButton {
   deviceCongfig: DeviceConfig;
