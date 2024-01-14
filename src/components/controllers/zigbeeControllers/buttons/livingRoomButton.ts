@@ -1,10 +1,10 @@
 import { ButtonPayload, DeviceConfig } from "src/types";
 import { Plug } from "src/components/stores";
 
-export default class HeatingTimeSetter {
+export default class LivingRoomButton {
   deviceCongfig: DeviceConfig;
   floodlight: Plug;
-  livingroomLamp: Plug;
+  livingRoomLamp: Plug;
   topic: string;
 
   allLightState = true;
@@ -14,11 +14,13 @@ export default class HeatingTimeSetter {
     this.topic = deviceCongfig.topic;
 
     this.floodlight = new Plug("floodlight");
-    this.livingroomLamp = new Plug("livingRoomLamp");
+    this.livingRoomLamp = new Plug("livingRoomLamp");
   }
 
-  handleIncoming = async (topic: String, payload: ButtonPayload) => {
+  handleIncoming = async (topic: String, rawPayload: object) => {
     if (topic !== this.topic) return;
+
+    const payload: ButtonPayload = JSON.parse(rawPayload.toString());
 
     if (payload.action === "single") {
       const floodLightState = await this.floodlight.getState();
@@ -26,16 +28,14 @@ export default class HeatingTimeSetter {
     }
 
     if (payload.action === "double") {
-      const livingroomLampstate = await this.livingroomLamp.getState();
-      this.livingroomLamp.setState(!livingroomLampstate.state);
+      const livingRoomLampstate = await this.livingRoomLamp.getState();
+      this.livingRoomLamp.setState(!livingRoomLampstate.state);
     }
 
     if (payload.action === "long") {
       this.floodlight.setState(!this.allLightState);
-      this.livingroomLamp.setState(!this.allLightState);
+      this.livingRoomLamp.setState(!this.allLightState);
       this.allLightState = !this.allLightState;
     }
-
-    console.log(payload);
   };
 }

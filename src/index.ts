@@ -7,7 +7,7 @@ const client = connectToMQTT();
 
 const controllers: Array<any> = [];
 
-import { zigbeeControllers } from "./components/controllers/zigbeeControllers";
+import { zigbeeControllers } from "./components/controllers";
 
 zigbeeControllers(client);
 

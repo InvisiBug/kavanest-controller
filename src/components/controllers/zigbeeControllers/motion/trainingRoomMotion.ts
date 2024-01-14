@@ -1,4 +1,4 @@
-import { DeviceConfig } from "src/types";
+import { DeviceConfig, MotionPayload } from "src/types";
 import { Plug, RGBLight } from "src/components/stores";
 
 export default class TrainingRoomMotion {
@@ -15,10 +15,10 @@ export default class TrainingRoomMotion {
     this.rgbStrip = new RGBLight("kitchenStrip");
   }
 
-  handleIncoming = async (topic: String, rawPayload: Object) => {
+  handleIncoming = async (topic: String, rawPayload: object) => {
     if (topic !== this.topic) return;
 
-    const payload = JSON.parse(rawPayload.toString());
+    const payload: MotionPayload = JSON.parse(rawPayload.toString());
 
     if (payload.occupancy === true) {
       this.rgbStrip.setState(true);
@@ -27,7 +27,5 @@ export default class TrainingRoomMotion {
     if (payload.occupancy === false) {
       this.rgbStrip.setState(false);
     }
-
-    console.log(payload);
   };
 }

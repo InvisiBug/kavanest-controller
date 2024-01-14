@@ -1,7 +1,7 @@
 import { ButtonPayload, DeviceConfig } from "src/types";
 import { Plug } from "src/components/stores";
 
-export default class HeatingTimeSetter {
+export default class StudyButton {
   deviceCongfig: DeviceConfig;
   eggChair: Plug;
   studyLamp: Plug;
@@ -17,8 +17,10 @@ export default class HeatingTimeSetter {
     this.studyLamp = new Plug("studyLamp");
   }
 
-  handleIncoming = async (topic: String, payload: ButtonPayload) => {
+  handleIncoming = async (topic: String, rawPayload: object) => {
     if (topic !== this.topic) return;
+
+    const payload: ButtonPayload = JSON.parse(rawPayload.toString());
 
     if (payload.action === "single") {
       const eggChairState = await this.eggChair.getState();
