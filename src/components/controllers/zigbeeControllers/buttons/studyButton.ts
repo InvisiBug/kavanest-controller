@@ -1,5 +1,5 @@
-import { ButtonPayload, DeviceConfig } from "src/types";
-import { Plug } from "src/components/stores";
+import { ButtonPayload, DeviceConfig } from "../../../../types";
+import { Plug } from "../../../stores";
 
 export default class StudyButton {
   deviceCongfig: DeviceConfig;

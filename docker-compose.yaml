@@ -6,11 +6,13 @@ services:
     image: kavanest-skippy
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.argo
+
     networks:
       - proxynet
     environment:
-      - API=http://kavanest-api:4000
+      - API=http://api.kavanet.io
+      - MQTT=mqtt://kavanet.io
 
 networks:
   proxynet:
