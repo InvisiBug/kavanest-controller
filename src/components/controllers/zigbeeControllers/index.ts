@@ -1,8 +1,6 @@
-import LivingRoomButton from "./buttons/LivingRoomButton";
+import LivingRoomButton from "./buttons/livingRoomButton";
 import StudyButton from "./buttons/studyButton";
 import TrainingRoomMotion from "./motion/trainingRoomMotion";
-
-import { ButtonPayload, MotionPayload } from "../../../types";
 
 import mqtt from "mqtt";
 
