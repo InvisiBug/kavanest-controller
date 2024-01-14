@@ -1,6 +1,7 @@
 ## Need a build stage to compile the typescript
 
 ## Build stage
+# FROM node:16 as build
 FROM arm64v8/node as build
 
 COPY . .
@@ -11,6 +12,7 @@ RUN yarn build
 
 ## Deploy stage
 FROM arm64v8/node
+# FROM node:16
 
 WORKDIR /usr/src/app
 
@@ -25,4 +27,4 @@ RUN yarn install
 EXPOSE 1883
 EXPOSE 9001
 
-CMD ["node","index.js"]
+CMD ["node","src/index.js"]
