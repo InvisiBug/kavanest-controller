@@ -28,14 +28,14 @@ export default class StudyButton {
     }
 
     if (payload.action === "double") {
-      const studyLampstate = await this.studyLamp.getState();
-      this.studyLamp.setState(!studyLampstate.state);
-    }
-
-    if (payload.action === "long") {
       this.eggChair.setState(!this.allLightState);
       this.studyLamp.setState(!this.allLightState);
       this.allLightState = !this.allLightState;
+    }
+
+    if (payload.action === "long") {
+      const studyLampstate = await this.studyLamp.getState();
+      this.studyLamp.setState(!studyLampstate.state);
     }
 
     console.log(topic, payload);
