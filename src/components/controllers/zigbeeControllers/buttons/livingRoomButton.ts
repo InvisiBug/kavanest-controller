@@ -28,14 +28,14 @@ export default class LivingRoomButton {
     }
 
     if (payload.action === "double") {
-      const livingRoomLampstate = await this.livingRoomLamp.getState();
-      this.livingRoomLamp.setState(!livingRoomLampstate.state);
-    }
-
-    if (payload.action === "long") {
       this.floodlight.setState(!this.allLightState);
       this.livingRoomLamp.setState(!this.allLightState);
       this.allLightState = !this.allLightState;
+    }
+
+    if (payload.action === "long") {
+      const livingRoomLampstate = await this.livingRoomLamp.getState();
+      this.livingRoomLamp.setState(!livingRoomLampstate.state);
     }
   };
 }
