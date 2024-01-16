@@ -1,5 +1,5 @@
-import { DeviceConfig, MotionPayload } from "../../../../types";
-import { Plug, RGBLight } from "../../../stores";
+import { DeviceConfig, MotionPayload } from "src/types";
+import { Plug, RGBLight } from "src/components/stores";
 
 export default class TrainingRoomMotion {
   deviceCongfig: DeviceConfig;
