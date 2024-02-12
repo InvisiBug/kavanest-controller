@@ -1,36 +1,24 @@
-import LivingRoomButton from "./buttons/livingRoomButton";
-import StudyButton from "./buttons/studyButton";
-import TrainingRoomMotion from "./motion/trainingRoomMotion";
+import TrainingRoom from "./trainingRoom";
+import Bedroom from "./bedRoom";
+import LivingRoom from "./livingRoom";
+import Study from "./study";
 
 import mqtt from "mqtt";
 
-const zigbeeDevices: Array<LivingRoomButton | TrainingRoomMotion | StudyButton> = [];
-
 export const zigbeeControllers = (client: mqtt.MqttClient) => {
-  zigbeeDevices.push(
-    new LivingRoomButton({ topic: "zigbee2mqtt/livingRoomButton" }),
-    new StudyButton({ topic: "zigbee2mqtt/studyButton" }),
-    new TrainingRoomMotion({ topic: "zigbee2mqtt/trainingRoomMotion" }),
-  );
+  const study = new Study();
+  const trainingRoom = new TrainingRoom();
+  const bedroom = new Bedroom();
+  const livingRoom = new LivingRoom();
 
   client.on("message", (topic: string, rawPayload: object) => {
-    if (topicExists(zigbeeDevices, topic)) {
-      try {
-        for (let i = 0; i < zigbeeDevices.length; i++) {
-          zigbeeDevices[i].handleIncoming(topic, rawPayload);
-        }
-      } catch (error: unknown) {
-        console.log("Error:", error);
-      }
+    try {
+      study.handleIncoming(topic, rawPayload);
+      trainingRoom.handleIncoming(topic, rawPayload);
+      bedroom.handleIncoming(topic, rawPayload);
+      livingRoom.handleIncoming(topic, rawPayload);
+    } catch (error: unknown) {
+      console.log("Error:", error);
     }
   });
 };
-
-function topicExists(devices: typeof zigbeeDevices, givenTopic: string) {
-  for (let device in devices) {
-    if (devices[device].topic === givenTopic) {
-      return true;
-    }
-  }
-  return false;
-}

@@ -2,23 +2,20 @@ import { ButtonPayload, DeviceConfig } from "../../../../types";
 import { Plug } from "src/components/stores";
 
 export default class LivingRoomButton {
-  deviceCongfig: DeviceConfig;
   floodlight: Plug;
   livingRoomLamp: Plug;
-  topic: string;
 
   allLightState = true;
 
-  constructor(deviceCongfig: DeviceConfig) {
-    this.deviceCongfig = deviceCongfig;
-    this.topic = deviceCongfig.topic;
+  buttonTopic = "zigbee2mqtt/livingRoomButton";
 
+  constructor() {
     this.floodlight = new Plug("floodlight");
     this.livingRoomLamp = new Plug("livingRoomLamp");
   }
 
   handleIncoming = async (topic: String, rawPayload: object) => {
-    if (topic !== this.topic) return;
+    if (topic !== this.buttonTopic) return;
 
     const payload: ButtonPayload = JSON.parse(rawPayload.toString());
 
