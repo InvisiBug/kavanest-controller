@@ -65,6 +65,12 @@ export default class RoomDemandSetter {
 
             this.room.setDemand(off);
             return;
+          } else if (overrideType === "passive") {
+            if (log) console.log("Passive override");
+            if (log) console.log(`So set demand maybe`);
+
+            this.room.setDemand(maybe);
+            return;
           }
         }
 
