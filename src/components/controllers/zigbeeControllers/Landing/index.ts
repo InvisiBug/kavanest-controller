@@ -1,32 +1,24 @@
 import { DeviceConfig, MotionPayload, ButtonPayload } from "../../../../types";
-import { Plug, RGBLight } from "../../../stores";
+import { Bulb, RGBLight } from "../../../stores";
 
-export default class TrainingRoom {
-  trainingRoomPlug: Plug;
-  rgbStrip: RGBLight;
-  kitchenLamp: Plug;
+export default class Study {
+  landingLight: Bulb;
 
   allLightState = true;
 
-  motionTopic = "zigbee2mqtt/trainingRoomMotion";
-  buttonTopic = "zigbee2mqtt/kitchenButton";
+  motionTopic = "zigbee2mqtt/landingMotion";
+  buttonTopic = "zigbee2mqtt/landingButton";
 
-  motionArmed = true;
+  armed = true;
   onByMotion = false;
 
   constructor() {
-    this.trainingRoomPlug = new Plug("trainingRoomLamp");
-    this.kitchenLamp = new Plug("kitchenLamp");
-    this.rgbStrip = new RGBLight("kitchenStrip");
+    this.landingLight = new Bulb("landingLight");
   }
 
   handleIncoming = async (topic: string, rawPayload: object) => {
-    // if (topic !== this.buttonTopic || topic !== this.motionTopic) return;
-    // console.log(topic);
-
     if (![this.motionTopic, this.buttonTopic].includes(topic)) return;
-    console.log(topic);
-
+    console.log("Landing", topic);
     /*
      * Button
      */
@@ -35,15 +27,15 @@ export default class TrainingRoom {
       console.log("Button, action:", action);
 
       if (action === "single") {
-        const plugState = await this.trainingRoomPlug.getState();
-        this.trainingRoomPlug.setState(!plugState.state);
+        const landingLight = await this.landingLight.getState();
+        this.landingLight.setState(!landingLight.state);
       }
 
       if (action === "double") {
         if (this.onByMotion && this.allLightState) {
           console.log("Turned on by motion, disarming");
           this.onByMotion = false;
-          this.motionArmed = false;
+          this.armed = false;
 
           // Make something flash here
           return;
@@ -51,21 +43,21 @@ export default class TrainingRoom {
 
         // Lights are on, arm system and turn off lights
         if (this.allLightState) {
-          this.motionArmed = true;
+          this.armed = true;
           console.log("Lights are on, arming system and turning off the lights");
         }
 
         // Lights are off, disarm system and turn on lights
         if (!this.allLightState) {
-          this.motionArmed = false;
+          this.armed = false;
           console.log("Lights are off, disarming system and turning on the lights");
         }
 
-        this.trainingRoomPlug.setState(!this.allLightState);
-        this.rgbStrip.setState(!this.allLightState);
-        this.kitchenLamp.setState(!this.allLightState);
-
+        this.landingLight.setState(!this.allLightState);
         this.allLightState = !this.allLightState;
+      }
+
+      if (action === "long") {
       }
     }
 
@@ -74,29 +66,23 @@ export default class TrainingRoom {
      */
     if (topic === this.motionTopic) {
       const { occupancy }: MotionPayload = JSON.parse(rawPayload.toString());
-      console.log("Motion, occupancy:", occupancy);
+      console.log("Motion, occupancy:", occupancy, "Armed:", this.armed);
 
       if (occupancy === true) {
-        if (this.motionArmed === false) return;
+        if (this.armed === false) return;
 
         this.onByMotion = true;
 
-        this.trainingRoomPlug.setState(true);
-        this.rgbStrip.setState(true);
-        this.kitchenLamp.setState(true);
-
+        this.landingLight.setState(true);
         this.allLightState = true;
       }
 
       if (occupancy === false) {
-        if (this.motionArmed === false) return;
+        if (this.armed === false) return;
 
         this.onByMotion = false;
 
-        this.trainingRoomPlug.setState(false);
-        this.rgbStrip.setState(false);
-        this.kitchenLamp.setState(false);
-
+        this.landingLight.setState(false);
         this.allLightState = false;
       }
     }

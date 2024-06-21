@@ -1,4 +1,5 @@
 .env
-helm
-bin
-readmeImages
+helm/
+/bin/*
+Diagrams/
+**/.git
