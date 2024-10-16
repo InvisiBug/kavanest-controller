@@ -17,7 +17,7 @@ export default class PlugTimer {
   }
 
   async tick() {
-    const log: boolean = false;
+    const log: boolean = true;
 
     if (log) console.log(`\n* ${decamelize(this.deviceName)} *`);
 
