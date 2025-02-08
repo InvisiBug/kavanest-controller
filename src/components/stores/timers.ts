@@ -8,12 +8,6 @@ export default class Timers {
   }
 
   async getTimer() {
-    type Data = {
-      response: {
-        value: number | null;
-      };
-    };
-
     const query = gql`
       query ($name: String) {
         response: getTimer(name: $name) {
@@ -33,16 +27,15 @@ export default class Timers {
     } catch (error) {
       return null;
     }
+
+    type Data = {
+      response: {
+        value: number | null;
+      };
+    };
   }
 
   async setTimer(value: number) {
-    type Data = {
-      response: {
-        name: string;
-        value: number;
-      };
-    };
-
     const mutation = gql`
       mutation ($input: TimerInput) {
         response: updateTimer(input: $input) {
@@ -66,5 +59,12 @@ export default class Timers {
     } catch (error) {
       console.log(error);
     }
+
+    type Data = {
+      response: {
+        name: string;
+        value: number;
+      };
+    };
   }
 }

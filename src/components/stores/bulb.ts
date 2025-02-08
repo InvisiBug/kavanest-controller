@@ -2,20 +2,21 @@ import { request, gql } from "graphql-request";
 import { apiUrl } from "../helpers";
 
 /*
-  The Plug store
-  This class is responsible for dealing with the plug data
+  The Bulb store
+  This class is responsible for dealing with the Bulb data
 */
-export default class Plug {
+export default class Bulb {
   name: string;
 
   constructor(name: string) {
     this.name = name;
+    this.getState();
   }
 
   async getState() {
     const query = gql`
       query ($name: String) {
-        response: getPlug(name: $name) {
+        response: getBulb(name: $name) {
           name
           state
           connected
@@ -35,15 +36,30 @@ export default class Plug {
       response: {
         name: string;
         state: boolean;
+        brightness: number;
+        colour_mode: string;
+        colour_temp: number;
         connected: boolean;
+        linkQuality: number;
+        room: string;
+        type: string;
       };
     };
   }
 
   async setState(state: boolean) {
+    type Data = {
+      response: {
+        name: string;
+        state: boolean;
+        connected: boolean;
+        _id: number;
+      };
+    };
+
     const mutation = gql`
-      mutation ($input: PlugInput) {
-        response: updatePlug(input: $input) {
+      mutation ($input: BulbInput) {
+        response: updateBulb(input: $input) {
           name
           state
           connected
@@ -61,15 +77,6 @@ export default class Plug {
 
     const { response }: Data = await request(apiUrl, mutation, variables);
 
-    return response;
-
-    type Data = {
-      response: {
-        name: string;
-        state: boolean;
-        connected: boolean;
-        _id: number;
-      };
-    };
+    return { response };
   }
 }

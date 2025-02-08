@@ -1,24 +1,20 @@
 import { request, gql } from "graphql-request";
 import { apiUrl } from "../helpers";
 
-/*
-  The Plug store
-  This class is responsible for dealing with the plug data
-*/
-export default class Plug {
+export default class MotionControllers {
   name: string;
 
   constructor(name: string) {
     this.name = name;
   }
 
-  async getState() {
+  async getMotionController() {
     const query = gql`
       query ($name: String) {
-        response: getPlug(name: $name) {
-          name
-          state
-          connected
+        response: getMotionController(name: $name) {
+          motionTriggered
+          armed
+          allLights
         }
       }
     `;
@@ -33,21 +29,21 @@ export default class Plug {
 
     type Data = {
       response: {
-        name: string;
-        state: boolean;
-        connected: boolean;
+        motionTriggered: boolean | null;
+        armed: boolean | null;
+        allLights: boolean | null;
       };
     };
   }
 
-  async setState(state: boolean) {
+  async setMotionController({ motionTriggered, armed, allLights }: { motionTriggered?: boolean; armed?: boolean; allLights?: boolean }) {
     const mutation = gql`
-      mutation ($input: PlugInput) {
-        response: updatePlug(input: $input) {
+      mutation ($input: MotionControllerInput) {
+        response: updateMotionController(input: $input) {
           name
-          state
-          connected
-          _id
+          motionTriggered
+          armed
+          allLights
         }
       }
     `;
@@ -55,20 +51,21 @@ export default class Plug {
     const variables = {
       input: {
         name: this.name,
-        state,
+        motionTriggered,
+        armed,
+        allLights,
       },
     };
 
     const { response }: Data = await request(apiUrl, mutation, variables);
-
     return response;
 
     type Data = {
       response: {
         name: string;
-        state: boolean;
-        connected: boolean;
-        _id: number;
+        motionTriggered: boolean;
+        armed: boolean;
+        allLights: boolean;
       };
     };
   }

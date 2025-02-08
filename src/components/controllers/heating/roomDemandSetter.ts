@@ -1,5 +1,10 @@
-import { decamelize, nowTimer } from "../../helpers";
-import { Sensor, Room, Radiator } from "../../stores";
+import { decamelize, nowTimer } from "@/components/helpers";
+import { Sensor, Room, Radiator } from "@/components/stores";
+
+/*
+  Sumamry
+  - Override happens before anything else (rooms sensor and radiator can be disconnected)
+*/
 
 const off = 0;
 const on = 1;
@@ -25,6 +30,37 @@ export default class RoomDemandSetter {
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
+    //* //////////////
+    //* Override
+
+    const roomData = await this.room.getRoomData();
+    const overrideTime = roomData?.overrideTime;
+    const overrideType = roomData?.overrideType;
+
+    if (overrideTime && nowTimer() < overrideTime) {
+      if (log) console.log("Override");
+
+      if (overrideType === "heating-on") {
+        if (log) console.log("Heating on override");
+        if (log) console.log(`So set demand to on`);
+
+        this.room.setDemand(on);
+        return;
+      } else if (overrideType === "heating-off") {
+        if (log) console.log("Heating off override");
+        if (log) console.log(`So set demand to off`);
+
+        this.room.setDemand(off);
+        return;
+      } else if (overrideType === "passive") {
+        if (log) console.log("Passive override");
+        if (log) console.log(`So set demand maybe`);
+
+        this.room.setDemand(maybe);
+        return;
+      }
+    }
+
     const sensor = await this.sensor.getState();
     if (!sensor) {
       if (log) console.log(`No sensor found`);
@@ -42,37 +78,9 @@ export default class RoomDemandSetter {
         if (log) console.log(`Sensor and radiator connected`);
 
         const target = await this.room.getCurrentTarget();
-        const roomData = await this.room.getRoomData();
-        const overrideTime = roomData?.overrideTime;
-        const overrideType = roomData?.overrideType;
+
         const deadzone = roomData?.deadzone || 0;
         const maybeDeadzone = 0.2;
-
-        //* //////////////
-        //* Override
-        if (overrideTime && nowTimer() < overrideTime) {
-          if (log) console.log("Override");
-
-          if (overrideType === "heating-on") {
-            if (log) console.log("Heating on override");
-            if (log) console.log(`So set demand to on`);
-
-            this.room.setDemand(on);
-            return;
-          } else if (overrideType === "heating-off") {
-            if (log) console.log("Heating off override");
-            if (log) console.log(`So set demand to off`);
-
-            this.room.setDemand(off);
-            return;
-          } else if (overrideType === "passive") {
-            if (log) console.log("Passive override");
-            if (log) console.log(`So set demand maybe`);
-
-            this.room.setDemand(maybe);
-            return;
-          }
-        }
 
         // if (log) console.log(deadzone);
 

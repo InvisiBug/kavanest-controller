@@ -14,8 +14,10 @@
     "declaration": true,
     "outDir": "dist/",
     "baseUrl": ".",
+    "skipLibCheck": true,
     "paths": {
-      "src*": ["./src/*"]
+      "src*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
     "plugins": [
       {
@@ -27,6 +29,5 @@
     // Do not forget to `yarn add tsconfig-paths`
     "require": ["tsconfig-paths/register"]
   },
-  "include": [
-    "src/*",    ]
+  "include": ["src",]
 }
