@@ -1,43 +1,83 @@
-import TrainingRoom from "./trainingRoom";
-import Bedroom from "./bedRoom";
-import LivingRoom from "./livingRoom";
-import Study from "./study";
-import Landing from "./Landing";
 import ButtonController from "./buttonControllers";
 import MotionControllers from "./motionControllers";
-
 import { MqttClient } from "mqtt";
 
 export const zigbeeControllers = (client: MqttClient) => {
-  const study = new Study();
-  const livingRoom = new LivingRoom();
-  const landing = new Landing();
-
   const motionSensors: MotionControllers[] = [];
+  const buttons: ButtonController[] = [];
 
-  motionSensors.push(
-    new MotionControllers({
-      controllerName: "trainingRoom",
-      motionTopic: "zigbee2mqtt/trainingRoomMotion",
-      buttonTopic: "zigbee2mqtt/kitchenButton",
-      lights: ["trainingRoomLamp", "kitchenLamp"],
-      rgbStrips: ["kitchenStrip"],
-    }),
-  );
+  const config = {
+    motionSensors: [
+      {
+        controllerName: "trainingRoom",
+        motionTopic: "zigbee2mqtt/trainingRoomMotion",
+        buttonTopic: "zigbee2mqtt/kitchenButton",
+        lights: ["trainingRoomLamp", "kitchenLamp"],
+        rgbStrips: ["kitchenStrip"],
+      },
+      {
+        controllerName: "landing",
+        motionTopic: "zigbee2mqtt/landingMotion",
+        bulbs: ["landingLight"],
+      },
+      {
+        controllerName: "printerRoom",
+        motionTopic: "zigbee2mqtt/printerRoomMotion",
+        bulbs: ["printerRoomLight"],
+      },
+
+      {
+        controllerName: "bedRoom",
+        buttonTopic: "zigbee2mqtt/bedRoomButton",
+        lights: ["bedRoomLamp"],
+      },
+      {
+        controllerName: "study",
+        buttonTopic: "zigbee2mqtt/studyButton",
+        lights: ["studyLamp", "eggChair"],
+      },
+      {
+        controllerName: "livingRoom",
+        buttonTopic: "zigbee2mqtt/livingRoomButton",
+        lights: ["livingRoomLamp", "floodlight"],
+      },
+    ],
+    buttons: [
+      // {
+      //   controllerName: "bedRoom",
+      //   buttonTopic: "zigbee2mqtt/bedRoomButton",
+      //   lights: ["bedRoomLamp"],
+      // },
+      // {
+      //   controllerName: "study",
+      //   buttonTopic: "zigbee2mqtt/studyButton",
+      //   lights: ["studyLamp", "eggChair"],
+      // },
+      // {
+      //   controllerName: "livingRoom",
+      //   buttonTopic: "zigbee2mqtt/livingRoomButton",
+      //   lights: ["livingRoomLamp", "floodlight"],
+      // },
+    ],
+  };
 
   //* Simple button controllers (no motion)
-  const bedroom = new ButtonController("zigbee2mqtt/bedRoomButton", "bedRoomLamp");
+  config.buttons.forEach((button) => {
+    buttons.push(new ButtonController(button));
+  });
+
+  config.motionSensors.forEach((motionSensor) => {
+    motionSensors.push(new MotionControllers(motionSensor));
+  });
 
   client.on("message", (topic: string, rawPayload: object) => {
     try {
-      study.handleIncoming(topic, rawPayload);
-      // trainingRoom.handleIncoming(topic, rawPayload);
-      bedroom.handleIncoming(topic, rawPayload);
-      livingRoom.handleIncoming(topic, rawPayload);
-      landing.handleIncoming(topic, rawPayload);
-
       motionSensors.forEach((motionSensor) => {
         motionSensor.handleIncoming(topic, rawPayload);
+      });
+
+      buttons.forEach((button) => {
+        button.handleIncoming(topic, rawPayload);
       });
     } catch (error: unknown) {
       console.log("Error:", error);

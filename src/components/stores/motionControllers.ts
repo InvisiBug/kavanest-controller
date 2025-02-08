@@ -9,14 +9,6 @@ export default class MotionControllers {
   }
 
   async getMotionController() {
-    type Data = {
-      response: {
-        motionTriggered: boolean | null;
-        armed: boolean | null;
-        allLights: boolean | null;
-      };
-    };
-
     const query = gql`
       query ($name: String) {
         response: getMotionController(name: $name) {
@@ -31,25 +23,20 @@ export default class MotionControllers {
       name: this.name,
     };
 
-    try {
-      const { response }: Data = await request(apiUrl, query, variables);
+    const { response }: Data = await request(apiUrl, query, variables);
 
-      return response;
-    } catch (error) {
-      return null;
-    }
+    return response;
+
+    type Data = {
+      response: {
+        motionTriggered: boolean | null;
+        armed: boolean | null;
+        allLights: boolean | null;
+      };
+    };
   }
 
   async setMotionController({ motionTriggered, armed, allLights }: { motionTriggered?: boolean; armed?: boolean; allLights?: boolean }) {
-    type Data = {
-      response: {
-        name: string;
-        motionTriggered: boolean;
-        armed: boolean;
-        allLights: boolean;
-      };
-    };
-
     const mutation = gql`
       mutation ($input: MotionControllerInput) {
         response: updateMotionController(input: $input) {
@@ -70,12 +57,16 @@ export default class MotionControllers {
       },
     };
 
-    try {
-      const { response }: Data = await request(apiUrl, mutation, variables);
+    const { response }: Data = await request(apiUrl, mutation, variables);
+    return response;
 
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
+    type Data = {
+      response: {
+        name: string;
+        motionTriggered: boolean;
+        armed: boolean;
+        allLights: boolean;
+      };
+    };
   }
 }

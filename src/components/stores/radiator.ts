@@ -3,20 +3,12 @@ import { apiUrl } from "../helpers";
 
 export default class RadiatorV2 {
   name: string;
+
   constructor(name: string) {
     this.name = name;
   }
 
   async getData() {
-    type Data = {
-      response: {
-        valve: boolean;
-        fan: boolean | null;
-        temperature: number | null;
-        connected: boolean;
-      };
-    };
-
     const query = gql`
       query GetRadiator($name: String) {
         response: getRadiator(name: $name) {
@@ -32,21 +24,21 @@ export default class RadiatorV2 {
       name: this.name,
     };
 
-    const gqlResponse: Data = await request(apiUrl, query, variables);
+    const { response }: Data = await request(apiUrl, query, variables);
 
-    return gqlResponse.response;
-  }
+    return response;
 
-  setValveState = async (state: boolean) => {
     type Data = {
       response: {
-        name: string;
         valve: boolean;
         fan: boolean | null;
         temperature: number | null;
+        connected: boolean;
       };
     };
+  }
 
+  setValveState = async (state: boolean) => {
     const query = gql`
       mutation ($input: RadiatorInput) {
         updateRadiator(input: $input) {
@@ -63,12 +55,10 @@ export default class RadiatorV2 {
       },
     };
 
-    const gqlResponse: Data = await request(apiUrl, query, variables);
+    const { response }: Data = await request(apiUrl, query, variables);
 
-    return gqlResponse.response;
-  };
+    return response;
 
-  setFanState = async (state: boolean) => {
     type Data = {
       response: {
         name: string;
@@ -77,7 +67,9 @@ export default class RadiatorV2 {
         temperature: number | null;
       };
     };
+  };
 
+  setFanState = async (state: boolean) => {
     const query = gql`
       mutation ($input: RadiatorInput) {
         updateRadiator(input: $input) {
@@ -94,8 +86,17 @@ export default class RadiatorV2 {
       },
     };
 
-    const gqlResponse: Data = await request(apiUrl, query, variables);
+    const { response }: Data = await request(apiUrl, query, variables);
 
-    return gqlResponse.response;
+    return response;
+
+    type Data = {
+      response: {
+        name: string;
+        valve: boolean;
+        fan: boolean | null;
+        temperature: number | null;
+      };
+    };
   };
 }

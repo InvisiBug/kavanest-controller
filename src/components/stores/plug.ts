@@ -10,18 +10,9 @@ export default class Plug {
 
   constructor(name: string) {
     this.name = name;
-    this.getState();
   }
 
   async getState() {
-    type Data = {
-      response: {
-        name: string;
-        state: boolean;
-        connected: boolean;
-      };
-    };
-
     const query = gql`
       query ($name: String) {
         response: getPlug(name: $name) {
@@ -36,21 +27,20 @@ export default class Plug {
       name: this.name,
     };
 
-    const gqlResponse: Data = await request(apiUrl, query, variables);
+    const { response }: Data = await request(apiUrl, query, variables);
 
-    return gqlResponse.response;
-  }
+    return response;
 
-  async setState(state: boolean) {
     type Data = {
       response: {
         name: string;
         state: boolean;
         connected: boolean;
-        _id: number;
       };
     };
+  }
 
+  async setState(state: boolean) {
     const mutation = gql`
       mutation ($input: PlugInput) {
         response: updatePlug(input: $input) {
@@ -69,8 +59,17 @@ export default class Plug {
       },
     };
 
-    const gqlResponse: Data = await request(apiUrl, mutation, variables);
+    const { response }: Data = await request(apiUrl, mutation, variables);
 
-    return gqlResponse.response;
+    return response;
+
+    type Data = {
+      response: {
+        name: string;
+        state: boolean;
+        connected: boolean;
+        _id: number;
+      };
+    };
   }
 }

@@ -10,13 +10,6 @@ export default class RGBLight {
   }
 
   async getState() {
-    type Data = {
-      response: {
-        state: boolean;
-        connected: boolean;
-      };
-    };
-
     const query = gql`
       query ($name: String) {
         response: getPlug(name: $name) {
@@ -30,21 +23,19 @@ export default class RGBLight {
       name: this.name,
     };
 
-    const gqlResponse: Data = await request(apiUrl, query, variables);
+    const { response }: Data = await request(apiUrl, query, variables);
 
-    return gqlResponse.response;
+    return response;
+
+    type Data = {
+      response: {
+        state: boolean;
+        connected: boolean;
+      };
+    };
   }
 
   async setState(state: boolean) {
-    type Data = {
-      response: {
-        name: string;
-        state: boolean;
-        connected: boolean;
-        _id: string;
-      };
-    };
-
     const mutation = gql`
       mutation ($input: RGBLightInput) {
         updateRGBLights(input: $input) {
@@ -63,8 +54,17 @@ export default class RGBLight {
       },
     };
 
-    const gqlResponse: Data = await request(apiUrl, mutation, variables);
+    const { response }: Data = await request(apiUrl, mutation, variables);
 
-    return gqlResponse.response;
+    return response;
+
+    type Data = {
+      response: {
+        name: string;
+        state: boolean;
+        connected: boolean;
+        _id: string;
+      };
+    };
   }
 }

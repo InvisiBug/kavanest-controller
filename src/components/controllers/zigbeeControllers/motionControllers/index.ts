@@ -1,5 +1,5 @@
 import { DeviceConfig, MotionPayload, ButtonPayload } from "@/types";
-import { Plug, RGBLight, MotionController } from "@/components/stores";
+import { Plug, RGBLight, Bulb, MotionController } from "@/components/stores";
 import { decamelize } from "@/components/helpers";
 
 const log = false;
@@ -10,15 +10,17 @@ const log = false;
  */
 export default class MotionControllers {
   name: string;
+
   lights: Plug[] = [];
   rgbStrips: RGBLight[] = [];
+  bulbs: Bulb[] = [];
 
   motionTopic: string;
   buttonTopic: string;
 
   motionController: MotionController;
 
-  constructor({ controllerName, motionTopic, buttonTopic, lights, rgbStrips }: Constructor) {
+  constructor({ controllerName, motionTopic = "", buttonTopic = "", lights, rgbStrips, bulbs }: Constructor) {
     this.name = controllerName;
     this.motionTopic = motionTopic;
     this.buttonTopic = buttonTopic;
@@ -26,6 +28,11 @@ export default class MotionControllers {
     lights &&
       lights.forEach((name) => {
         this.lights.push(new Plug(name));
+      });
+
+    bulbs &&
+      bulbs.forEach((name) => {
+        this.bulbs.push(new Bulb(name));
       });
 
     rgbStrips &&
@@ -92,13 +99,7 @@ export default class MotionControllers {
         if (allLights) {
           if (log) console.log("Lights are on, arming system and turning off the lights");
 
-          this.lights.forEach((light) => {
-            light.setState(false);
-          });
-
-          this.rgbStrips.forEach((rgbStrip) => {
-            rgbStrip.setState(false);
-          });
+          this.setAll(false);
 
           this.motionController.setMotionController({
             allLights: false,
@@ -109,13 +110,7 @@ export default class MotionControllers {
         if (!allLights) {
           if (log) console.log("Lights are off, disarming system and turning on the lights");
 
-          this.lights.forEach((light) => {
-            light.setState(true);
-          });
-
-          this.rgbStrips.forEach((rgbStrip) => {
-            rgbStrip.setState(true);
-          });
+          this.setAll(true);
 
           this.motionController.setMotionController({
             allLights: true,
@@ -135,13 +130,7 @@ export default class MotionControllers {
       if (occupancy) {
         if (!armed) return;
 
-        this.lights.forEach(async (light) => {
-          light.setState(true);
-        });
-
-        this.rgbStrips.forEach(async (rgb) => {
-          rgb.setState(true);
-        });
+        this.setAll(true);
 
         this.motionController.setMotionController({
           motionTriggered: true,
@@ -152,13 +141,7 @@ export default class MotionControllers {
       if (!occupancy) {
         if (!armed) return;
 
-        this.lights.forEach(async (light) => {
-          light.setState(false);
-        });
-
-        this.rgbStrips.forEach(async (rgb) => {
-          rgb.setState(false);
-        });
+        this.setAll(false);
 
         this.motionController.setMotionController({
           motionTriggered: false,
@@ -167,12 +150,27 @@ export default class MotionControllers {
       }
     }
   };
+
+  private setAll = (state: boolean) => {
+    this.lights.forEach((light) => {
+      light.setState(state);
+    });
+
+    this.rgbStrips.forEach((rgb) => {
+      rgb.setState(state);
+    });
+
+    this.bulbs.forEach((bulb) => {
+      bulb.setState(state);
+    });
+  };
 }
 
 type Constructor = {
   controllerName: string;
-  motionTopic: string;
-  buttonTopic: string;
-  lights: string[];
-  rgbStrips: string[];
+  motionTopic?: string;
+  buttonTopic?: string;
+  lights?: string[];
+  rgbStrips?: string[];
+  bulbs?: string[];
 };

@@ -162,6 +162,7 @@ export default class Demand {
 
     const gqlData: Data = await request(apiUrl, query, variables);
 
+    // TODO: (investigation): Is this needed for first boot when there are no data points in mongo?
     if (!gqlData.response) {
       return;
     } else {
