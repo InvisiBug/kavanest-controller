@@ -9,13 +9,6 @@ export default class Sensor {
   }
 
   async getState() {
-    type Data = {
-      response: {
-        temperature: number;
-        connected: boolean;
-      };
-    };
-
     const query = gql`
       query GetSensor($room: String) {
         response: getSensor(room: $room) {
@@ -29,8 +22,15 @@ export default class Sensor {
       room: this.roomName,
     };
 
-    const sensor: Data = await request(apiUrl, query, variables);
+    const { response }: Data = await request(apiUrl, query, variables);
 
-    return sensor.response;
+    return response;
+
+    type Data = {
+      response: {
+        temperature: number;
+        connected: boolean;
+      };
+    };
   }
 }

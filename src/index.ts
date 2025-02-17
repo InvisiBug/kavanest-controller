@@ -43,7 +43,6 @@ request(apiUrl, query).then((data: Data) => {
     for (const room of data.response) {
       controllers.push(new RoomDemandSetter(room.name));
       controllers.push(new Radiator(room.name));
-      // controllers.push(new RadiatorFan(room.name));
     }
   }
 });

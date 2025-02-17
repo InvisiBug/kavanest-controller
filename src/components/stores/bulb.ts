@@ -14,20 +14,6 @@ export default class Bulb {
   }
 
   async getState() {
-    type Data = {
-      response: {
-        name: string;
-        state: boolean;
-        brightness: number;
-        colour_mode: string;
-        colour_temp: number;
-        connected: boolean;
-        linkQuality: number;
-        room: string;
-        type: string;
-      };
-    };
-
     const query = gql`
       query ($name: String) {
         response: getBulb(name: $name) {
@@ -42,9 +28,23 @@ export default class Bulb {
       name: this.name,
     };
 
-    const gqlResponse: Data = await request(apiUrl, query, variables);
+    const { response }: Data = await request(apiUrl, query, variables);
 
-    return gqlResponse.response;
+    return response;
+
+    type Data = {
+      response: {
+        name: string;
+        state: boolean;
+        brightness: number;
+        colour_mode: string;
+        colour_temp: number;
+        connected: boolean;
+        linkQuality: number;
+        room: string;
+        type: string;
+      };
+    };
   }
 
   async setState(state: boolean) {
@@ -75,8 +75,8 @@ export default class Bulb {
       },
     };
 
-    const gqlResponse: Data = await request(apiUrl, mutation, variables);
+    const { response }: Data = await request(apiUrl, mutation, variables);
 
-    return gqlResponse.response;
+    return { response };
   }
 }

@@ -1,5 +1,10 @@
-import { decamelize, nowTimer } from "../../helpers";
-import { Sensor, Room, Radiator } from "../../stores";
+import { decamelize, nowTimer } from "@/components/helpers";
+import { Sensor, Room, Radiator } from "@/components/stores";
+
+/*
+  Sumamry
+  - Override happens before anything else (rooms sensor and radiator can be disconnected)
+*/
 
 const off = 0;
 const on = 1;
