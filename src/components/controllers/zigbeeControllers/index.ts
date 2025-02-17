@@ -42,29 +42,9 @@ export const zigbeeControllers = (client: MqttClient) => {
         lights: ["livingRoomLamp", "floodlight"],
       },
     ],
-    buttons: [
-      // {
-      //   controllerName: "bedRoom",
-      //   buttonTopic: "zigbee2mqtt/bedRoomButton",
-      //   lights: ["bedRoomLamp"],
-      // },
-      // {
-      //   controllerName: "study",
-      //   buttonTopic: "zigbee2mqtt/studyButton",
-      //   lights: ["studyLamp", "eggChair"],
-      // },
-      // {
-      //   controllerName: "livingRoom",
-      //   buttonTopic: "zigbee2mqtt/livingRoomButton",
-      //   lights: ["livingRoomLamp", "floodlight"],
-      // },
-    ],
   };
 
   //* Simple button controllers (no motion)
-  config.buttons.forEach((button) => {
-    buttons.push(new ButtonController(button));
-  });
 
   config.motionSensors.forEach((motionSensor) => {
     motionSensors.push(new MotionControllers(motionSensor));
