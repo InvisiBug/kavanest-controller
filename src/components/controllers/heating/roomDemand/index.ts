@@ -1,7 +1,7 @@
 import { decamelize, nowTimer } from "@/components/helpers";
 import { Sensor, Room, Radiator } from "@/components/stores";
 import { checkOverride } from "./checkOverride";
-import { radiatorConnectedDemandSetter } from "./sensorConnectedDemandSetter";
+import { sensorConnectedDemandSetter } from "./sensorConnectedDemandSetter";
 import { sensorDisconnectedDemandSetter } from "./sensorDisconnectedDemandSetter";
 
 /*
@@ -58,7 +58,7 @@ export default class RoomDemandSetter {
 
         //* //////////////
         //* Sensor Connected controller
-        radiatorConnectedDemandSetter({
+        sensorConnectedDemandSetter({
           sensor,
           room: this.room,
           log,

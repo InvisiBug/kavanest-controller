@@ -41,10 +41,6 @@ export const getCurrentSetpoint = (setpoints: Setpoints) => {
 
     const obj = setpoints[weekOrWeekend()];
 
-    console.log("obj", obj);
-
-    console.log("🚀 ", obj[Object.keys(obj)[count - 1]].temp);
-
     // If setpoint isnt found, use the last entry
     if (!setpoint.temp) {
       const lastEntry = obj[Object.keys(obj)[count - 1]]; // Final entry in the setpoint array
