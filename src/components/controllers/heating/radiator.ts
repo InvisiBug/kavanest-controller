@@ -25,7 +25,7 @@ export default class ValveController {
     const on = true;
     const off = false;
 
-    if (log) console.log(`\n* ${decamelize(this.roomName)} Radiator Controller *`);
+    if (log) console.log(`\n\n* ${decamelize(this.roomName)} Radiator Controller *`);
 
     const radiator = await this.radiator.getData();
     if (!radiator) {
@@ -128,7 +128,7 @@ export default class ValveController {
           if (log) console.log("Valve is closed...");
           if (log) console.log("So open Valve");
 
-          this.radiator.setValveState(open);
+          // this.radiator.setValveState(open);
         } else {
           if (log) console.log("And it is :)");
         }

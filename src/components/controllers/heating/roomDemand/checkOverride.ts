@@ -7,31 +7,31 @@ export const checkOverride = async ({ room, log, roomData }: Props) => {
   const overrideType = roomData?.overrideType;
 
   if (overrideTime && nowTimer() < overrideTime) {
-    if (log) console.log("Override");
-
     switch (overrideType) {
       case "on":
-        if (log) console.log("Heating on override");
+        if (log) console.log("Heating override: on ");
         if (log) console.log(`So set demand to on`);
 
         room.setDemand("on");
         break;
 
       case "off":
-        if (log) console.log("Heating off override");
+        if (log) console.log("Heating override: off");
         if (log) console.log(`So set demand to off`);
 
         room.setDemand("off");
         break;
 
       case "passive":
-        if (log) console.log("Passive override");
+        if (log) console.log("Heating override: passive");
         if (log) console.log(`So set passive mode`);
 
         room.setDemand("passive");
         break;
     }
+    return true;
   }
+  return false;
 };
 
 type Props = {
