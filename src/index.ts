@@ -33,7 +33,7 @@ const query = gql`
 
 request(apiUrl, query).then((data: Data) => {
   // Set to true when testing
-  const testing = true;
+  const testing = false;
 
   if (testing) {
     const testRoom = "study";

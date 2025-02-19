@@ -47,6 +47,7 @@ export const sensorConnectedDemandSetter = async ({ room, log, roomData, sensor 
     if (log) console.log(`Type is off`);
 
     room.setDemand("off");
+    return;
   } else if (target.type === "passive") {
     if (log) console.log(`Type is passive`);
 

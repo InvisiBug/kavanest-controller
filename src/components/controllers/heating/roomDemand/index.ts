@@ -26,7 +26,7 @@ export default class RoomDemandSetter {
   }
 
   async tick() {
-    const log = true;
+    const log = false;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
@@ -38,7 +38,10 @@ export default class RoomDemandSetter {
 
     //* //////////////
     //* Override
-    checkOverride({ room: this.room, log, roomData });
+    const overrideActive = await checkOverride({ room: this.room, log, roomData });
+    if (overrideActive) {
+      return;
+    }
 
     const sensor = await this.sensor.getState();
     if (!sensor) {
@@ -58,6 +61,7 @@ export default class RoomDemandSetter {
 
         //* //////////////
         //* Sensor Connected controller
+
         sensorConnectedDemandSetter({
           sensor,
           room: this.room,
