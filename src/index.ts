@@ -33,10 +33,10 @@ const query = gql`
 
 request(apiUrl, query).then((data: Data) => {
   // Set to true when testing
-  const testing = false;
+  const testing = true;
 
   if (testing) {
-    const testRoom = "bedroom";
+    const testRoom = "study";
     controllers.push(new RoomDemandSetter(testRoom));
     controllers.push(new Radiator(testRoom));
   } else {
