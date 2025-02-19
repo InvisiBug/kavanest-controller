@@ -20,7 +20,13 @@ export const weekOrWeekend = () => {
 
 // Takes in setpoints object and returns current target
 export const getCurrentSetpoint = (setpoints: Setpoints) => {
-  let setpoint: string | undefined | null;
+  // let setpoint: {
+  //   temp: number;
+  //   type: string;
+  // } = {};
+
+  let setpoint = {} as Setpoint;
+
   let count: number = 0;
   // console.log(now());
 
@@ -34,25 +40,36 @@ export const getCurrentSetpoint = (setpoints: Setpoints) => {
     });
 
     const obj = setpoints[weekOrWeekend()];
-    // console.log("obj", obj);
 
     // If setpoint isnt found, use the last entry
-    if (!setpoint) {
-      const lastSetpoint = parseInt(obj[Object.keys(obj)[count - 1]]);
+    if (!setpoint.temp) {
+      const lastEntry = obj[Object.keys(obj)[count - 1]]; // Final entry in the setpoint array
+      // Data format
+      // {
+      //   temp:Number;
+      //   type:String;
+      // }
+
+      const lastSetpoint = obj[Object.keys(obj)[count - 1]].temp;
+      console.log("🚀 ~ getCurrentSetpoint ~ lastEntry:", lastEntry);
       // If there arent any setpoints return 0
-      if (!lastSetpoint) {
-        return 0;
+      if (!lastEntry.temp) {
+        return lastEntry;
       }
 
       // Otherwise return the last setpoint
-      return lastSetpoint;
+      return lastEntry;
     }
 
     // console.log(setpoint);
 
-    return parseFloat(setpoint);
+    // return parseFloat(setpoint);
+    return setpoint;
   } catch {
-    return 0;
+    return {
+      temp: 0,
+      type: "off",
+    };
   }
 };
 
@@ -96,8 +113,11 @@ interface Setpoints {
   weekday: entry;
 }
 interface entry {
-  [x: key]: value;
+  [x: key]: Setpoint;
 }
 
 type key = string;
-type value = string;
+type Setpoint = {
+  temp: number;
+  type: string;
+};

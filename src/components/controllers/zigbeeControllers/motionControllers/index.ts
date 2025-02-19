@@ -2,7 +2,7 @@ import { DeviceConfig, MotionPayload, ButtonPayload } from "@/types";
 import { Plug, RGBLight, Bulb, MotionController } from "@/components/stores";
 import { decamelize } from "@/components/helpers";
 
-const log = false;
+const log = true;
 
 /**
  * This motion controller requires a button, a motion sensor and a light
