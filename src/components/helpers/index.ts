@@ -20,56 +20,32 @@ export const weekOrWeekend = () => {
 
 // Takes in setpoints object and returns current target
 export const getCurrentSetpoint = (setpoints: Setpoints) => {
-  // let setpoint: {
-  //   temp: number;
-  //   type: string;
-  // } = {};
+  let setpoint = {} as SetpointWithTime;
 
-  let setpoint = {} as Setpoint;
-
-  let count: number = 0;
-  // console.log(now());
-
-  // Look for a setpoint
   try {
-    Object.keys(setpoints[weekOrWeekend()]).forEach((entry) => {
-      if (now() >= entry) {
-        setpoint = setpoints[weekOrWeekend()][entry];
+    Object.keys(setpoints[weekOrWeekend()]).forEach((time) => {
+      if (now() > time) {
+        setpoint.temp = setpoints[weekOrWeekend()][time].temp;
+        setpoint.type = setpoints[weekOrWeekend()][time].type;
+        setpoint.time = time;
       }
-      count++;
     });
 
-    const obj = setpoints[weekOrWeekend()];
+    if (!setpoint.time) {
+      const obj = setpoints[weekOrWeekend()];
+      const lastTime = Object.keys(obj).sort().reverse()[0];
+      const lastSetpoint = obj[lastTime];
 
-    // If setpoint isnt found, use the last entry
-    if (!setpoint.temp) {
-      const lastEntry = obj[Object.keys(obj)[count - 1]]; // Final entry in the setpoint array
-      // Data format
-      // {
-      //   temp:Number;
-      //   type:String;
-      // }
-
-      const lastSetpoint = obj[Object.keys(obj)[count - 1]].temp;
-      console.log("🚀 ~ getCurrentSetpoint ~ lastEntry:", lastEntry);
-      // If there arent any setpoints return 0
-      if (!lastEntry.temp) {
-        return lastEntry;
-      }
-
-      // Otherwise return the last setpoint
-      return lastEntry;
+      return {
+        time: lastTime,
+        temp: lastSetpoint.temp,
+        type: lastSetpoint.type,
+      };
     }
 
-    // console.log(setpoint);
-
-    // return parseFloat(setpoint);
     return setpoint;
   } catch {
-    return {
-      temp: 0,
-      type: "off",
-    };
+    return setpoint;
   }
 };
 
@@ -121,3 +97,7 @@ type Setpoint = {
   temp: number;
   type: string;
 };
+
+interface SetpointWithTime extends Setpoint {
+  time: string;
+}

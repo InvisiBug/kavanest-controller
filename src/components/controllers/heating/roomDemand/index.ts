@@ -26,7 +26,7 @@ export default class RoomDemandSetter {
   }
 
   async tick() {
-    const log = false;
+    const log = true;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 

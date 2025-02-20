@@ -36,7 +36,7 @@ request(apiUrl, query).then((data: Data) => {
   const testing = false;
 
   if (testing) {
-    const testRoom = "study";
+    const testRoom = "livingRoom";
     controllers.push(new RoomDemandSetter(testRoom));
     controllers.push(new Radiator(testRoom));
   } else {

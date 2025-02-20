@@ -107,7 +107,7 @@ export default class Demand {
     if (!gqlData.response) {
       return {
         temp: 0,
-        type: "heating-on",
+        type: "on",
       };
     } else {
       return getCurrentSetpoint(gqlData.response.setpoints);
