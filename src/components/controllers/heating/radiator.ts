@@ -25,7 +25,7 @@ export default class ValveController {
     const on = true;
     const off = false;
 
-    if (log) console.log(`\n* ${decamelize(this.roomName)} Radiator Controller *`);
+    if (log) console.log(`\n\n* ${decamelize(this.roomName)} Radiator Controller *`);
 
     const radiator = await this.radiator.getData();
     if (!radiator) {
@@ -83,7 +83,7 @@ export default class ValveController {
 
         const thisRoomDemand = await this.room.getDemand();
 
-        if (thisRoomDemand == 0) {
+        if (thisRoomDemand == "off") {
           if (log) console.log("This room is not in demand");
           if (log) console.log("Valve should be closed!");
 
@@ -95,7 +95,7 @@ export default class ValveController {
           } else {
             if (log) console.log("And it is :)");
           }
-        } else if (thisRoomDemand == 1) {
+        } else if (thisRoomDemand == "on") {
           if (log) console.log("This room is in demand");
           if (log) console.log("Valve should be open!");
 
@@ -107,8 +107,8 @@ export default class ValveController {
           } else {
             if (log) console.log("And it is :)");
           }
-        } else if (thisRoomDemand == 2) {
-          if (log) console.log("This room is in maybe demand");
+        } else if (thisRoomDemand == "passive") {
+          if (log) console.log("This room is in passive mode");
           if (log) console.log("Valve should be open!");
 
           if (valve === closed) {
@@ -128,7 +128,7 @@ export default class ValveController {
           if (log) console.log("Valve is closed...");
           if (log) console.log("So open Valve");
 
-          this.radiator.setValveState(open);
+          // this.radiator.setValveState(open);
         } else {
           if (log) console.log("And it is :)");
         }

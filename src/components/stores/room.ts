@@ -11,6 +11,7 @@ import { apiUrl, getCurrentSetpoint } from "../helpers";
   getDemand();
   setDemand();
 */
+
 export default class Demand {
   roomName: string;
 
@@ -104,7 +105,10 @@ export default class Demand {
     const gqlData: Data = await request(apiUrl, query, { name: this.roomName });
 
     if (!gqlData.response) {
-      return 0;
+      return {
+        temp: 0,
+        type: "heating-on",
+      };
     } else {
       return getCurrentSetpoint(gqlData.response.setpoints);
     }
@@ -112,8 +116,8 @@ export default class Demand {
     type Data = {
       response: {
         setpoints: {
-          weekend: Record<string, string>;
-          weekday: Record<string, string>;
+          weekend: Record<string, { temp: number; type: string }>;
+          weekday: Record<string, { temp: number; type: string }>;
         };
       };
     };
@@ -132,8 +136,8 @@ export default class Demand {
 
     let anyDemand = false;
 
-    gqlResponse.response.forEach((room: any) => {
-      if (room.demand == 1) {
+    gqlResponse.response.forEach((room: { demand: string }) => {
+      if (room.demand == "on") {
         anyDemand = true;
       }
     });
@@ -143,7 +147,7 @@ export default class Demand {
     type Data = {
       response: [
         {
-          demand: number;
+          demand: string;
         },
       ];
     };
@@ -171,12 +175,12 @@ export default class Demand {
 
     type Data = {
       response: {
-        demand: number | null;
+        demand: string | null;
       };
     };
   }
 
-  async setDemand(demand: number) {
+  async setDemand(demand: "on" | "off" | "passive") {
     const mutation = gql`
       mutation ($input: RoomInput) {
         response: updateRoom(input: $input) {
@@ -197,7 +201,7 @@ export default class Demand {
     type Data = {
       response: {
         name: string;
-        demand: number;
+        demand: string;
       };
     };
   }
