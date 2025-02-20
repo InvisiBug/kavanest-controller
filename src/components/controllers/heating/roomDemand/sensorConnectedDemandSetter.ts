@@ -7,11 +7,10 @@ export const sensorConnectedDemandSetter = async ({ room, log, roomData, sensor 
   const deadzone = roomData?.deadzone || 0;
   const passiveDeadzone = 0.2;
 
-  if (log) console.log(`Temperature: ${sensor.temperature} \t Target: ${target.temp} \t Type: ${target.type}`);
-  if (target.type === "on") {
-    if (log) console.log(`Type is on`);
-
+  const targetOn = async () => {
     if (sensor.temperature > target.temp) {
+      // Temp is higher than setpoint
+
       if (log) console.log(`Not wanting heat`);
       if (log) console.log(`So set demand to off`);
 
@@ -19,6 +18,8 @@ export const sensorConnectedDemandSetter = async ({ room, log, roomData, sensor 
 
       return;
     } else if (sensor.temperature < target.temp - deadzone) {
+      // temp is lower than setpoint and deadzone
+
       if (log) console.log("Wanting heat...");
       if (log) console.log(`So set demand to on`);
 
@@ -26,6 +27,9 @@ export const sensorConnectedDemandSetter = async ({ room, log, roomData, sensor 
 
       return;
     } else {
+      // Within deadzone
+      // Heat if another room is being heated
+
       const anyDemand = await room.anyDemand();
       const thisRoomDemand = await room.getDemand();
 
@@ -43,15 +47,43 @@ export const sensorConnectedDemandSetter = async ({ room, log, roomData, sensor 
         return;
       }
     }
+  };
+
+  const targetPassive = () => {
+    if (log) console.log(`Type is passive`);
+    if (target.temp !== 0) {
+      if (log) console.log(`With a temperature`);
+      if (sensor.temperature < target.temp - passiveDeadzone) {
+        if (log) console.log(`Temperature is less than target`);
+        if (log) console.log(`So set demand to passive`);
+
+        room.setDemand("passive");
+      } else {
+        if (log) console.log(`Temperature is above target`);
+        if (log) console.log(`So set demand to off`);
+
+        room.setDemand("off");
+      }
+    } else {
+      if (log) console.log(`Without a temperature`);
+      if (log) console.log(`So set demand to passive`);
+
+      room.setDemand("passive");
+    }
+  };
+
+  if (log) console.log(`Temperature: ${sensor.temperature} \t Target: ${target.temp} \t Type: ${target.type}`);
+  if (target.type === "on") {
+    if (log) console.log(`Type is on`);
+
+    targetOn();
   } else if (target.type === "off") {
     if (log) console.log(`Type is off`);
 
     room.setDemand("off");
     return;
   } else if (target.type === "passive") {
-    if (log) console.log(`Type is passive`);
-
-    room.setDemand("passive");
+    targetPassive();
   }
 };
 type Props = {
