@@ -107,6 +107,7 @@ export default class Demand {
     if (!gqlData.response) {
       return {
         temp: 0,
+        time: "00:00",
         type: "on",
       };
     } else {

@@ -98,6 +98,6 @@ type Setpoint = {
   type: string;
 };
 
-interface SetpointWithTime extends Setpoint {
+export interface SetpointWithTime extends Setpoint {
   time: string;
 }
