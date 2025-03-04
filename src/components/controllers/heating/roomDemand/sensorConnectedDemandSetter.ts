@@ -7,8 +7,11 @@ export const sensorConnectedDemandSetter = async ({ room, log, roomData, sensor 
   const deadzone = roomData?.deadzone || 0;
   const passiveDeadzone = 0.2;
 
+  const higherThanSetpoint = () => sensor.temperature > target.temp;
+  const wantingHeat = () => sensor.temperature < target.temp - deadzone;
+
   const targetOn = async () => {
-    if (sensor.temperature > target.temp) {
+    if (higherThanSetpoint()) {
       // Temp is higher than setpoint
 
       if (log) console.log(`Not wanting heat`);
@@ -17,7 +20,7 @@ export const sensorConnectedDemandSetter = async ({ room, log, roomData, sensor 
       room.setDemand("off");
 
       return;
-    } else if (sensor.temperature < target.temp - deadzone) {
+    } else if (wantingHeat()) {
       // temp is lower than setpoint and deadzone
 
       if (log) console.log("Wanting heat...");
@@ -34,7 +37,7 @@ export const sensorConnectedDemandSetter = async ({ room, log, roomData, sensor 
       const thisRoomDemand = await room.getDemand();
 
       if (anyDemand && thisRoomDemand != "on" && sensor.temperature < target.temp - passiveDeadzone) {
-        if (log) console.log("Another room is wanting heat");
+        if (log) console.log("Within deadzone... Another room is wanting heat");
         if (log) console.log(`So set demand to passive`);
 
         room.setDemand("passive");
@@ -53,22 +56,31 @@ export const sensorConnectedDemandSetter = async ({ room, log, roomData, sensor 
     if (log) console.log(`Type is passive`);
     if (target.temp !== 0) {
       if (log) console.log(`With a temperature`);
-      if (sensor.temperature < target.temp - passiveDeadzone) {
-        if (log) console.log(`Temperature is less than target`);
-        if (log) console.log(`So set demand to passive`);
 
-        room.setDemand("passive");
-      } else {
+      if (higherThanSetpoint()) {
         if (log) console.log(`Temperature is above target`);
         if (log) console.log(`So set demand to off`);
 
         room.setDemand("off");
+
+        return;
+      } else if (wantingHeat()) {
+        if (log) console.log(`Temperature is less than target`);
+        if (log) console.log(`So set demand to passive`);
+
+        room.setDemand("passive");
+
+        return;
+      } else {
+        if (log) console.log(`Within deadzone`);
       }
     } else {
       if (log) console.log(`Without a temperature`);
       if (log) console.log(`So set demand to passive`);
 
       room.setDemand("passive");
+
+      return;
     }
   };
 
