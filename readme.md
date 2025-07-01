@@ -23,6 +23,10 @@ This is the `Controller` microservice of my KavaNest home automation system whic
 ![Helm](https://img.shields.io/badge/Helm-0F1689?logo=helm)
 ![Docker](https://img.shields.io/badge/Docker-0db7ed?&logo=docker&logoColor=white)
 
+## Links
+[Repo](https://github.com/InvisiBug/kavanest-controller)
+[Argo](https://192.168.1.60/applications/argocd/kavanest-controller)
+
 # What is KavaNest
 The system, I’m calling KavaNest is a zone based heating system that controls my house. It allows me to control the temperature of each room independently of the others, meaning I can heat just my office during the day and turn the heating on in the living room in the evening so it’s nice and warm when people get in from work.
 

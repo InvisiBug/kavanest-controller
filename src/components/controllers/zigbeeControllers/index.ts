@@ -25,7 +25,6 @@ export const zigbeeControllers = (client: MqttClient) => {
         motionTopic: "zigbee2mqtt/printerRoomMotion",
         bulbs: ["printerRoomLight"],
       },
-
       {
         controllerName: "bedRoom",
         buttonTopic: "zigbee2mqtt/bedRoomButton",
