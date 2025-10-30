@@ -12,7 +12,7 @@ RUN yarn build
 
 
 ## Deploy stage
-FROM arm64v8/node:22-alpine
+FROM arm64v8/node
 # FROM node:16
 
 WORKDIR /usr/src/app
