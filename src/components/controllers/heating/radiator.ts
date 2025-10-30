@@ -20,7 +20,7 @@ export default class ValveController {
   }
 
   async tick() {
-    const log = true;
+    const log = false;
 
     const on = true;
     const off = false;

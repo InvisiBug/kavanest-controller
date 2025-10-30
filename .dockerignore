@@ -3,3 +3,4 @@ helm/
 /bin/*
 Diagrams/
 **/.git
+./node_modules
