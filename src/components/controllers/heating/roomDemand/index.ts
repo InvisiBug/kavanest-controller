@@ -26,7 +26,7 @@ export default class RoomDemandSetter {
   }
 
   async tick() {
-    const log = false;
+    const log = true;
 
     if (log) console.log(`\n* ${decamelize(this.roomName)} Demand Setter *`);
 
@@ -38,7 +38,7 @@ export default class RoomDemandSetter {
 
     //* //////////////
     //* Override
-    const overrideActive = await checkOverride({ room: this.room, log, roomData });
+    const overrideActive = await checkOverride({ room: this.room, log, roomData }); // Override function returns true if override is active
     if (overrideActive) {
       return;
     }

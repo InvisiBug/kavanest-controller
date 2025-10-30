@@ -43,7 +43,7 @@ export default class ValveController {
       if (temperature) {
         if (log) console.log("Radiator has a fan");
 
-        const setpoint = 25;
+        const setpoint = 27;
         const deadzone = 0.5;
 
         if (log) console.log("Radiator temp:", temperature, "Setpoint:", setpoint, "Deadzone", deadzone);
@@ -128,7 +128,7 @@ export default class ValveController {
           if (log) console.log("Valve is closed...");
           if (log) console.log("So open Valve");
 
-          // this.radiator.setValveState(open);
+          this.radiator.setValveState(open); // * This was disabled for some reason, will probs become clear later, might interfere with maybe demand
         } else {
           if (log) console.log("And it is :)");
         }
