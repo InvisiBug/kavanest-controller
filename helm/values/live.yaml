@@ -2,7 +2,7 @@ name: kavanest-controller
 
 namespace: kavanest
 env:
-  APP_VERSION: 76e7377b49f6966c45cb036d8f33261e0146eb82
+  APP_VERSION: e33ada997a0dab077386e9d902d1342834735180
 
 deployment:
   - name: kavanest-controller
