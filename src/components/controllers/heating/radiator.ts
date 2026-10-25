@@ -17,6 +17,7 @@ export default class ValveController {
 
     this.radiator = new Radiator(roomName);
     this.room = new Room(roomName);
+    // TODO: Add sensor and only turn the fan on if the room temperature is below 22
   }
 
   async tick() {
