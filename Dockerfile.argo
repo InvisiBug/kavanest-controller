@@ -2,6 +2,7 @@
 
 ## Build stage
 FROM  arm64v8/node:20 AS build
+WORKDIR /usr/src/app
 
 COPY . .
 
@@ -14,10 +15,10 @@ FROM  arm64v8/node:20
 
 WORKDIR /usr/src/app
 
-COPY --from=build ./dist ./
+COPY --from=build /usr/src/app/dist ./
 
-COPY package*.json ./
-COPY tsconfig.json ./
+COPY --from=build /usr/src/app/package*.json ./
+COPY --from=build /usr/src/app/tsconfig.json ./
 
 # ENV NODE_ENV production
 RUN yarn install
