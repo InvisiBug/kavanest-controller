@@ -1,3 +1,4 @@
+{{- if and .Values.httpRoute .Values.service .Values.service.name }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -17,4 +18,5 @@ spec:
       backendRefs:
         - name: {{ .Values.httpRoute.serviceName }}
           port: {{ .Values.httpRoute.servicePort }}
+{{- end }}
 
